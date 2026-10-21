@@ -1,0 +1,43 @@
+{
+  "repository": "BAAI/bge-small-zh-v1.5",
+  "revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "license": "mit",
+  "files": {
+    "config.json": {
+      "sha256": "3853a7979202c348751b753e36f579c41d8da7d36af617d3d907e1fc9b441f2a",
+      "bytes": 776,
+      "official_git_blob": "f79ec8dfc5812a1d5d7d2e69253eb9054be2246d",
+      "official_lfs_sha256": null
+    },
+    "model.safetensors": {
+      "sha256": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026",
+      "bytes": 95827648,
+      "official_git_blob": "f0a3ffbd80eb817ece290d57976319a542d3ce00",
+      "official_lfs_sha256": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026"
+    },
+    "special_tokens_map.json": {
+      "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+      "bytes": 125,
+      "official_git_blob": "a8b3208c2884c4efb86e49300fdd3dc877220cdf",
+      "official_lfs_sha256": null
+    },
+    "tokenizer.json": {
+      "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26",
+      "bytes": 439125,
+      "official_git_blob": "cdb3043fc938fc918c06e66cf704c2ba58f88747",
+      "official_lfs_sha256": null
+    },
+    "tokenizer_config.json": {
+      "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a",
+      "bytes": 367,
+      "official_git_blob": "3a59388f0fd1bd22dec2ce7902c1be8e1fb84107",
+      "official_lfs_sha256": null
+    },
+    "vocab.txt": {
+      "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c",
+      "bytes": 109540,
+      "official_git_blob": "ca4f9781030019ab9b253c6dcb8c7878b6dc87a5",
+      "official_lfs_sha256": null
+    }
+  }
+}

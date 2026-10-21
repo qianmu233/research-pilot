@@ -1,0 +1,11 @@
+# Optional third overlay: compose.yaml + compose.vector.yaml + compose.zh.yaml.
+# Explicitly rebuild/reimport; existing 384-D data and containers are not migrated.
+services:
+  researchpilot:
+    build:
+      args:
+        REQUIREMENTS: requirements-chinese.lock
+    environment:
+      RESEARCH_EMBEDDING_MODEL: BAAI/bge-small-zh-v1.5
+      RESEARCH_EMBEDDING_QUERY_INSTRUCTION: "false"
+      RESEARCH_VECTOR_COLLECTION: chinese-default-v1

@@ -1,0 +1,41 @@
+{
+  "researchpilot_vector_chunks": [
+    [
+      "phase61-en-v1",
+      19,
+      19,
+      384,
+      384
+    ]
+  ],
+  "researchpilot_vector_chunks_512": [
+    [
+      "phase61-zh-instruction-v1",
+      19,
+      19,
+      512,
+      512
+    ],
+    [
+      "phase61-zh-noinstruction-v1",
+      19,
+      19,
+      512,
+      512
+    ],
+    [
+      "phase61-zh-noinstruction-v2",
+      19,
+      19,
+      512,
+      512
+    ],
+    [
+      "phase61-zh-noinstruction-v3",
+      19,
+      19,
+      512,
+      512
+    ]
+  ]
+}

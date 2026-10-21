@@ -1,0 +1,56 @@
+# Isolated Phase 7 deployment. Run with -p researchpilot-phase7.
+# Ollama stays on Windows loopback; host.docker.internal must be verified first.
+services:
+  postgres:
+    image: pgvector/pgvector:pg17@sha256:ac08538c6f8b9904c33c8224c5e5706dbe760aca29db1d096972b4052c22a75d
+    environment:
+      POSTGRES_USER: researchpilot_demo
+      POSTGRES_PASSWORD: researchpilot_local_demo
+      POSTGRES_DB: researchpilot_demo
+    ports:
+      - "127.0.0.1:15433:5432"
+    volumes:
+      - phase7-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U researchpilot_demo -d researchpilot_demo"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  researchpilot:
+    build:
+      context: .
+      args:
+        REQUIREMENTS: requirements-chinese.lock
+    ports:
+      - "127.0.0.1:8017:8010"
+    environment:
+      RESEARCH_DATA_DIR: /app/data
+      RESEARCH_MODEL_BACKEND: ollama
+      RESEARCH_OPENAI_MODEL: qwen3:4b-instruct-2507-q4_K_M
+      RESEARCH_OPENAI_BASE_URL: http://host.docker.internal:11434/v1
+      RESEARCH_MODEL_CONTEXT_TOKENS: "4096"
+      RESEARCH_MODEL_OUTPUT_TOKENS: "768"
+      RESEARCH_MAX_MODEL_CALLS: "5"
+      RESEARCH_TASK_TIMEOUT_SECONDS: "300"
+      RESEARCH_STEP_TIMEOUT_SECONDS: "90"
+      RESEARCH_MAX_ROUNDS: "3"
+      RESEARCH_MAX_SOURCES: "6"
+      RESEARCH_RETRIEVAL_TOP_K: "1"
+      RESEARCH_SEARCH_BACKEND: none
+      RESEARCH_RETRIEVAL_BACKEND: pgvector
+      RESEARCH_POSTGRES_DSN: postgresql://researchpilot_demo:researchpilot_local_demo@postgres:5432/researchpilot_demo
+      RESEARCH_VECTOR_COLLECTION: phase7-docker-v2
+      RESEARCH_EMBEDDING_CACHE_DIR: /app/models
+      RESEARCH_EMBEDDING_MODEL: BAAI/bge-small-zh-v1.5
+      RESEARCH_EMBEDDING_QUERY_INSTRUCTION: "false"
+      LANGSMITH_TRACING: "false"
+      LANGCHAIN_TRACING_V2: "false"
+    volumes:
+      - phase7-tasks:/app/data
+      - ./data/models:/app/models:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  phase7-pgdata: {}
+  phase7-tasks: {}

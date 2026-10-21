@@ -1,0 +1,8 @@
+﻿First Compose build failure (2026-10-20), before application dependencies were built:
+
+failed to authorize: failed to fetch anonymous token: Get "https://auth.docker.io/token?scope=repository%3Alibrary%2Fpython%3Apull&service=registry.docker.io": dial tcp [2a03:2880:f10c:83:face:b00c:0:25de]:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+
+Recovery: docker pull python:3.12-slim through the Docker engine succeeded.
+Pinned the resulting official image digest in Dockerfile and retried with --pull=false.
+No global Docker, DNS, proxy, or other-project configuration was modified.
+Final build/start/HTTP results are recorded in TEST_REPORT.md.

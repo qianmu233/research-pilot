@@ -1,0 +1,8 @@
+{
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+  "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+  "quantization": "Q4_K_M",
+  "license": "Apache-2.0",
+  "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
+}

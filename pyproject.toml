@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-pilot"
+version = "0.1.0"
+description = "Bounded LangGraph research workflow with traceable evidence"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = {text = "MIT"}
+authors = [{name = "ResearchPilot contributors"}]
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.30,<1",
+  "pydantic>=2.9,<3",
+  "httpx>=0.27,<1",
+  "langchain>=1.0,<2",
+  "langgraph>=1.0,<2",
+  "langchain-openai>=1.0,<2",
+  "langgraph-checkpoint-sqlite>=3.0,<4",
+]
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "ruff>=0.8,<1"]
+vector = ["fastembed>=0.7,<1", "psycopg[binary]>=3.2,<4", "pgvector>=0.4,<1"]
+chinese = ["research-pilot[vector]", "torch>=2.10,<2.11", "transformers>=5,<6"]
+
+[tool.setuptools.packages.find]
+include = ["research_pilot*"]
+
+[tool.setuptools.package-data]
+research_pilot = ["embedding.lock.json", "embedding-zh.lock.json", "chat-tokenizer.lock.json", "chat-model.lock.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

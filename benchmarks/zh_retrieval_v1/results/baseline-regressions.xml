@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="1.211" timestamp="2026-10-20T18:26:07.994459+08:00" hostname="LAPTOP-0TJ3VR8A"><testcase classname="tests.test_phase6_zh" name="test_source_metadata_survives_search_dedup_and_evidence_schema" time="0.730"><failure message="KeyError: 'source_ref'">store = &lt;research_pilot.vector.PgVectorSearch object at 0x00000169575C6000&gt;
+
+    def test_source_metadata_survives_search_dedup_and_evidence_schema(store):
+        doc_id, _ = store.ingest_text(IngestText(title="合成测试：检查点", source_ref="synthetic:zh:source",
+                                                content="LangGraph 检查点保存图状态，进程意外退出后可以恢复执行。"))
+        result = store.search("LangGraph 检查点保存图状态")
+&gt;       assert result and result[0]["source_ref"] == "synthetic:zh:source"
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'source_ref'
+
+tests\test_phase6_zh.py:44: KeyError</failure></testcase><testcase classname="tests.test_phase6_zh" name="test_retrieved_evidence_preserves_entire_stored_chunk" time="0.058"><failure message="AssertionError: assert ([{'title': 'Synthetic full evidence', 'locator': 'pgvector:5d22ea4177744bbdb42427ae53f7d6c2-0', 'excerpt': 'persistenc...ce persistence persistence persistence persistence persistence persistence persistence ', 'source_type': 'local', ...}] and 'persistence ... persistence ' == 'persistence ...E_TAIL_MARKER'&#10;  &#10;  Skipping 889 identical leading characters in diff, use -v to show&#10;  - ersistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence EVIDENCE_TAIL_MARKER&#10;  + ersistence )">store = &lt;research_pilot.vector.PgVectorSearch object at 0x000001695BCCD490&gt;
+
+    def test_retrieved_evidence_preserves_entire_stored_chunk(store):
+        text = "persistence " * 100 + "EVIDENCE_TAIL_MARKER"
+        assert len(text) &gt; 900 and len(store.embedding.chunks(text)) == 1
+        store.ingest_text(IngestText(title="Synthetic full evidence", content=text))
+        result = store.search("persistence")
+&gt;       assert result and result[0]["excerpt"] == text
+E       AssertionError: assert ([{'title': 'Synthetic full evidence', 'locator': 'pgvector:5d22ea4177744bbdb42427ae53f7d6c2-0', 'excerpt': 'persistenc...ce persistence persistence persistence persistence persistence persistence persistence ', 'source_type': 'local', ...}] and 'persistence ... persistence ' == 'persistence ...E_TAIL_MARKER'
+E         
+E         Skipping 889 identical leading characters in diff, use -v to show
+E         - ersistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence persistence EVIDENCE_TAIL_MARKER
+E         + ersistence )
+
+tests\test_phase6_zh.py:61: AssertionError</failure></testcase></testsuite></testsuites>

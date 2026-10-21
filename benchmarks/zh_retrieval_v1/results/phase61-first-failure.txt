@@ -1,0 +1,15 @@
+﻿Phase 6.1 first evaluation attempt: phase61-zh-noinstruction-v1
+Model loaded, 19 documents re-embedded and inserted into the independent 512-dimensional table.
+Evaluation stopped before query metrics:
+TypeError: float() argument must be a string or a real number, not 'Vector'
+at document-vector-digest conversion: np.asarray(row[0], dtype='<f4')
+Cause: pgvector 0.5.1 returns pgvector.Vector on SELECT, requiring to_numpy().
+Fix: handle the real driver's return type before hashing. No model/dataset/gold change.
+The failed-attempt collection was retained; a new named collection is used for the complete rerun.
+
+Additional diagnostic correction:
+The first complete no-instruction result (phase61-zh-noinstruction.json, collection v2) inspected only the first returned probe chunk. The official Chinese tokenizer splits the same 1220-character probe into two 256-token-bounded chunks, so that first chunk correctly lacked the final marker.
+The evaluator now checks every returned probe chunk against stored content and reports chunk counts separately. Final v3 metrics are identical; both chunks and the tail marker are preserved. This was an evaluator assumption, not model truncation. The intermediate JSON/collection were retained.
+
+Packaging attempt:
+A wheel build completed but pip failed to write its external cache origin.json (PermissionError [Errno 13]). Retrying the same build with --no-cache-dir succeeded, and both model manifests were found in the wheel. No global permissions or system configuration were changed.

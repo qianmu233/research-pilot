@@ -1,0 +1,1698 @@
+{
+  "run_label": "phase61-zh-noinstruction",
+  "dataset_sha256": "6b7975eb701d461fd712cef3acc0ab749d42498eca65fb75f67250be46d5475c",
+  "documents": 19,
+  "chunks": 19,
+  "query_count": 20,
+  "annotation_policy": "仅将正文明确支持问题所需事实的文档标为相关；多文档问题必须覆盖全部标注文档。标题相似、技术主题接近但不能回答的问题不算相关。先冻结本文件及 SHA256，再运行任何检索，不根据结果改标注。",
+  "model": {
+    "name": "BAAI/bge-small-zh-v1.5",
+    "snapshot": "7999e1d3359715c523056ef9478215996d62a620",
+    "dimensions": 512,
+    "query_instruction": false,
+    "query_prefix": "",
+    "document_prefix": "",
+    "encoding": "CPU, CLS pooling, L2 normalization",
+    "artifacts_sha256": {
+      "config.json": "3853a7979202c348751b753e36f579c41d8da7d36af617d3d907e1fc9b441f2a",
+      "model.safetensors": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026",
+      "special_tokens_map.json": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+      "tokenizer.json": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26",
+      "tokenizer_config.json": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a",
+      "vocab.txt": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c"
+    },
+    "packages": {
+      "fastembed": "0.9.0",
+      "onnxruntime": "1.31.0",
+      "tokenizers": "0.23.3",
+      "pgvector": "0.5.1",
+      "psycopg": "3.3.6",
+      "torch": "2.10.0+cpu",
+      "transformers": "5.20.2",
+      "safetensors": "0.8.0"
+    },
+    "python": "3.12.3"
+  },
+  "threshold": 0.5,
+  "index": {
+    "chunks_table": "researchpilot_vector_chunks_512",
+    "collections_table": "researchpilot_vector_collections_512",
+    "collection": "phase61-zh-noinstruction-v2",
+    "kept": true,
+    "document_vector_digest": "40e12240fc95acb1988a457e03a6e4b487bca40f2c8c448bc70e737be1f7d23a",
+    "fingerprint": "396ba2aa04e61cb4a10bf20913cf1c56fa175a2ba7e6db7981019e2d0e10dc62"
+  },
+  "configuration": {
+    "chunk_tokens": 256,
+    "overlap_tokens": 32,
+    "top_k": 5,
+    "distance": "cosine",
+    "eligibility": "same model table and collection, score>=0.5"
+  },
+  "performance": {
+    "ingest_seconds": 0.50920899999619,
+    "warm_search_median_ms": 11.77954999729991,
+    "warm_search_p95_ms": 15.022374994805432,
+    "search_ms_per_query": [
+      9.754400001838803,
+      10.261600000376347,
+      15.51399999880232,
+      13.309900001331698,
+      11.348299995006528,
+      10.230400002910756,
+      13.395599999057595,
+      14.99649999459507,
+      11.274800002865959,
+      14.994299999671057,
+      10.952600001473911,
+      12.975700003153179,
+      10.986399996909313,
+      11.806799993792083,
+      13.15259999682894,
+      9.730199999467004,
+      11.752300000807736,
+      14.106199996604118,
+      10.43999999819789,
+      14.276599998993333
+    ],
+    "elapsed_seconds": 2.732093699996767,
+    "working_set_mib": 593.68359375,
+    "peak_working_set_mib": 684.203125,
+    "model_load_seconds": 6.998798299995542
+  },
+  "query_l2_norm_range": [
+    0.9999998807907104,
+    1.0
+  ],
+  "unknown_tokens": 42,
+  "tokens": 2451,
+  "unknown_token_ratio": 0.017135862913096694,
+  "database_version": "17.11 (Debian 17.11-1.pgdg12+2)",
+  "pgvector_version": "0.8.7",
+  "production_metrics": {
+    "answerable_queries": 16,
+    "no_answer_queries": 4,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "mrr@5": 0.96875,
+    "no_answer_empty_count": 1,
+    "no_answer_nonempty_count": 3,
+    "no_answer_rejection_rate": 0.25,
+    "multi_document_queries": 4,
+    "multi_document_all_gold_in_top5": 4,
+    "returned_irrelevant_chunks@5": 59
+  },
+  "raw_ranking_metrics": {
+    "answerable_queries": 16,
+    "no_answer_queries": 4,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "mrr@5": 0.96875,
+    "no_answer_empty_count": 0,
+    "no_answer_nonempty_count": 4,
+    "no_answer_rejection_rate": 0.0,
+    "multi_document_queries": 4,
+    "multi_document_all_gold_in_top5": 4,
+    "returned_irrelevant_chunks@5": 80
+  },
+  "evidence_checks": {
+    "missing_source_rows": 0,
+    "metadata_mismatches": 0,
+    "excerpt_mismatches": 0,
+    "dedup_mismatches": 0
+  },
+  "truncation_probe": {
+    "stored_characters": 767,
+    "returned_characters": 767,
+    "full_chunk_preserved": true,
+    "tail_marker_preserved": false
+  },
+  "no_answer_workflow_probe": {
+    "query_id": "Q19",
+    "gold_documents": [],
+    "task_status": "completed",
+    "error_code": null,
+    "evidence_status": "unverified",
+    "trace": [
+      "plan",
+      "retrieve:1:4",
+      "assess:candidates_collected",
+      "write",
+      "validate:OK"
+    ],
+    "report_model": "Mock",
+    "returned_documents": [
+      "D07",
+      "D13",
+      "D17",
+      "D12"
+    ]
+  },
+  "queries": [
+    {
+      "id": "Q01",
+      "category": "同义改写",
+      "question": "程序突然断电后，怎样保留进度，避免把研究步骤从头再做？",
+      "relevant_documents": [
+        "D01"
+      ],
+      "rationale": "D01 明确说明快照持久化、断电后使用相同 thread_id 继续。",
+      "raw_top5": [
+        {
+          "document": "D02",
+          "chunk": "D02#0",
+          "score": 0.6068159107456251
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.5598816275596777
+        },
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.5536684457860563
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5497401088321362
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5259526716386098
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D02",
+          "chunk": "D02#0",
+          "score": 0.6068159107456251,
+          "source_id": "S1",
+          "locator": "pgvector:ad10bcf32d644b15ba4ddd58505280fc-0",
+          "document_id": "ad10bcf32d644b15ba4ddd58505280fc",
+          "chunk_id": "ad10bcf32d644b15ba4ddd58505280fc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D02"
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.5598816275596777,
+          "source_id": "S2",
+          "locator": "pgvector:464f121e46d84385ae083ebc7e167ecc-0",
+          "document_id": "464f121e46d84385ae083ebc7e167ecc",
+          "chunk_id": "464f121e46d84385ae083ebc7e167ecc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D01"
+        },
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.5536684457860563,
+          "source_id": "S3",
+          "locator": "pgvector:494210af6da84b349379f253679a4658-0",
+          "document_id": "494210af6da84b349379f253679a4658",
+          "chunk_id": "494210af6da84b349379f253679a4658-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D17"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5497401088321362,
+          "source_id": "S4",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5259526716386098,
+          "source_id": "S5",
+          "locator": "pgvector:108fb926d73b4717ac77d0944b3aeee6-0",
+          "document_id": "108fb926d73b4717ac77d0944b3aeee6",
+          "chunk_id": "108fb926d73b4717ac77d0944b3aeee6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D03"
+        }
+      ]
+    },
+    {
+      "id": "Q02",
+      "category": "同义改写",
+      "question": "服务重开后，上次没跑完的工作会自己接着做吗？如果不会该请求哪个接口？",
+      "relevant_documents": [
+        "D02"
+      ],
+      "rationale": "只有 D02 同时给出不自动调度和手动 resume 的要求。",
+      "raw_top5": [
+        {
+          "document": "D02",
+          "chunk": "D02#0",
+          "score": 0.5856703664653848
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.5576027133224031
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5518674521525321
+        },
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.550114446864794
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.48584339275776367
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D02",
+          "chunk": "D02#0",
+          "score": 0.5856703664653848,
+          "source_id": "S1",
+          "locator": "pgvector:ad10bcf32d644b15ba4ddd58505280fc-0",
+          "document_id": "ad10bcf32d644b15ba4ddd58505280fc",
+          "chunk_id": "ad10bcf32d644b15ba4ddd58505280fc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D02"
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.5576027133224031,
+          "source_id": "S2",
+          "locator": "pgvector:e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "document_id": "e4a66af07b7b458eb96cf461fe9a8b41",
+          "chunk_id": "e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D04"
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5518674521525321,
+          "source_id": "S3",
+          "locator": "pgvector:108fb926d73b4717ac77d0944b3aeee6-0",
+          "document_id": "108fb926d73b4717ac77d0944b3aeee6",
+          "chunk_id": "108fb926d73b4717ac77d0944b3aeee6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D03"
+        },
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.550114446864794,
+          "source_id": "S4",
+          "locator": "pgvector:cb989bc54983432d82be2a9ac0676599-0",
+          "document_id": "cb989bc54983432d82be2a9ac0676599",
+          "chunk_id": "cb989bc54983432d82be2a9ac0676599-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D12"
+        }
+      ]
+    },
+    {
+      "id": "Q03",
+      "category": "相似概念与多文档",
+      "question": "失败后重试一个操作，与从保存进度继续整个任务，有什么区别？",
+      "relevant_documents": [
+        "D02",
+        "D03"
+      ],
+      "rationale": "D02 定义恢复先前状态，D03 定义操作级 retry；二者共同支持比较。",
+      "raw_top5": [
+        {
+          "document": "D02",
+          "chunk": "D02#0",
+          "score": 0.6756595566475667
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.6596583521162493
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.6128540221707234
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5838484416098342
+        },
+        {
+          "document": "D14",
+          "chunk": "D14#0",
+          "score": 0.5707042473134857
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D02",
+          "chunk": "D02#0",
+          "score": 0.6756595566475667,
+          "source_id": "S1",
+          "locator": "pgvector:ad10bcf32d644b15ba4ddd58505280fc-0",
+          "document_id": "ad10bcf32d644b15ba4ddd58505280fc",
+          "chunk_id": "ad10bcf32d644b15ba4ddd58505280fc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D02"
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.6596583521162493,
+          "source_id": "S2",
+          "locator": "pgvector:108fb926d73b4717ac77d0944b3aeee6-0",
+          "document_id": "108fb926d73b4717ac77d0944b3aeee6",
+          "chunk_id": "108fb926d73b4717ac77d0944b3aeee6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D03"
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.6128540221707234,
+          "source_id": "S3",
+          "locator": "pgvector:e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "document_id": "e4a66af07b7b458eb96cf461fe9a8b41",
+          "chunk_id": "e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D04"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5838484416098342,
+          "source_id": "S4",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D14",
+          "chunk": "D14#0",
+          "score": 0.5707042473134857,
+          "source_id": "S5",
+          "locator": "pgvector:b899f65626b74e2f84a22f2668c9c344-0",
+          "document_id": "b899f65626b74e2f84a22f2668c9c344",
+          "chunk_id": "b899f65626b74e2f84a22f2668c9c344-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D14"
+        }
+      ]
+    },
+    {
+      "id": "Q04",
+      "category": "技术术语和缩写",
+      "question": "PgVector 的向量匹配用的是 L2 还是 cosine，返回的相似分数怎么算？",
+      "relevant_documents": [
+        "D07"
+      ],
+      "rationale": "D07 明确 cosine distance 和一减距离，其他余弦文本不描述 PgVector 分数。",
+      "raw_top5": [
+        {
+          "document": "D07",
+          "chunk": "D07#0",
+          "score": 0.7470280528068542
+        },
+        {
+          "document": "D09",
+          "chunk": "D09#0",
+          "score": 0.5586715340614319
+        },
+        {
+          "document": "D08",
+          "chunk": "D08#0",
+          "score": 0.5511083931391483
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5399843728551652
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5338236689567566
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D07",
+          "chunk": "D07#0",
+          "score": 0.7470280528068542,
+          "source_id": "S1",
+          "locator": "pgvector:fa31f354ae20415cbebcf241468fe9c8-0",
+          "document_id": "fa31f354ae20415cbebcf241468fe9c8",
+          "chunk_id": "fa31f354ae20415cbebcf241468fe9c8-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D07"
+        },
+        {
+          "document": "D09",
+          "chunk": "D09#0",
+          "score": 0.5586715340614319,
+          "source_id": "S2",
+          "locator": "pgvector:5b9b022797124977ae826644630f02cb-0",
+          "document_id": "5b9b022797124977ae826644630f02cb",
+          "chunk_id": "5b9b022797124977ae826644630f02cb-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D09"
+        },
+        {
+          "document": "D08",
+          "chunk": "D08#0",
+          "score": 0.5511083931391483,
+          "source_id": "S3",
+          "locator": "pgvector:239af20ed4f9403aa4489a45037089c6-0",
+          "document_id": "239af20ed4f9403aa4489a45037089c6",
+          "chunk_id": "239af20ed4f9403aa4489a45037089c6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D08"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5399843728551652,
+          "source_id": "S4",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5338236689567566,
+          "source_id": "S5",
+          "locator": "pgvector:63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "document_id": "63ae713c430b44eea9ed4d6c3cf3382e",
+          "chunk_id": "63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D10"
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "category": "多文档关联",
+      "question": "为什么只统计共有字词的检索不等于用预训练模型生成语义向量？",
+      "relevant_documents": [
+        "D08",
+        "D09"
+      ],
+      "rationale": "D08 说明词面方法，D09 说明实际神经编码器；需要两种方法的证据。",
+      "raw_top5": [
+        {
+          "document": "D08",
+          "chunk": "D08#0",
+          "score": 0.614904201919092
+        },
+        {
+          "document": "D09",
+          "chunk": "D09#0",
+          "score": 0.5593026280403137
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5233711884396569
+        },
+        {
+          "document": "D15",
+          "chunk": "D15#0",
+          "score": 0.5172900557518005
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5054270625114441
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D08",
+          "chunk": "D08#0",
+          "score": 0.614904201919092,
+          "source_id": "S1",
+          "locator": "pgvector:239af20ed4f9403aa4489a45037089c6-0",
+          "document_id": "239af20ed4f9403aa4489a45037089c6",
+          "chunk_id": "239af20ed4f9403aa4489a45037089c6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D08"
+        },
+        {
+          "document": "D09",
+          "chunk": "D09#0",
+          "score": 0.5593026280403137,
+          "source_id": "S2",
+          "locator": "pgvector:5b9b022797124977ae826644630f02cb-0",
+          "document_id": "5b9b022797124977ae826644630f02cb",
+          "chunk_id": "5b9b022797124977ae826644630f02cb-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D09"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5233711884396569,
+          "source_id": "S3",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D15",
+          "chunk": "D15#0",
+          "score": 0.5172900557518005,
+          "source_id": "S4",
+          "locator": "pgvector:d4303455bb0741ab8451f806fe1d43ac-0",
+          "document_id": "d4303455bb0741ab8451f806fe1d43ac",
+          "chunk_id": "d4303455bb0741ab8451f806fe1d43ac-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D15"
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5054270625114441,
+          "source_id": "S5",
+          "locator": "pgvector:63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "document_id": "63ae713c430b44eea9ed4d6c3cf3382e",
+          "chunk_id": "63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D10"
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "category": "技术术语和缩写",
+      "question": "当前 BGE ONNX 的向量有多少维，能直接认定它适合中文吗？",
+      "relevant_documents": [
+        "D09"
+      ],
+      "rationale": "D09 同时给出三百八十四维和英文适用性限制。",
+      "raw_top5": [
+        {
+          "document": "D09",
+          "chunk": "D09#0",
+          "score": 0.647125244140625
+        },
+        {
+          "document": "D07",
+          "chunk": "D07#0",
+          "score": 0.5217545032501221
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.4953556063559299
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.48533791303634644
+        },
+        {
+          "document": "D15",
+          "chunk": "D15#0",
+          "score": 0.4728919565677643
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D09",
+          "chunk": "D09#0",
+          "score": 0.647125244140625,
+          "source_id": "S1",
+          "locator": "pgvector:5b9b022797124977ae826644630f02cb-0",
+          "document_id": "5b9b022797124977ae826644630f02cb",
+          "chunk_id": "5b9b022797124977ae826644630f02cb-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D09"
+        },
+        {
+          "document": "D07",
+          "chunk": "D07#0",
+          "score": 0.5217545032501221,
+          "source_id": "S2",
+          "locator": "pgvector:fa31f354ae20415cbebcf241468fe9c8-0",
+          "document_id": "fa31f354ae20415cbebcf241468fe9c8",
+          "chunk_id": "fa31f354ae20415cbebcf241468fe9c8-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D07"
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "category": "同义改写",
+      "question": "长资料如何切成小块，邻接块留多少重复内容才能保住边界上下文？",
+      "relevant_documents": [
+        "D10"
+      ],
+      "rationale": "D10 规定真实 tokenizer、256 token 和 32 token 重叠。",
+      "raw_top5": [
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.6058974266052246
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5497214466499429
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.5410548609809538
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5160226533426445
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.5026141108640507
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.6058974266052246,
+          "source_id": "S1",
+          "locator": "pgvector:63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "document_id": "63ae713c430b44eea9ed4d6c3cf3382e",
+          "chunk_id": "63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D10"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5497214466499429,
+          "source_id": "S2",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.5410548609809538,
+          "source_id": "S3",
+          "locator": "pgvector:e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "document_id": "e4a66af07b7b458eb96cf461fe9a8b41",
+          "chunk_id": "e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D04"
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5160226533426445,
+          "source_id": "S4",
+          "locator": "pgvector:108fb926d73b4717ac77d0944b3aeee6-0",
+          "document_id": "108fb926d73b4717ac77d0944b3aeee6",
+          "chunk_id": "108fb926d73b4717ac77d0944b3aeee6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D03"
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.5026141108640507,
+          "source_id": "S5",
+          "locator": "pgvector:b3c5896b518f4d2fba99360e08b864bc-0",
+          "document_id": "b3c5896b518f4d2fba99360e08b864bc",
+          "chunk_id": "b3c5896b518f4d2fba99360e08b864bc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D13"
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "category": "相似概念",
+      "question": "同一文档第二个向量片段写入失败时，第一个片段应该还在数据库里吗？",
+      "relevant_documents": [
+        "D11"
+      ],
+      "rationale": "D11 对该失败场景直接规定整文档事务回滚。",
+      "raw_top5": [
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.744595781290784
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.590280627625027
+        },
+        {
+          "document": "D15",
+          "chunk": "D15#0",
+          "score": 0.574048638343811
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.5490540803606453
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5423545837402344
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.744595781290784,
+          "source_id": "S1",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.590280627625027,
+          "source_id": "S2",
+          "locator": "pgvector:b3c5896b518f4d2fba99360e08b864bc-0",
+          "document_id": "b3c5896b518f4d2fba99360e08b864bc",
+          "chunk_id": "b3c5896b518f4d2fba99360e08b864bc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D13"
+        },
+        {
+          "document": "D15",
+          "chunk": "D15#0",
+          "score": 0.574048638343811,
+          "source_id": "S3",
+          "locator": "pgvector:d4303455bb0741ab8451f806fe1d43ac-0",
+          "document_id": "d4303455bb0741ab8451f806fe1d43ac",
+          "chunk_id": "d4303455bb0741ab8451f806fe1d43ac-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D15"
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.5490540803606453,
+          "source_id": "S4",
+          "locator": "pgvector:464f121e46d84385ae083ebc7e167ecc-0",
+          "document_id": "464f121e46d84385ae083ebc7e167ecc",
+          "chunk_id": "464f121e46d84385ae083ebc7e167ecc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D01"
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5423545837402344,
+          "source_id": "S5",
+          "locator": "pgvector:63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "document_id": "63ae713c430b44eea9ed4d6c3cf3382e",
+          "chunk_id": "63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D10"
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "category": "多文档关联",
+      "question": "报告里的引用编号通过检查，就表示来源真的支持结论且事实正确吗？",
+      "relevant_documents": [
+        "D05",
+        "D06"
+      ],
+      "rationale": "D05 定义编号检查范围，D06 说明事实和语义支持并未被证明。",
+      "raw_top5": [
+        {
+          "document": "D06",
+          "chunk": "D06#0",
+          "score": 0.7054275274276733
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.6926421156695076
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5397751009598324
+        },
+        {
+          "document": "D16",
+          "chunk": "D16#0",
+          "score": 0.49955725675139107
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.4908644405264988
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D06",
+          "chunk": "D06#0",
+          "score": 0.7054275274276733,
+          "source_id": "S1",
+          "locator": "pgvector:5ed02416d4264307a999462b7c9b63df-0",
+          "document_id": "5ed02416d4264307a999462b7c9b63df",
+          "chunk_id": "5ed02416d4264307a999462b7c9b63df-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D06"
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.6926421156695076,
+          "source_id": "S2",
+          "locator": "pgvector:8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "document_id": "8ef9ae1a90f44cb284f79e20c6246e4a",
+          "chunk_id": "8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D05"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5397751009598324,
+          "source_id": "S3",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "category": "相似概念与缩写",
+      "question": "接口返回 202 是否表示报告已生成，客户端要如何确认能够读取报告？",
+      "relevant_documents": [
+        "D12"
+      ],
+      "rationale": "D12 区分提交成功与 completed，并要求轮询。",
+      "raw_top5": [
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.7491663694381714
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.5846437316708286
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5466183098186079
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.5230458534671623
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.4986694454353726
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.7491663694381714,
+          "source_id": "S1",
+          "locator": "pgvector:cb989bc54983432d82be2a9ac0676599-0",
+          "document_id": "cb989bc54983432d82be2a9ac0676599",
+          "chunk_id": "cb989bc54983432d82be2a9ac0676599-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D12"
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.5846437316708286,
+          "source_id": "S2",
+          "locator": "pgvector:8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "document_id": "8ef9ae1a90f44cb284f79e20c6246e4a",
+          "chunk_id": "8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D05"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5466183098186079,
+          "source_id": "S3",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.5230458534671623,
+          "source_id": "S4",
+          "locator": "pgvector:e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "document_id": "e4a66af07b7b458eb96cf461fe9a8b41",
+          "chunk_id": "e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D04"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "category": "相似概念",
+      "question": "step_timeout 到了以后会杀掉阻塞线程吗，迟到的节点输出应如何处理？",
+      "relevant_documents": [
+        "D17"
+      ],
+      "rationale": "D17 明确线程无法强杀以及拒绝迟到结果；D13 只涉及 SQL 时限。",
+      "raw_top5": [
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.7640988826751709
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.6031326528629521
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.5872359625837791
+        },
+        {
+          "document": "D02",
+          "chunk": "D02#0",
+          "score": 0.5572905208295283
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5229518129200833
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.7640988826751709,
+          "source_id": "S1",
+          "locator": "pgvector:494210af6da84b349379f253679a4658-0",
+          "document_id": "494210af6da84b349379f253679a4658",
+          "chunk_id": "494210af6da84b349379f253679a4658-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D17"
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.6031326528629521,
+          "source_id": "S2",
+          "locator": "pgvector:464f121e46d84385ae083ebc7e167ecc-0",
+          "document_id": "464f121e46d84385ae083ebc7e167ecc",
+          "chunk_id": "464f121e46d84385ae083ebc7e167ecc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D01"
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.5872359625837791,
+          "source_id": "S3",
+          "locator": "pgvector:b3c5896b518f4d2fba99360e08b864bc-0",
+          "document_id": "b3c5896b518f4d2fba99360e08b864bc",
+          "chunk_id": "b3c5896b518f4d2fba99360e08b864bc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D13"
+        },
+        {
+          "document": "D02",
+          "chunk": "D02#0",
+          "score": 0.5572905208295283,
+          "source_id": "S4",
+          "locator": "pgvector:ad10bcf32d644b15ba4ddd58505280fc-0",
+          "document_id": "ad10bcf32d644b15ba4ddd58505280fc",
+          "chunk_id": "ad10bcf32d644b15ba4ddd58505280fc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D02"
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5229518129200833,
+          "source_id": "S5",
+          "locator": "pgvector:108fb926d73b4717ac77d0944b3aeee6-0",
+          "document_id": "108fb926d73b4717ac77d0944b3aeee6",
+          "chunk_id": "108fb926d73b4717ac77d0944b3aeee6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D03"
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "category": "技术术语和干扰",
+      "question": "statement_timeout 的十秒约束作用于单条 SQL 还是整个 HTTP 研究任务？",
+      "relevant_documents": [
+        "D13"
+      ],
+      "rationale": "D13 说明单 SQL 语句时限，与 HTTP/总任务时限不同。",
+      "raw_top5": [
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.6929379335567872
+        },
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.6371653459766725
+        },
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.5672242979541012
+        },
+        {
+          "document": "D14",
+          "chunk": "D14#0",
+          "score": 0.5546489357948342
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5517765283584634
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.6929379335567872,
+          "source_id": "S1",
+          "locator": "pgvector:b3c5896b518f4d2fba99360e08b864bc-0",
+          "document_id": "b3c5896b518f4d2fba99360e08b864bc",
+          "chunk_id": "b3c5896b518f4d2fba99360e08b864bc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D13"
+        },
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.6371653459766725,
+          "source_id": "S2",
+          "locator": "pgvector:494210af6da84b349379f253679a4658-0",
+          "document_id": "494210af6da84b349379f253679a4658",
+          "chunk_id": "494210af6da84b349379f253679a4658-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D17"
+        },
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.5672242979541012,
+          "source_id": "S3",
+          "locator": "pgvector:cb989bc54983432d82be2a9ac0676599-0",
+          "document_id": "cb989bc54983432d82be2a9ac0676599",
+          "chunk_id": "cb989bc54983432d82be2a9ac0676599-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D12"
+        },
+        {
+          "document": "D14",
+          "chunk": "D14#0",
+          "score": 0.5546489357948342,
+          "source_id": "S4",
+          "locator": "pgvector:b899f65626b74e2f84a22f2668c9c344-0",
+          "document_id": "b899f65626b74e2f84a22f2668c9c344",
+          "chunk_id": "b899f65626b74e2f84a22f2668c9c344-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D14"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5517765283584634,
+          "source_id": "S5",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "category": "多文档关联",
+      "question": "有了检查点和进程里的防重集合，能保证多个 worker 对外部操作恰好执行一次吗？",
+      "relevant_documents": [
+        "D04",
+        "D14"
+      ],
+      "rationale": "D04 否定 exactly-once，D14 说明 active 集合不跨进程；两者分别支持限制。",
+      "raw_top5": [
+        {
+          "document": "D14",
+          "chunk": "D14#0",
+          "score": 0.6844734141544465
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.6567403869849562
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.6017234800191589
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5950849410942173
+        },
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.5628524422645569
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D14",
+          "chunk": "D14#0",
+          "score": 0.6844734141544465,
+          "source_id": "S1",
+          "locator": "pgvector:b899f65626b74e2f84a22f2668c9c344-0",
+          "document_id": "b899f65626b74e2f84a22f2668c9c344",
+          "chunk_id": "b899f65626b74e2f84a22f2668c9c344-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D14"
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.6567403869849562,
+          "source_id": "S2",
+          "locator": "pgvector:e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "document_id": "e4a66af07b7b458eb96cf461fe9a8b41",
+          "chunk_id": "e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D04"
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.6017234800191589,
+          "source_id": "S3",
+          "locator": "pgvector:464f121e46d84385ae083ebc7e167ecc-0",
+          "document_id": "464f121e46d84385ae083ebc7e167ecc",
+          "chunk_id": "464f121e46d84385ae083ebc7e167ecc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D01"
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5950849410942173,
+          "source_id": "S4",
+          "locator": "pgvector:108fb926d73b4717ac77d0944b3aeee6-0",
+          "document_id": "108fb926d73b4717ac77d0944b3aeee6",
+          "chunk_id": "108fb926d73b4717ac77d0944b3aeee6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D03"
+        },
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.5628524422645569,
+          "source_id": "S5",
+          "locator": "pgvector:494210af6da84b349379f253679a4658-0",
+          "document_id": "494210af6da84b349379f253679a4658",
+          "chunk_id": "494210af6da84b349379f253679a4658-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D17"
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "category": "同义改写",
+      "question": "我已导入语义库，再切到词面备用索引，原来资料会自动出现在备用索引吗？",
+      "relevant_documents": [
+        "D15"
+      ],
+      "rationale": "D15 明确索引独立、切换后须重新导入。",
+      "raw_top5": [
+        {
+          "document": "D15",
+          "chunk": "D15#0",
+          "score": 0.7377485476582389
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5856806039810222
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5839095463698842
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.5628565364223496
+        },
+        {
+          "document": "D06",
+          "chunk": "D06#0",
+          "score": 0.5357010087788716
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D15",
+          "chunk": "D15#0",
+          "score": 0.7377485476582389,
+          "source_id": "S1",
+          "locator": "pgvector:d4303455bb0741ab8451f806fe1d43ac-0",
+          "document_id": "d4303455bb0741ab8451f806fe1d43ac",
+          "chunk_id": "d4303455bb0741ab8451f806fe1d43ac-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D15"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5856806039810222,
+          "source_id": "S2",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5839095463698842,
+          "source_id": "S3",
+          "locator": "pgvector:63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "document_id": "63ae713c430b44eea9ed4d6c3cf3382e",
+          "chunk_id": "63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D10"
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.5628565364223496,
+          "source_id": "S4",
+          "locator": "pgvector:8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "document_id": "8ef9ae1a90f44cb284f79e20c6246e4a",
+          "chunk_id": "8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D05"
+        },
+        {
+          "document": "D06",
+          "chunk": "D06#0",
+          "score": 0.5357010087788716,
+          "source_id": "S5",
+          "locator": "pgvector:5ed02416d4264307a999462b7c9b63df-0",
+          "document_id": "5ed02416d4264307a999462b7c9b63df",
+          "chunk_id": "5ed02416d4264307a999462b7c9b63df-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D06"
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "category": "安全与干扰",
+      "question": "取回的材料要求忽略系统规则并执行命令，是否应该照办？",
+      "relevant_documents": [
+        "D16"
+      ],
+      "rationale": "D16 规定正文不可信、攻击串不能执行，并说明工具边界。",
+      "raw_top5": [
+        {
+          "document": "D16",
+          "chunk": "D16#0",
+          "score": 0.5461326078733143
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5391406577569502
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.5385345266502541
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5345931253721009
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.5146264911408855
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D16",
+          "chunk": "D16#0",
+          "score": 0.5461326078733143,
+          "source_id": "S1",
+          "locator": "pgvector:327103e913874fefa99a1a30479d8263-0",
+          "document_id": "327103e913874fefa99a1a30479d8263",
+          "chunk_id": "327103e913874fefa99a1a30479d8263-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D16"
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.5391406577569502,
+          "source_id": "S2",
+          "locator": "pgvector:7c7a07e9c15e43169e6ab32990f6293e-0",
+          "document_id": "7c7a07e9c15e43169e6ab32990f6293e",
+          "chunk_id": "7c7a07e9c15e43169e6ab32990f6293e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D11"
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.5385345266502541,
+          "source_id": "S3",
+          "locator": "pgvector:e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "document_id": "e4a66af07b7b458eb96cf461fe9a8b41",
+          "chunk_id": "e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D04"
+        },
+        {
+          "document": "D03",
+          "chunk": "D03#0",
+          "score": 0.5345931253721009,
+          "source_id": "S4",
+          "locator": "pgvector:108fb926d73b4717ac77d0944b3aeee6-0",
+          "document_id": "108fb926d73b4717ac77d0944b3aeee6",
+          "chunk_id": "108fb926d73b4717ac77d0944b3aeee6-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D03"
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.5146264911408855,
+          "source_id": "S5",
+          "locator": "pgvector:8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "document_id": "8ef9ae1a90f44cb284f79e20c6246e4a",
+          "chunk_id": "8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D05"
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "category": "引用拒绝",
+      "question": "如果报告引用了从未检索到的来源编号 S999，系统允许发布吗？",
+      "relevant_documents": [
+        "D05"
+      ],
+      "rationale": "D05 明确不存在的引用应拒绝；D06 的语义判断不能代替此规则。",
+      "raw_top5": [
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.7204440332253051
+        },
+        {
+          "document": "D06",
+          "chunk": "D06#0",
+          "score": 0.613949931499359
+        },
+        {
+          "document": "D16",
+          "chunk": "D16#0",
+          "score": 0.5427399550235386
+        },
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.5392754399344597
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.519564555844476
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.7204440332253051,
+          "source_id": "S1",
+          "locator": "pgvector:8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "document_id": "8ef9ae1a90f44cb284f79e20c6246e4a",
+          "chunk_id": "8ef9ae1a90f44cb284f79e20c6246e4a-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D05"
+        },
+        {
+          "document": "D06",
+          "chunk": "D06#0",
+          "score": 0.613949931499359,
+          "source_id": "S2",
+          "locator": "pgvector:5ed02416d4264307a999462b7c9b63df-0",
+          "document_id": "5ed02416d4264307a999462b7c9b63df",
+          "chunk_id": "5ed02416d4264307a999462b7c9b63df-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D06"
+        },
+        {
+          "document": "D16",
+          "chunk": "D16#0",
+          "score": 0.5427399550235386,
+          "source_id": "S3",
+          "locator": "pgvector:327103e913874fefa99a1a30479d8263-0",
+          "document_id": "327103e913874fefa99a1a30479d8263",
+          "chunk_id": "327103e913874fefa99a1a30479d8263-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D16"
+        },
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.5392754399344597,
+          "source_id": "S4",
+          "locator": "pgvector:cb989bc54983432d82be2a9ac0676599-0",
+          "document_id": "cb989bc54983432d82be2a9ac0676599",
+          "chunk_id": "cb989bc54983432d82be2a9ac0676599-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D12"
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.519564555844476,
+          "source_id": "S5",
+          "locator": "pgvector:e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "document_id": "e4a66af07b7b458eb96cf461fe9a8b41",
+          "chunk_id": "e4a66af07b7b458eb96cf461fe9a8b41-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D04"
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "category": "无答案：近主题",
+      "question": "该项目使用的收费大模型每百万输出 token 具体收取多少人民币？",
+      "relevant_documents": [],
+      "rationale": "没有任何文档给出价格或计费条款。",
+      "raw_top5": [
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5235061205478349
+        },
+        {
+          "document": "D09",
+          "chunk": "D09#0",
+          "score": 0.4178028529227632
+        },
+        {
+          "document": "D08",
+          "chunk": "D08#0",
+          "score": 0.3834484264357473
+        },
+        {
+          "document": "D15",
+          "chunk": "D15#0",
+          "score": 0.3830007130801891
+        },
+        {
+          "document": "D07",
+          "chunk": "D07#0",
+          "score": 0.3810097688737444
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D10",
+          "chunk": "D10#0",
+          "score": 0.5235061205478349,
+          "source_id": "S1",
+          "locator": "pgvector:63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "document_id": "63ae713c430b44eea9ed4d6c3cf3382e",
+          "chunk_id": "63ae713c430b44eea9ed4d6c3cf3382e-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D10"
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "category": "无答案：技术干扰",
+      "question": "服务端 TLS 证书使用哪家机构签发，证书每隔多少天自动轮换？",
+      "relevant_documents": [],
+      "rationale": "数据集未描述 TLS 证书和轮换配置。",
+      "raw_top5": [
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.5353853106498718
+        },
+        {
+          "document": "D04",
+          "chunk": "D04#0",
+          "score": 0.48174048905791333
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.4764873371414752
+        },
+        {
+          "document": "D11",
+          "chunk": "D11#0",
+          "score": 0.4691773075355712
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.46889853848236673
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.5353853106498718,
+          "source_id": "S1",
+          "locator": "pgvector:cb989bc54983432d82be2a9ac0676599-0",
+          "document_id": "cb989bc54983432d82be2a9ac0676599",
+          "chunk_id": "cb989bc54983432d82be2a9ac0676599-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D12"
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "category": "无答案：近主题",
+      "question": "此 PgVector 部署在一亿条向量下实测能达到多少 QPS 和 P99 延迟？",
+      "relevant_documents": [],
+      "rationale": "D07 描述精确排序，不包含任何规模性能实测值。",
+      "raw_top5": [
+        {
+          "document": "D07",
+          "chunk": "D07#0",
+          "score": 0.5500387117278195
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.5490112795541837
+        },
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.5237013257652918
+        },
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.5102252516217607
+        },
+        {
+          "document": "D01",
+          "chunk": "D01#0",
+          "score": 0.49144674914061826
+        }
+      ],
+      "production_top5": [
+        {
+          "document": "D07",
+          "chunk": "D07#0",
+          "score": 0.5500387117278195,
+          "source_id": "S1",
+          "locator": "pgvector:fa31f354ae20415cbebcf241468fe9c8-0",
+          "document_id": "fa31f354ae20415cbebcf241468fe9c8",
+          "chunk_id": "fa31f354ae20415cbebcf241468fe9c8-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D07"
+        },
+        {
+          "document": "D13",
+          "chunk": "D13#0",
+          "score": 0.5490112795541837,
+          "source_id": "S2",
+          "locator": "pgvector:b3c5896b518f4d2fba99360e08b864bc-0",
+          "document_id": "b3c5896b518f4d2fba99360e08b864bc",
+          "chunk_id": "b3c5896b518f4d2fba99360e08b864bc-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D13"
+        },
+        {
+          "document": "D17",
+          "chunk": "D17#0",
+          "score": 0.5237013257652918,
+          "source_id": "S3",
+          "locator": "pgvector:494210af6da84b349379f253679a4658-0",
+          "document_id": "494210af6da84b349379f253679a4658",
+          "chunk_id": "494210af6da84b349379f253679a4658-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D17"
+        },
+        {
+          "document": "D12",
+          "chunk": "D12#0",
+          "score": 0.5102252516217607,
+          "source_id": "S4",
+          "locator": "pgvector:cb989bc54983432d82be2a9ac0676599-0",
+          "document_id": "cb989bc54983432d82be2a9ac0676599",
+          "chunk_id": "cb989bc54983432d82be2a9ac0676599-0",
+          "source_ref": "synthetic:zh-retrieval-v1:D12"
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "category": "无答案：不相关",
+      "question": "天狼星的伴星质量是多少倍太阳质量，测量误差是多少？",
+      "relevant_documents": [],
+      "rationale": "技术与两篇干扰文档均没有天文测量数据。",
+      "raw_top5": [
+        {
+          "document": "D07",
+          "chunk": "D07#0",
+          "score": 0.4757855676348679
+        },
+        {
+          "document": "D09",
+          "chunk": "D09#0",
+          "score": 0.46782608234364065
+        },
+        {
+          "document": "D06",
+          "chunk": "D06#0",
+          "score": 0.44280050524474723
+        },
+        {
+          "document": "D05",
+          "chunk": "D05#0",
+          "score": 0.42066949913941487
+        },
+        {
+          "document": "D16",
+          "chunk": "D16#0",
+          "score": 0.41475810872691365
+        }
+      ],
+      "production_top5": []
+    }
+  ]
+}

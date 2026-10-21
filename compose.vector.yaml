@@ -1,0 +1,34 @@
+# Isolated local demo credentials, never reuse for real data or public deployment.
+services:
+  postgres:
+    image: pgvector/pgvector:pg17@sha256:ac08538c6f8b9904c33c8224c5e5706dbe760aca29db1d096972b4052c22a75d
+    environment:
+      POSTGRES_USER: researchpilot_demo
+      POSTGRES_PASSWORD: researchpilot_local_demo
+      POSTGRES_DB: researchpilot_demo
+    ports:
+      - "127.0.0.1:15432:5432"
+    volumes:
+      - researchpilot-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U researchpilot_demo -d researchpilot_demo"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  researchpilot:
+    build:
+      args:
+        REQUIREMENTS: requirements-vector.lock
+    environment:
+      RESEARCH_RETRIEVAL_BACKEND: pgvector
+      RESEARCH_POSTGRES_DSN: postgresql://researchpilot_demo:researchpilot_local_demo@postgres:5432/researchpilot_demo
+      RESEARCH_EMBEDDING_CACHE_DIR: /app/models
+      LANGSMITH_TRACING: "false"
+      LANGCHAIN_TRACING_V2: "false"
+    volumes:
+      - ./data/models:/app/models:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  researchpilot-pgdata: {}

@@ -1,0 +1,17 @@
+services:
+  researchpilot:
+    build: .
+    ports:
+      - "127.0.0.1:8010:8010"
+    environment:
+      RESEARCH_MODEL_BACKEND: mock
+      RESEARCH_SEARCH_BACKEND: none
+      RESEARCH_DATA_DIR: /app/data
+      RESEARCH_MAX_ROUNDS: "2"
+      LANGSMITH_TRACING: "false"
+      LANGCHAIN_TRACING_V2: "false"
+    volumes:
+      - researchpilot-data:/app/data
+    restart: unless-stopped
+volumes:
+  researchpilot-data: {}
