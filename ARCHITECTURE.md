@@ -1,5 +1,7 @@
 ﻿# ResearchPilot 架构说明
 
+?????? Ollama ??? DeepSeek Provider?DeepSeek ???????? A ??? HTTP ?????B/E ????Qwen B/E ?????????? [TEST_REPORT](TEST_REPORT.md)????? Phase ??????????
+
 ## 运行链路
 
 Phase7.2开发分支新增显式deepseek模式：DeepSeekStructuredModel复用LocalStructuredModel的消息构造、三份Schema和同一5节点图，只替换Provider预检、输入预算计数与请求协议（json_object、本地严格Pydantic，禁用thinking，输出max_tokens）。调用预算/300秒deadline/失败恢复由原结构化路径执行；任务记录Provider、请求模型/端点，事件记录响应模型/用量/结束原因，恢复时禁止身份漂移。新错误分类只持久化安全码，不保留SDK异常原文。原Ollama身份/Tokenizer/json_schema保留，旧openai模式仍为历史适配器，不等同新DeepSeek。新增30项离线TCP合约通过，用户一次真实规划冒烟和一条公开合成A的HTTP完整研究成功；详见[Phase7.2](docs/PHASE72_DEEPSEEK_PREVIEW.md)。[Phase7.3](docs/PHASE73_DEEPSEEK_HTTP_A.md)仅增加受控HTTP实验脚本，不改变本图；Docker恢复后4项离线预检通过，A实际plan/retrieve/assess/write/validate、1轮3请求。下面冻结架构为main历史；单条成功不覆盖Qwen B/E失败或证明生产可靠性。
