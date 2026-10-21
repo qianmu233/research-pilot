@@ -24,6 +24,13 @@ class ContextBudgetExceeded(ValueError):
     pass
 
 
+class ProviderFailure(RuntimeError):
+    """Safe classification/usage only; never retain provider bodies or headers."""
+    def __init__(self, code: str, usage: dict | None = None):
+        super().__init__(code)
+        self.code, self.usage = code, usage or {}
+
+
 def verify_local_model(settings, timeout: float = 3) -> dict:
     import httpx
     identity = json.loads(Path(__file__).with_name("chat-model.lock.json").read_text("utf-8"))
@@ -46,10 +53,30 @@ class LocalStructuredModel(LangChainOpenAIResearchModel):
         super().__init__(settings.model_name, "local-ollama-no-secret", settings.model_base_url)
         self.settings = settings
 
-    def generate(self, stage: str, payload: dict, timeout: float) -> tuple[dict, dict]:
-        started = time.monotonic()
+    def preflight(self, timeout: float) -> None:
         if getattr(self, "identity", None):
             verify_local_model(self.settings, min(3, timeout))
+
+    def input_size(self, system: str, content: str) -> int:
+        from .chat_tokens import count_qwen_messages
+        return count_qwen_messages(self.settings.embedding_cache_dir, system, content)
+
+    def request(self, schema, provider_schema, messages, timeout):
+        client = self.client.with_structured_output(
+            provider_schema, method="json_schema", include_raw=True,
+            timeout=timeout, extra_body={"max_tokens": self.settings.model_output_tokens},
+            reasoning_effort="none")
+        try:
+            result = client.invoke(messages)
+        except (json.JSONDecodeError, ValidationError):
+            raise ModelContractError("MODEL_JSON_SCHEMA_INVALID") from None
+        if result.get("parsing_error") or result.get("parsed") is None:
+            raise ModelContractError("MODEL_JSON_SCHEMA_INVALID")
+        return result["raw"], schema.model_validate(result["parsed"]).model_dump()
+
+    def generate(self, stage: str, payload: dict, timeout: float) -> tuple[dict, dict]:
+        started = time.monotonic()
+        self.preflight(timeout)
         schemas = {"plan": ResearchPlan, "assess": EvidenceAssessment, "write": StructuredReport}
         instructions = {
             "plan": ("生成简短中文研究计划。questions覆盖用户要求核实的每个要点；queries为1至2条精准检索词。"
@@ -85,8 +112,7 @@ class LocalStructuredModel(LangChainOpenAIResearchModel):
         schema_text = json.dumps(schema.model_json_schema(), ensure_ascii=False, separators=(",", ":"))
         system += "\nJSON_SCHEMA:\n" + schema_text
         content = json.dumps(payload, ensure_ascii=False)
-        from .chat_tokens import count_qwen_messages
-        input_tokens = count_qwen_messages(self.settings.embedding_cache_dir, system, content)
+        input_tokens = self.input_size(system, content)
         # Reserve an additional 128 tokens for differences in the Ollama template.
         # Reject rather than truncate evidence. Actual server usage is also recorded.
         if input_tokens + 128 + self.settings.model_output_tokens > self.settings.model_context_tokens:
@@ -94,23 +120,18 @@ class LocalStructuredModel(LangChainOpenAIResearchModel):
         remaining = timeout - (time.monotonic() - started)
         if remaining <= 0:
             raise TimeoutError("MODEL_PREFLIGHT_DEADLINE_EXCEEDED")
-        client = self.client.with_structured_output(
-            provider_schema, method="json_schema", include_raw=True,
-            timeout=remaining, extra_body={"max_tokens": self.settings.model_output_tokens},
-            reasoning_effort="none")
-        try:
-            result = client.invoke([("system", system), ("human", content)])
-        except (json.JSONDecodeError, ValidationError):
-            raise ModelContractError("MODEL_JSON_SCHEMA_INVALID") from None
-        if result.get("parsing_error") or result.get("parsed") is None:
-            raise ModelContractError("MODEL_JSON_SCHEMA_INVALID")
-        raw = result["raw"]
+        raw, parsed = self.request(schema, provider_schema, [("system", system), ("human", content)], remaining)
         if raw.response_metadata.get("finish_reason") == "length":
             raise ModelContractError("MODEL_OUTPUT_TRUNCATED")
         usage = raw.usage_metadata or {}
-        return schema.model_validate(result["parsed"]).model_dump(), {
+        return parsed, {
             "input_tokens": usage.get("input_tokens"), "output_tokens": usage.get("output_tokens"),
+            "total_tokens": usage.get("total_tokens"),
             "input_tokens_estimated": input_tokens, "template_margin_tokens": 128,
+            "provider": getattr(self, "identity", {}).get("provider", "ollama"),
+            "requested_model": self.settings.model_name,
+            "response_model": raw.response_metadata.get("model_name"),
+            "finish_reason": raw.response_metadata.get("finish_reason"),
         }
 
 

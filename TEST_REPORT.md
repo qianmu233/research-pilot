@@ -1,5 +1,64 @@
 # ResearchPilot 实际验收报告：Phase 7.1
 
+## Phase 7.3 最终结果核验（2026-10-21，只读原件，无新增收费请求）
+
+**DeepSeek公开合成A真实HTTP闭环完成，针对本次合成来源的两条技术结论均supported；不代表全部模型质量通过。** task_id=9e6e89bd429e4151906408b8d2160a6d，原件data/phase72-paid-8421922ca7b2/A-http。实际completed、无错误/工具错误，原图plan→retrieve:1:1→assess:model_sufficient→write→validate:OK。前置真实JSON规划冒烟另1请求/357 Token，不能合并成A节点。
+
+| 验证项 | 实际核对结果 |
+|---|---|
+| 三次真实HTTP与节点 | plan：296/63/359；assess：550/68/618；write：716/137/853（输入/输出/总Token），均200、completed、finish_reason=stop |
+| 模型/用量 | deepseek；请求及响应deepseek-flash（别名，不是权重锁）；合计1562输入、268输出、1830 Token，HTTP3/5、检索1/3轮 |
+| 报告与来源 | S1=synthetic:phase72-public-A，唯一分片731f8ce2b5c04de7bb4d1a64e5591f6e-0；ID、映射、摘录和原合成正文分别核对一致 |
+| 逐条质量 | “通过检查点保存单线程图状态”“相同线程标识读取此前状态”两条均为原句直接支持：2 supported、0 unsupported、0 uncertain；无过度拒答或材料外技术结论 |
+| 状态/持久化 | 任务、API报告/轨迹、SQLite预算3次及最终checkpoint一致；7个checkpoint，最后completed、iteration=1 |
+| 重启 | restart.json：同进程Runtime/SQLite/HTTP重开后任务/报告/轨迹相同，HTTP3→3；不是本次远端跨进程崩溃恢复验收 |
+| 实际费用 | 按保存的高峰未缓存价估算USD0.0007902，实际账单未知；前置smoke另USD0.0001656，不虚构实扣 |
+| 环境/离线补验 | 只读确认Docker29.8.1/linux、项目postgres healthy；已有phase73-local-recheck.xml为4 passed、0 failed、0 skipped、10.730秒，非真实模型质量计数 |
+| 凭据/隐私 | 扫描本次运行文件及SQLite未发现Key/Authorization/私钥/非空密钥字段，内容仅公开合成材料；未读取真实Key/环境文件，运行数据继续忽略、不暂存 |
+
+evidence_status=unverified、citation_valid=true、facts_verified=false原样保留；助手有限来源复核不冒充用户/专家独立事实认证，不改原summary中的pending_manual_review。历史Qwen七条事实6 supported/1 uncertain、B/E质量失败原样保留；DeepSeek B/E未测试。本轮无产品/Prompt/断言/金标修改、无模型请求、不重复全量评测，仅文档、安全审核及本地提交准备。
+
+逐条原始结论/摘录、来源ID、用量对账、原件SHA256与历史失败见[Phase7.3最终核验](docs/PHASE73_DEEPSEEK_HTTP_A.md)。main仍0304f7783700636f14b494a30745388069f20f3b，功能分支不自动合并或推送。下方准备期阻塞及“尚未执行”描述仅为历史记录，后续恢复结果以上方为准，不删除失败证据。
+
+## Phase 7.3 准备与首次真实冒烟归档（2026-10-21）
+
+**本轮没有收费请求；A未获收费授权，完整离线预检仍被Docker环境阻塞。** 只读核对用户已完成的smoke，未重新请求：data/phase72-paid-8421922ca7b2，deepseek / deepseek-flash，http_attempts=1，model_calls=1，exit_code=0，error_code=null，status=completed，finish_reason=stop；292输入+65输出=357 Token，1.078秒，ResearchPlan三字段严格校验成功。按官方高峰未缓存价估算USD0.0001656，未查询账单；原文件及SHA256归档于[Phase7.2](docs/PHASE72_DEEPSEEK_PREVIEW.md)。这仅证明真实规划，不证明证据评估/报告或B/E质量。
+
+新增scripts/deepseek_http_a.py与tests/test_phase73_preview.py，只补实验工具，不修改产品代码、Prompt、历史48项测试、真实Qwen用例或评测金标。旧A直接Runtime入口不满足HTTP要求；新入口设计为真实本机TCP FastAPI→原图→DeepSeek三节点→真实中文BGE/PgVector→引用校验→SQLite→API及Runtime/HTTP重启查询。后者是同进程重开，不冒充进程崩溃恢复。
+
+| 检查 | 本轮实际结果 | 记录 |
+|---|---|---|
+| 新完整离线预检 | **2 passed、2 failed，21.83秒**；两个完整场景在真实PgVector初始化ConnectionTimeout，HTTP模型尝试均0 | data/acceptance/phase73-preview-first.xml |
+| 相关离线合约 | **41 passed、2 deselected，18.12秒**：原DeepSeek30+Phase7合约9+新门禁2；不能覆盖或抹掉上述失败 | phase73-offline-contracts.xml |
+| 最终无网络门禁测试 | **2 passed、2 deselected，0.93秒**；5次上限、输入限制、失败尝试和缺usage后停止 | phase73-guard-final.xml |
+| 其他本机检查 | 真实loopback健康200；三节点经受控MockTransport预检成功，云端0；Ruff、pip check通过 | 不属于真实DeepSeek或完整PgVector HTTP成功 |
+| 完整48/78回归 | 本轮未重跑；历史78通过/48基线保持，不改原断言 | 历史记录见下节 |
+
+Docker Linux引擎管道不存在，普通start受日志目录权限限制；受控标准start返回already running仍无后端，一次标准restart超时、前端未退出。未删除数据、容器或卷，不继续修复环境。需要用户正常恢复Docker Desktop Linux引擎，再重跑原4项新离线测试；仍有失败则停止，不收费。新测试初次Ruff导入写法及追加断言的闭包绑定告警已修正，最终Ruff通过，没有弱化断言。
+
+预算：最多5次真实HTTP尝试（失败计入）、3轮、300秒；每次输入应用预算8192/输出768、SDK与HTTP传输重试0。按2026-10-21官方高峰输入USD0.30/百万、输出USD1.20/百万，最坏估算USD0.016896 < USD0.02；不是钱包硬上限，缺usage费用为未知。新增门禁在I/O前写入持久化请求账，来源限定原公开合成笔记，关闭Tracing/代理/重定向；真实请求前先做BGE/数据库/HTTP预检，配置/日期/旧结果不合格即停止。完整计划、待授权命令和预定义证据文件见[Phase7.3](docs/PHASE73_DEEPSEEK_HTTP_A.md)。
+
+当前main仍0304f7783700636f14b494a30745388069f20f3b，feat/deepseek-provider未提交、未合并、未推送。本轮原smoke文件不变、运行材料仍由data/忽略。Qwen B/E失败、6 supported/1 uncertain不因一次云端规划成功改变。以下保留首次冒烟前的原始离线报告，历史“真实调用0次”以当时阶段为准。
+
+## Phase 7.2 原始离线开发验收（首次真实冒烟前，2026-10-21）
+
+main保持预览基线0304f7783700636f14b494a30745388069f20f3b；本轮授权的最小DeepSeek适配位于feat/deepseek-provider，**尚未提交，未合并/推送**。旧冻结清单及B/E原始失败保留，不将新分支源码变动称作旧清单完全匹配。
+
+| 检查 | 本轮实际结果 | 原始记录 |
+|---|---|---|
+| 全部回归/合约 | **78 passed，0 failed，0 skipped，38.01秒**；原48项未改，加30项新合约 | data/acceptance/phase72-regression-release.xml |
+| 新DeepSeek离线合约 | **30 passed，17.78秒**；3个节点实际SDK/本机TCP请求、严格JSON、HTTP错误、预算/恢复、Provider隔离、本地Ollama请求兼容 | phase72-contract-final.xml |
+| Ruff / pip check | 全部通过 | research_pilot/tests/scripts/tests_real；宿主虚拟环境 |
+| 真实DeepSeek / 本轮真实Qwen质量任务 | **均0次**；不能称真实API或B/E质量通过 | 首次付费调用前停止 |
+
+保留首轮及中间失败：新合约先26通过/2失败（SDK截断分类/Windows拒连时序），修复后与旧合约合计37通过；首次全回归64通过/5失败/7错误，因Docker引擎未运行、PgVector15432关闭；启动已有Docker Desktop和本项目专用postgres后数据库通过。下一次全套77通过/1失败，为旧HTTP恢复测试随机端口绑定Windows Errno13；原代码单独复测1通过，最终全套78通过。未跳过、删改原测试断言或系统端口配置，未确证那次绑定失败的系统原因。对应XML：phase72-contract-first/fixed、phase72-regression-first/final、phase72-recovery-port-recheck；全部保留。
+
+同一5节点图和Pydantic Schema复用，显式deepseek模式用json_object，Ollama保留json_schema；HTTP max_tokens/thinking/response_format均由本机TCP实际捕获断言。SDK重试为0；401/403/429/5xx/超时/连接及非法响应分类可见，失败用量可取得时入账，恢复不重置调用次数/deadline，不允许换Provider继续旧任务。没有读取真实Key、外发研究资料、调用收费搜索/模型或下载新权重；本轮没有重建Docker应用或重新做真实远端HTTP验收。
+
+实现、30项合约边界、环境失败和单次smoke→公开合成A的未执行计划见[Phase7.2专项记录](docs/PHASE72_DEEPSEEK_PREVIEW.md)。最高价未命中缓存估算：单次smoke约USD0.0013824（申请USD0.002，1请求）；后续A最多5请求约USD0.016896（需另批USD0.02）。这是输入预算/输出上限下的估算，不是供应商账单硬保证；B/E不执行。当前仅离线准备通过，未验证真实DeepSeek账号、参数执行、实际账单或质量。
+
+---
+
 **工程冻结归档（2026-10-21）：工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 本次只核对已有证据和文件、整理文档，没有重跑pytest/Ruff/pip check或模型评测。下面2026-10-20的结果、耗时及所有失败按原样保留；“不能封板”指模型质量条件未满足，不等于否定此次带已知失败的工程归档。见[归档事实清单](docs/ENGINEERING_ARCHIVE.md)与[演示指南](docs/DEMO_GUIDE.md)。
 
 2026-10-20。**E 未解决，不能封板；本次原配置 B 也过度拒答。** 完成原始证据排查、一次通用提示实验及撤回、定向重复验证、七条事实终审与HTTP/持久化验收。没有把实验写成修复成果，没有改金标或放宽断言。最终仅更新文档，产品代码/测试/依赖/数据集未变。完整说明：[Phase 7.1 最终审核](docs/PHASE71_FINAL_REVIEW.md)。

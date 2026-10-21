@@ -64,8 +64,8 @@ class Settings:
         return config
 
     def validate(self) -> None:
-        if self.model_backend not in {"mock", "openai", "ollama"}:
-            raise ValueError("RESEARCH_MODEL_BACKEND must be mock, openai or ollama")
+        if self.model_backend not in {"mock", "openai", "ollama", "deepseek"}:
+            raise ValueError("Unsupported model backend")
         if self.search_backend not in {"none", "tavily"}:
             raise ValueError("RESEARCH_SEARCH_BACKEND must be none or tavily")
         if self.retrieval_backend not in {"lexical", "pgvector"}:
@@ -99,6 +99,16 @@ class Settings:
                 raise ValueError("Ollama requires an explicit local /v1 URL and model name")
             if "cloud" in self.model_name.lower():
                 raise ValueError("Cloud models are forbidden in local mode")
+        if self.model_backend == "deepseek":
+            endpoint = urlparse(self.model_base_url)
+            if (endpoint.scheme != "https" or endpoint.hostname != "api.deepseek.com" or
+                    endpoint.port not in {None, 443} or endpoint.username or endpoint.password or
+                    endpoint.query or endpoint.fragment or endpoint.path.rstrip("/") not in {"", "/v1"}):
+                raise ValueError("DeepSeek requires the official HTTPS endpoint")
+            if self.model_name != "deepseek-flash" or not self.model_api_key.strip():
+                raise ValueError("DeepSeek requires deepseek-flash and an environment API key")
+            if self.max_model_calls > 5 or self.task_timeout_seconds > 300 or self.model_output_tokens > 768:
+                raise ValueError("DeepSeek preview exceeds the 5-call/300s/768-output budget")
         if not 2048 <= self.model_context_tokens <= 8192:
             raise ValueError("Context must be in [2048, 8192]")
         if not 128 <= self.model_output_tokens <= 1536:

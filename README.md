@@ -1,10 +1,12 @@
 ﻿# ResearchPilot · LangGraph 研究工作流与证据溯源
 
-**工程冻结状态（2026-10-21）：工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 最后实际回归/合约48通过；真实A/B/C/D/E/F定向4通过、2失败（B/E），追加E/D为1通过、1失败；原配置E三次均过度拒答，D两次均正确拒答。通用提示实验已撤回；七条事实终审为6 supported、1 uncertain。保留Mock和全部失败记录，不将工程冻结说成质量全通过或生产级可靠。本次只归档文档，不重跑模型评测。见[归档与简历事实清单](docs/ENGINEERING_ARCHIVE.md)、[三个演示/两个失败复现](docs/DEMO_GUIDE.md)、[测试报告](TEST_REPORT.md)及[Phase7.1原始审核](docs/PHASE71_FINAL_REVIEW.md)。后面的安装与早期阶段描述是复现参考，冻结演示优先使用演示指南，不自动下载或启动新模型。
+**Phase7.2/7.3开发分支验收（2026-10-21）：** main工程预览基线保持不变；feat/deepseek-provider沿用原图/预算/来源校验。历史78项回归/合约通过（原48+新增30），用户恢复Docker后新增离线预检4通过；**DeepSeek JSON规划冒烟与一条公开合成A的完整HTTP工作流均已真实执行**。A为3请求、1轮检索、1830 Token、状态completed；报告两条结论对合成来源均supported，引用和Runtime/HTTP重启查询一致。仅限本次资料支持性核查，不等于外部事实独立验证、全部模型质量通过或生产级可靠；DeepSeek B/E未测试。本次只读复核，无新增收费请求。见[冒烟归档](docs/PHASE72_DEEPSEEK_PREVIEW.md)及[Phase7.3实际结果](docs/PHASE73_DEEPSEEK_HTTP_A.md)。分支尚未提交、未合并或推送。
+
+**main冻结历史状态（2026-10-21）：工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 基线48项回归/合约通过；真实A/B/C/D/E/F为4通过、2失败（B/E），原E三次拒答、D两次正确拒答。七条事实6 supported、1 uncertain，不因新离线合约改变。历史见[归档](docs/ENGINEERING_ARCHIVE.md)、[演示](docs/DEMO_GUIDE.md)、[测试报告](TEST_REPORT.md)和[Phase7.1审核](docs/PHASE71_FINAL_REVIEW.md)。
 
 项目将资料查询组织为：规划 → 检索 → 证据评估 → 有界补充检索 → 报告草拟 → 引用检查。真实LLM判断充分性，Mock仅控制候选收集；二者都不等于事实验证。参考 [LangChain Open Deep Research](https://github.com/langchain-ai/open_deep_research) 的工作流思想独立实现；保留上游来源与 MIT 声明，见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。上游归档审计保留在 `docs/STAGE0_UPSTREAM_AUDIT.md`。
 
-本地工程预览Git基线与外部API只读核验见[专项说明](docs/LOCAL_BASELINE_AND_API_AUDIT.md)。未创建远端或推送；67项冻结源码清单不变。OpenAI-compatible配置仅能进入旧版openai路径，不能把换成DeepSeek地址说成Phase7结构化闭环已兼容；本轮没有调用远端模型或读取真实密钥。
+Phase7.2之前的Git基线/只读API核验保留在[历史说明](docs/LOCAL_BASELINE_AND_API_AUDIT.md)：旧openai后端仍是旧路径。新开发分支应显式选择deepseek，而非仅更换openai的地址；当前已验证一次真实规划冒烟及单条公开合成A的远端完整研究。main的67项冻结清单保持历史原样。
 
 ## 已实现与边界
 

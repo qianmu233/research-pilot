@@ -1,5 +1,19 @@
 ﻿# ResearchPilot 面试复盘（以实际证据为准）
 
+## Phase 7.2/7.3：本地与远端兼容如何证明？
+
+2026-10-21新增验收：DeepSeek一次真实JSON规划冒烟已验证（1请求、357 Token），一条公开合成A已通过完整HTTP工作流与来源支持性核查（3请求、1830 Token）。主链为FastAPI→既有LangGraph五节点→DeepSeek规划/证据评估/报告→中文BGE512D/PgVector→引用校验→SQLite→API查询。实际轨迹plan/retrieve:1:1/assess:model_sufficient/write/validate:OK，未补检索，非Mock结果。两条技术结论各引用同一检索所得S1的对应原句，逐条supported；这里真实检索指实际数据库操作，来源内容仍是明确标记的合成演示笔记，不是企业资料或外部事实权威。
+
+怎样控制成本：显式deepseek Provider复用ChatOpenAI和原Schema；JSON对象加本地严格Pydantic校验，认证/限流/超时/坏JSON不重试或换Mock。SQLite在模型调用前记账，5调用/3轮/300秒跨节点约束保留；实验传输层另外在I/O前记录HTTP尝试，含失败最多5次、禁自动重试/重定向/Tracing。A实际1562输入、268输出Token，按保存的高峰未缓存价格估算USD0.0007902，实际账单未知，不能声称精确实扣或钱包硬限额。响应模型deepseek-flash为服务别名，不等于固定模型权重。
+
+怎样区分工程与质量：已有Qwen完整工作流运行证据，但最终B/E质量失败仍保留；DeepSeek只验证一次规划和一条单文档A，B/E从未测试，不能说换模型已经解决。A的引用ID存在、来源映射正确、原文支持结论分别检查；evidence_status仍unverified、facts_verified仍false，不把句子摘录匹配宣传成通用事实验证器。Runtime/SQLite/HTTP重开后原任务/报告/轨迹一致且请求仍3次，这是同进程服务重开，不冒充本次远端进程崩溃恢复。历史独立进程恢复测试另列。
+
+测试数字分开：历史48回归/合约；Phase7.2历史完整78通过（48+30）；用户修复Docker后Phase7.3独立离线预检4通过（10.730秒）。这4项使用本机模拟DeepSeek、真实BGE/PgVector；付费A另算1条真实任务，不能把这些计数混成模型准确率。本次只核对已有结果，不追加收费调用或质量评测。最初Docker未就绪导致的2项失败与所有Qwen失败原件保留。
+
+可用于实习简历的事实描述：“独立实现基于LangGraph的有界研究工作流，集成FastAPI、SQLite Checkpointer与中文BGE/PgVector检索；适配本地Ollama和DeepSeek结构化JSON输出，增加调用预算、错误分类和来源校验；通过真实HTTP、数据库与持久化验收，并记录公开合成任务的用量及逐条引用支持性。”面试主动补充Qwen B/E过度拒答与DeepSeek尚未覆盖B/E的边界，不称生产级系统。上游仅工作流思想/MIT参考，本项目API、图、预算、检索适配与验收实现不能说成上游提供。
+
+结果与源码入口见[Phase7.3最终核验](docs/PHASE73_DEEPSEEK_HTTP_A.md)。下面各阶段的“未付费”“不是Git仓库”等均为历史时点：目前已有main本地基线及feat/deepseek-provider，未合并或推送；不据新结果删除或重写旧失败。
+
 ## Phase 7.1 最终审核：哪些问题没有解决？
 
 **工程冻结归档（2026-10-21）：工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 下面是不覆盖失败的历史复盘。可引用的简历描述、第三方/本项目贡献划分及源码学习顺序见[工程归档](docs/ENGINEERING_ARCHIVE.md)，三个演示和B/E原标准复现见[演示指南](docs/DEMO_GUIDE.md)。工程归档不是生产级可靠性或质量全过的声明。

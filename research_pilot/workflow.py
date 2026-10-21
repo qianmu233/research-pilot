@@ -51,6 +51,9 @@ def build_graph(model: ResearchModel, tools: SearchTools, settings: Settings, ch
                 raise TimeoutError("MODEL_DEADLINE_EXCEEDED")
             status = "completed"
             return value
+        except Exception as exc:
+            usage = getattr(exc, "usage", {})
+            raise
         finally:
             model_budget.finish_model_call(state["task_id"], number, status,
                                            time.monotonic() - started, usage)

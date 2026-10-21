@@ -30,11 +30,16 @@ class ResearchRuntime:
             if settings.model_backend == "ollama":
                 from .local_llm import LocalStructuredModel, verify_local_model
                 model = LocalStructuredModel(settings)
-                model.identity = verify_local_model(settings)
+                model.identity = {**verify_local_model(settings), "provider": "ollama",
+                                  "base_url": settings.model_base_url.rstrip("/")}
+            elif settings.model_backend == "deepseek":
+                from .deepseek import DeepSeekStructuredModel
+                model = DeepSeekStructuredModel(settings)
             else:
                 model = MockResearchModel() if settings.model_backend == "mock" else \
                     LangChainOpenAIResearchModel(settings.model_name, settings.model_api_key,
                                                  settings.model_base_url)
+        self.model_identity = dict(getattr(model, "identity", {}))
         external = NoExternalSearch() if settings.search_backend == "none" else \
             TavilySearch(settings.tavily_api_key)
         self.local = LocalSearch(self.store)
@@ -60,7 +65,10 @@ class ResearchRuntime:
                               research=state.get("research", {}))
 
     def create_task(self, data: CreateTask) -> str:
-        return self.store.create_task(data)
+        task_id = self.store.create_task(data)
+        if self.model_identity:
+            self.store.patch_task(task_id, research={"model": self.model_identity})
+        return task_id
 
     def get_task(self, task_id: str) -> dict | None:
         return self.store.task(task_id)
@@ -76,6 +84,7 @@ class ResearchRuntime:
             if task_id in self.active:
                 return
             self.active.add(task_id)
+        current = {}
         try:
             current = self.store.task(task_id)
             if not current or current["status"] == "completed":
@@ -83,8 +92,23 @@ class ResearchRuntime:
             self.store.patch_task(task_id, status="running", phase="starting", error_code=None)
             config = {"configurable": {"thread_id": task_id}, "recursion_limit": 20}
             snapshot = self.graph.get_state(config)
+            saved = snapshot.values.get("research", current.get("research", {})).get("model", {})
+            if saved:
+                # Legacy pinned Qwen tasks had no explicit provider/endpoint fields.
+                provider = saved.get("provider", "ollama" if saved.get("manifest_sha256") else None)
+                if (provider != self.model_identity.get("provider") or
+                        saved.get("model") != self.model_identity.get("model") or
+                        saved.get("base_url", self.model_identity.get("base_url")) !=
+                        self.model_identity.get("base_url") or
+                        saved.get("manifest_sha256") != self.model_identity.get("manifest_sha256")):
+                    from .local_llm import ProviderFailure
+                    raise ProviderFailure("MODEL_IDENTITY_MISMATCH")
+            elif snapshot.values and self.model_identity.get("provider") == "deepseek":
+                from .local_llm import ProviderFailure
+                raise ProviderFailure("MODEL_IDENTITY_MISSING")
             graph_input = None if snapshot.values else {
-                "task_id": task_id, "question": current["question"], "scope": current["scope"]}
+                "task_id": task_id, "question": current["question"], "scope": current["scope"],
+                "research": current.get("research", {})}
             if not snapshot.values or snapshot.next:
                 # Stream only from the runtime thread. Timed-out node threads never update tasks.
                 for state in self.graph.stream(graph_input, config, stream_mode="values",
@@ -119,15 +143,19 @@ class ResearchRuntime:
                 fields = {"sources": stable.get("sources", []), "trace": stable.get("trace", []),
                           "tool_errors": stable.get("tool_errors", []),
                           "evidence_status": stable.get("evidence_status", "unassessed"),
-                          "research": stable.get("research", {})}
+                          "research": stable.get("research", current.get("research", {}))}
             except Exception:  # noqa: BLE001 -- preserve the original safe failure classification
                 fields = {}  # Keep the last published state if the checkpoint cannot be read.
             from httpx import TimeoutException
             from openai import APITimeoutError
             timed_out = isinstance(exc, (TimeoutError, APITimeoutError, TimeoutException))
+            from .local_llm import ProviderFailure
+            if isinstance(exc, ProviderFailure):
+                timed_out = exc.code == "MODEL_TIMEOUT"
             self.store.patch_task(task_id, status="timed_out" if timed_out else "failed",
                                   phase="timeout" if timed_out else "error",
-                                  error_code=("WORKFLOW_STEP_TIMEOUT" if timed_out else
+                                  error_code=(exc.code if isinstance(exc, ProviderFailure) else
+                                              "WORKFLOW_STEP_TIMEOUT" if timed_out else
                                               f"WORKFLOW_FAILURE_{type(exc).__name__}"), **fields)
         finally:
             with self.lock:
