@@ -1,6 +1,6 @@
 ﻿# ResearchPilot 架构说明
 
-?????? Ollama ??? DeepSeek Provider?DeepSeek ???????? A ??? HTTP ?????B/E ????Qwen B/E ?????????? [TEST_REPORT](TEST_REPORT.md)????? Phase ??????????
+当前实现包含 Ollama 与显式 DeepSeek Provider；DeepSeek 已有一条公开合成 A 的真实 HTTP 闭环证据，B/E 未验证，Qwen B/E 失败保留。测试历史见 [TEST_REPORT](TEST_REPORT.md)。以下早期 Phase 记录保留其当时口径。
 
 ## 运行链路
 
@@ -63,4 +63,4 @@ LangGraph step_timeout限制等待，节点包装器还检查实际执行耗时�
 
 ## 已验证与未验证
 
-真实图、独立HTTP、神经Embedding/PgVector、SQLite中断/异常/超时/进程硬退出和恢复见TEST_REPORT。真实模型定向A/C/D/F通过，B/E为已知失败；七条历史事实由助手核对为6 supported、1 uncertain，不是自动事实验证或用户签字。部署仍为单实例本地演示，未实现生产认证、持久队列、自动恢复、多实例协调、通用报告质量保证、P3 MCP或并行研究员。没有任意URL抓取或Shell/SQL写工具。兼容接口已连接免费本地Ollama，Tavily/付费端点未验收且未调用。
+真实图、独立HTTP、神经Embedding/PgVector、SQLite中断/异常/超时/进程硬退出和恢复见TEST_REPORT。真实模型定向A/C/D/F通过，B/E为已知失败；七条历史事实由助手核对为6 supported、1 uncertain，不是自动事实验证或用户签字。部署仍为单实例本地演示，未实现生产认证、持久队列、自动恢复、多实例协调、通用报告质量保证、P3 MCP或并行研究员。没有任意URL抓取或Shell/SQL写工具。兼容接口已连接免费本地Ollama，DeepSeek 已有一条公开合成 A 的真实 HTTP 验证，B/E 未验证；Tavily 未实测。
