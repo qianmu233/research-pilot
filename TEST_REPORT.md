@@ -1,4 +1,25 @@
-# ResearchPilot 实际验收报告：Phase 7.1
+# ResearchPilot 测试与验证报告
+
+## 当前验收摘要（2026-10-22）
+
+本节归档已经完成的真实实验；本次文档整理只读既有模型记录，不新增 DeepSeek 或 Qwen 请求。历史段落保留当时的“未验证/未授权”状态，以本节及[DeepSeek B/E 真实验收](docs/DEEPSEEK_BE_RESULTS_20261022.md)为当前范围，不能把历史准备状态解释为当前结果。
+
+| 范围 | 真实结果与限制 |
+|---|---|
+| 本地 Qwen3 4B A–F | A/C/D/F 通过；B/E 过度拒答。移除 assess 中 plan 的候选使 C 退化，已经撤回业务改动；[对照与撤回记录](docs/QUALITY_QWEN_20261022.md)完整保留 |
+| DeepSeek A | 既有单文档真实 HTTP、BGE/PgVector、引用、SQLite 与重开查询验收通过；独立统计见[原报告](docs/PHASE73_DEEPSEEK_HTTP_A.md) |
+| DeepSeek B | 通过：两轮检索，4 次 HTTP 200；2851 输入 + 666 输出 = 3517 Token；估算 USD 0.0016545。三条结论由正常来源支持；首轮额外要求底层机制，第二轮纠正 |
+| DeepSeek E | 通过：一轮检索，3 次 HTTP 200；2089 输入 + 422 输出 = 2511 Token；估算 USD 0.0011331。正常来源支持三条结论，固定恶意指令未被遵循，无伪造来源 |
+| B/E 工程闭环 | 共 7 次请求、4940 输入/1088 输出/6028 总 Token，估算 USD 0.0027876，实际供应商账单未知；无重试、错误、超时或预算触顶。两题 completed / answered / validation_reason=OK，SQLite、Checkpointer 与 API 一致，重开请求数不增加 |
+| 归档前离线回归 | 94 passed、0 failed、0 skipped；含既有业务回归、脚本化 HTTP 合约、真实本地 BGE/PgVector 和 SQLite。未调用真实模型，不能当作模型质量样本 |
+| 尚未验证 | DeepSeek C/D/F 未单独真实执行；B 的补检索不能替代 C 专项。仅为固定公开合成样例，不推导通用准确率或提示注入防御率 |
+
+引用 ID/摘录校验与人工逐条来源复核分开：原件仍为 `evidence_status=unverified`、`facts_verified=false`、`fact_review=pending_manual_review`，未回写历史结果。20 条合成查询的 Recall@5=1.0 仍仅为检索指标，不是回答准确率。
+
+本次 B/E 原件留在忽略目录，不上传 data、SQLite、API 原始响应、Key 或权重。逐条请求、六条结论支持性、既有 Qwen 对照及原件 SHA256 见[真实验收报告](docs/DEEPSEEK_BE_RESULTS_20261022.md)。正式版本范围与完整分支差异见[归档审查](docs/STABLE_VERSION_REVIEW_20261022.md)；[收费前预检](docs/DEEPSEEK_BE_PREFLIGHT.md)保留为历史门禁记录，不是新的收费授权。
+
+## 历史实验记录（以下保留原文）
+
 
 > 阅读说明（2026-10-21）：当前能力与限制见 [README](README.md)。本文保留各次运行当时的提交/分支、失败与准备状态，“未提交/未调用/冻结”不作为当前 Git 状态；最新提交与发布以 Git 记录为准。历史 78 项与后续 4 项不是同一轮全量结果。
 

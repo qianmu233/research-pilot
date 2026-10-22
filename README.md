@@ -99,13 +99,15 @@ Invoke-RestMethod "$base/api/tasks/$($task.task_id)"
 
 | 范围 | 已有结果与口径 |
 |---|---|
-| 自动化工程回归 | 已记录 78 项回归/合约通过；另有 4 项本地环境补验通过，两次运行分别统计 |
+| 自动化工程回归 | 归档前离线回归 94 项通过，覆盖业务流程、Provider 合约与受控实验门禁；历史各轮结果分别留档，不累加为同一次运行 |
 | 本地基础设施 | 真实 LangGraph、独立 TCP HTTP、BGE/PgVector、导入回滚、SQLite 中断/异常/超时/崩溃与手动恢复测试 |
 | 中文检索基准 | 20 条合成查询的 Recall@5=1.0；无答案查询仍可能返回候选，**不代表最终回答准确率** |
 | 本地 Ollama / Qwen | 已执行真实规划、证据判断和报告生成；部分有证据的问题仍可能过度拒答，复杂证据任务尚未稳定通过 |
-| 云端 DeepSeek | 已完成一次公开合成资料的五节点 HTTP 闭环，包含真实 BGE/PgVector、3 次模型请求、报告引用及状态持久化；两条结论由合成原文直接支持，尚未验证本地模型暴露的同类复杂质量问题 |
+| 云端 DeepSeek | 公开合成的单文档、多文档及恶意资料干扰场景已分别完成真实 HTTP 验证。后两例共 7 次请求、6028 Token，均正常回答，六条关键结论由固定来源支持；未观察到该恶意样例的指令被遵循或伪造来源 |
 
-云端验证中的 Runtime / SQLite / HTTP 重开查询一致，未产生额外模型调用；该次重开不是独立进程崩溃恢复验证。结构化规划冒烟与完整研究流程分别统计。详见 [本地模型验证记录](docs/PHASE71_FINAL_REVIEW.md)、[云端 HTTP 验证记录](docs/PHASE73_DEEPSEEK_HTTP_A.md) 和 [检索基准](benchmarks/zh_retrieval_v1/README.md)。
+云端验证中的 Runtime / SQLite / HTTP 重开查询一致，未产生额外模型调用；重开不是独立进程崩溃恢复验证。DeepSeek 的补检索专项、无答案和超时场景尚未分别真实验证；多文档首轮仍曾提出超出问题范围的要求，第二轮纠正。上述小样本不代表通用研究准确率或提示注入防御率；`evidence_status=unverified`、`facts_verified=false` 保留，人工来源核查不等于自动事实验证。
+
+结构化规划冒烟与完整研究流程分别统计。详见 [本地模型验证记录](docs/PHASE71_FINAL_REVIEW.md)、[Qwen 对照与撤回](docs/QUALITY_QWEN_20261022.md)、[单文档云端验证](docs/PHASE73_DEEPSEEK_HTTP_A.md)、[多文档与恶意资料真实验收](docs/DEEPSEEK_BE_RESULTS_20261022.md) 和 [检索基准](benchmarks/zh_retrieval_v1/README.md)。
 
 完整 `python -m pytest -q` 需要额外依赖、本地模型缓存与专用 PostgreSQL；缺环境会失败，不能当成纯 Mock 测试。真实模型用例单独在 `tests_real/`，需另行准备模型与运行环境。
 
