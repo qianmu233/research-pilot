@@ -2,6 +2,10 @@
 
 > 阅读说明（2026-10-21）：当前能力与限制见 [README](README.md)。本文保留各次运行当时的提交/分支、失败与准备状态，“未提交/未调用/冻结”不作为当前 Git 状态；最新提交与发布以 Git 记录为准。历史 78 项与后续 4 项不是同一轮全量结果。
 
+## 2026-10-22 独立质量实验
+
+[本地Qwen对照及撤回](docs/QUALITY_QWEN_20261022.md)：原配置4通过/2失败，候选3通过/3失败，撤回恢复4通过/2失败；B/E仍失败，C退化候选不采纳。[DeepSeek B/E收费前预检](docs/DEEPSEEK_BE_PREFLIGHT.md)：新增8项本地Mock HTTP合约通过，最终离线回归90通过；真实DeepSeek B/E仍未验证，本轮没有收费调用。原固定场景、金标、断言和历史证据未改写。
+
 ## Phase 7.3 最终结果核验（2026-10-21，只读原件，无新增收费请求）
 
 **DeepSeek公开合成A真实HTTP闭环完成，针对本次合成来源的两条技术结论均supported；不代表全部模型质量通过。** task_id=9e6e89bd429e4151906408b8d2160a6d，原件data/phase72-paid-8421922ca7b2/A-http。实际completed、无错误/工具错误，原图plan→retrieve:1:1→assess:model_sufficient→write→validate:OK。前置真实JSON规划冒烟另1请求/357 Token，不能合并成A节点。

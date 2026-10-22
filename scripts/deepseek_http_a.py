@@ -70,6 +70,14 @@ class RequestGate(httpx.BaseTransport):
         path.write_text(json.dumps({"http_attempts": len(self.events), "events": self.events,
                                   "blocked_reason": self.blocked_reason}, indent=2), "utf-8")
 
+    def validate_public_payload(self, payload):
+        if payload.get("question") != PUBLIC_QUESTION:
+            raise RuntimeError("EXPERIMENT_PUBLIC_QUESTION_STOP")
+        if any(s.get("source_ref") != PUBLIC_DOCUMENT.source_ref or
+               s.get("excerpt") not in PUBLIC_DOCUMENT.content
+               for s in payload.get("sources", [])):
+            raise RuntimeError("EXPERIMENT_PUBLIC_SOURCE_STOP")
+
     def handle_request(self, request):
         with self.lock:
             if (not self.enabled or self.blocked_reason or len(self.events) >= 5 or
@@ -92,12 +100,7 @@ class RequestGate(httpx.BaseTransport):
                     any(not isinstance(m.get("content"), str) for m in messages)):
                 raise RuntimeError("EXPERIMENT_MESSAGES_STOP")
             payload = json.loads(messages[1]["content"])
-            if payload.get("question") != PUBLIC_QUESTION:
-                raise RuntimeError("EXPERIMENT_PUBLIC_QUESTION_STOP")
-            if any(s.get("source_ref") != PUBLIC_DOCUMENT.source_ref or
-                   s.get("excerpt") not in PUBLIC_DOCUMENT.content
-                   for s in payload.get("sources", [])):
-                raise RuntimeError("EXPERIMENT_PUBLIC_SOURCE_STOP")
+            self.validate_public_payload(payload)
             if sum(len(m["content"].encode("utf-8")) for m in messages) + 256 + 768 > 8192:
                 raise RuntimeError("EXPERIMENT_INPUT_BUDGET_STOP")
             item = {"attempt": len(self.events) + 1, "status": "attempt_reserved",
