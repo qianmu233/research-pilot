@@ -44,3 +44,28 @@ python -m ruff check research_pilot tests tests_real scripts
 按2026-10-22[DeepSeek官方价格](https://api-docs.deepseek.com/quick_start/pricing/)的峰时cache-miss输入$0.30/百万、输出$1.20/百万，10×(8192×0.30+768×1.20)/百万=$0.033792。预算建议$0.04；应用字节/模板上界不是官方tokenizer或钱包硬限额。页面确认模型别名对应DeepSeek-V4.1-Flash-1017；价格、别名服务和时段可能变化，脚本日期失效时必须先重审，不能直接延长日期运行。
 
 真正执行还要求显式公共数据确认、价格日期、预算参数、新run-id及环境凭据，不能把旧A的授权沿用到B/E。当前停在这里：**未发送收费请求；B/E真实结果、费用和语义支持性均未知**。以后即便两例通过，也不能推广为通用研究能力或提示注入防御率。
+
+## 同日发布审查：最后本地预检
+
+在 `audit/publication-safety-preflight` 分支增加了本地就绪探针和PowerShell包装入口；未改变业务图、Provider或固定场景/原断言，也未合并失败的Qwen候选。P2的任何文件、历史和凭据都不作为实验输入。
+
+```powershell
+# 在仓库根目录运行；默认只做本地预检，不询问Key、不发收费请求
+powershell -NoProfile -File .\scripts\run-deepseek-be-once.ps1
+```
+
+实际默认运行通过：B/E SHA与数据范围、SDK及底层OpenAI客户端均max_retries=0、六个BGE缓存哈希、只读SQL确认PgVector就绪；当前环境没有 `RESEARCH_OPENAI_API_KEY` 变量，只检查名称存在性，没有读取值。付费执行还要求Git干净，业务源码/金标与既有main基线一致。探针不自动启动Docker、不下载模型、不读.env、不建表/清理数据；数据库未就绪时直接阻断。
+
+本轮新增4项有实际边界意义的测试：7168个UTF-8消息内容字节通过、7169拒绝；并发共享gate最多5次、两题最多10次；请求账本写入失败时零网络尝试；Windows的付费日期路径ZoneInfo可用。相关46项合约通过，最终全量离线 **94通过、0失败/跳过**；Ruff通过。既有90项和8项是前一轮记录，保持原文。证据为 `data/quality-20261022/publication-preflight-contracts.xml/log`、`publication-safety-final/` 与 `publication-preflight-first.log`。
+
+输入硬界限是 `sum(UTF8(system,user))+256+768<=8192`，即最多7168消息内容字节。该界限在transport发送前执行；provider还有较宽的输入检查。它**不是供应商tokenizer的精确Token上限**；费用按8192输入Token/次作保守计划，输出由请求max_tokens=768限制，usage缺失/越界后不再请求。请求计数在锁内、网络之前落账，失败也占一次；Runtime调用预算跨SQLite重开不重置，额外HTTP重开查询禁用gate；无代理继承、重定向或SDK自动重试。Python线程deadline不能撤销已发出的收费请求，不将应用预算描述为钱包绝对限额。
+
+**仅在用户另行明确授权以后**，用户本人可以运行下面的命令。两个开关都需主动填写；随后由用户在SecureString提示中输入自己账号新建的Key。包装器不使用已有环境Key、不从历史/P2加载Key，Key只进入子进程环境，不写文件、命令行或父进程环境；子进程任意输出/错误不会回显，报告与账本保留在新run-id目录。不要开启PowerShell调试或将凭据抄进命令。
+
+```powershell
+# 本轮禁止执行；仅为后续单独授权准备
+powershell -NoProfile -File .\scripts\run-deepseek-be-once.ps1 `
+  -AuthorizePaidExperiment -ConfirmNewAccountKey -RunId be20261022once
+```
+
+脚本仅接受2026-10-22价格日期，过期会在请求前停止，需重审价格/版本后再决定。相同run-id若已有证据则拒绝覆盖，失败后不得自动换ID重跑。任务完成后只生成正常结果/费用记录，不自动把语义支持性写成已核实。**本轮收费请求为0，真实B/E仍未验证。**
