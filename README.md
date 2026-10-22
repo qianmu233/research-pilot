@@ -95,25 +95,27 @@ Invoke-RestMethod "$base/api/tasks/$($task.task_id)"
 
 ## 测试与验证证据
 
-以下均为已有记录，本轮只整理文档，不运行模型评测或付费请求：
+以下为已执行并留档的验证结果，详细范围、失败记录与复核过程见 [测试报告](TEST_REPORT.md)。
 
 | 范围 | 已有结果与口径 |
 |---|---|
-| 自动化工程回归 | 历史 78 项回归/合约通过（原 48 + DeepSeek 合约 30）；另有后续本地环境补验 4 项通过，不能累计为新的全量结果 |
+| 自动化工程回归 | 已记录 78 项回归/合约通过；另有 4 项本地环境补验通过，两次运行分别统计 |
 | 本地基础设施 | 真实 LangGraph、独立 TCP HTTP、BGE/PgVector、导入回滚、SQLite 中断/异常/超时/崩溃与手动恢复测试 |
-| 中文检索基准 | 20 条合成查询的 Recall@5=1.0；4 条无答案中仍有 3 条返回候选，**不代表最终回答准确率** |
-| Qwen 真实质量 | 最终 A/B/C/D/E/F 六项检查 4 通过、2 失败；B/E 过度拒答仍是已知限制 |
-| DeepSeek 真实 HTTP | 2026-10-21 一条公开合成 A 完成五节点流程、真实 BGE/PgVector、报告/引用与状态持久化；3 次模型 HTTP、1830 token；两条结论获合成原文直接支持；B/E 未验证 |
+| 中文检索基准 | 20 条合成查询的 Recall@5=1.0；无答案查询仍可能返回候选，**不代表最终回答准确率** |
+| 本地 Ollama / Qwen | 已执行真实规划、证据判断和报告生成；部分有证据的问题仍可能过度拒答，复杂证据任务尚未稳定通过 |
+| 云端 DeepSeek | 已完成一次公开合成资料的五节点 HTTP 闭环，包含真实 BGE/PgVector、3 次模型请求、报告引用及状态持久化；两条结论由合成原文直接支持，尚未验证本地模型暴露的同类复杂质量问题 |
 
-DeepSeek A 的 Runtime / SQLite / HTTP 重开查询一致，未产生额外模型调用；该次重开不是独立进程崩溃恢复验证。前置 JSON 规划冒烟单独统计。详见 [测试报告](TEST_REPORT.md)、[Qwen 失败与事实复核](docs/PHASE71_FINAL_REVIEW.md)、[DeepSeek HTTP 原始核验](docs/PHASE73_DEEPSEEK_HTTP_A.md)、[检索基准](benchmarks/zh_retrieval_v1/README.md)。
+云端验证中的 Runtime / SQLite / HTTP 重开查询一致，未产生额外模型调用；该次重开不是独立进程崩溃恢复验证。结构化规划冒烟与完整研究流程分别统计。详见 [本地模型验证记录](docs/PHASE71_FINAL_REVIEW.md)、[云端 HTTP 验证记录](docs/PHASE73_DEEPSEEK_HTTP_A.md) 和 [检索基准](benchmarks/zh_retrieval_v1/README.md)。
 
-完整 `python -m pytest -q` 需要额外依赖、本地模型缓存与专用 PostgreSQL；缺环境会失败，不能当成纯 Mock 测试。真实模型用例单独在 `tests_real/`，不在本轮运行范围。
+完整 `python -m pytest -q` 需要额外依赖、本地模型缓存与专用 PostgreSQL；缺环境会失败，不能当成纯 Mock 测试。真实模型用例单独在 `tests_real/`，需另行准备模型与运行环境。
 
 ## 已知限制
 
 单实例 FastAPI BackgroundTasks 不是持久队列；不支持多 worker 协调、自动恢复或 exactly-once。任务表与 Checkpointer 是两个 SQLite 文件，没有跨库原子事务；硬退出后可能遗留 running，需显式恢复。Python 线程无法强杀同步 I/O，deadline 拒绝迟到结果仍依赖 Provider 自身超时。
 
-来源 ID、摘录和结构校验不等于语义蕴含或事实验证，复杂研究任务尚未稳定通过；Qwen B/E 失败与 DeepSeek B/E 未验证必须保留。API 无生产认证，面向本地演示；Tavily 适配未实测，不提供任意网页抓取、Shell/SQL 写工具或通用提示注入防御。
+来源 ID、摘录和结构校验不等于语义蕴含或事实验证。不同模型在证据充分性判断与拒答行为上仍有差异，已有小样本验证不足以覆盖全部复杂研究场景。
+
+API 无生产认证，面向本地演示；Tavily 适配未实测，不提供任意网页抓取、Shell/SQL 写工具或通用提示注入防御。
 
 ## 来源、许可与文档
 
