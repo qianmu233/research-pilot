@@ -1,126 +1,257 @@
 # ResearchPilot
 
-基于 Python、FastAPI 和 LangGraph 的状态化研究与证据溯源 Agent，将资料检索组织为有预算上限、可追踪、可恢复的研究任务。
+基于 Python、FastAPI 和 LangGraph 的深度研究与证据溯源 Agent。将研究问题组织为有边界的多步骤任务，通过资料检索、证据充分性判断、报告生成和来源校验，输出带有来源信息的研究报告。
 
-## 解决的问题
+## 项目介绍
 
-面向技术资料研究和内部知识整理：把问题拆为结构化计划，检索本地资料，判断证据是否充分，必要时有限补检索，再生成附来源与摘录的报告。任务状态、模型调用账和图检查点持久化，便于追踪失败与手动恢复。
+研究型任务往往需要多次检索和整理资料。一次模型调用很难同时完成问题拆解、资料收集、证据判断与报告生成；如果中途发生超时或进程异常，也需要能够查看任务进度并在受控条件下恢复。
 
-## 核心功能
+ResearchPilot 使用 LangGraph 组织研究流程，并通过 FastAPI 提供任务接口。任务状态、模型调用记录和图检查点分别持久化，使研究过程能够追踪、查询和手动恢复。
 
-- 五节点 LangGraph：`plan → retrieve → assess → write → validate`，不足时从 assess 返回 retrieve，最多配置 1–3 轮。
-- 本地中文 BGE + PgVector；保留英文 ONNX 与 SQLite 词面检索，索引和模型身份显式选择。
-- 结构化研究计划、充分性判断、报告 Schema 与来源 ID / 原文摘录校验。
-- SQLite Checkpointer、任务状态、节点轨迹、失败/超时处理及手动 `/resume`。
-- 本地 Ollama/Qwen 与显式 DeepSeek Provider；持久化请求预算、整任务 deadline、单节点超时和安全错误码。
-- FastAPI 文档导入、任务提交、报告、轨迹及恢复接口；Mock 模式可离线演示工程流程。
+项目重点包括：
+
+- 使用结构化模型输出组织研究计划、证据判断和报告内容。
+- 通过有限的检索回路补充资料，避免无限循环。
+- 使用本地向量检索或词面检索获取相关资料。
+- 将报告中的来源标识与实际检索记录对应，校验来源和摘录。
+- 保存任务状态、模型调用预算和图检查点，支持手动恢复。
+- 通过统一的模型适配层切换 Mock、Ollama/Qwen 和 DeepSeek。
 
 ## 技术栈
 
-Python **3.12** 为已验证环境（包要求 >=3.11,<3.13）；锁定依赖包括 FastAPI **0.151.0**、LangGraph **1.2.16**、LangChain **1.4.6**、Pydantic **2.14.1**、httpx **0.28.1**。使用 SQLite、PostgreSQL / PgVector、FastEmbed / ONNXRuntime，中文模型通过 PyTorch / Transformers / safetensors 加载。
+| 技术 | 用途 |
+|---|---|
+| Python 3.12 | 主要开发语言 |
+| FastAPI | 任务提交、查询、报告与恢复接口 |
+| LangGraph | 研究流程和有限状态流转 |
+| LangChain、Pydantic | 模型交互与结构化数据校验 |
+| SQLite | 任务、调用记录与图检查点 |
+| PostgreSQL、PgVector | 可选的向量检索后端 |
+| BGE、FastEmbed、ONNX Runtime | 文本向量化与语义检索 |
+| PyTorch、Transformers | 可选中文 Embedding 模型加载 |
+| Ollama、DeepSeek | 本地与云端模型适配 |
 
-版本与可选依赖见 [pyproject.toml](pyproject.toml)、[基础锁文件](requirements.lock) 和 [中文依赖锁](requirements-chinese.lock)。
+依赖版本及可选安装方式见 `pyproject.toml` 和对应的依赖锁文件。
 
-## 架构与调用链
+## 架构与研究流程
 
 ```mermaid
-flowchart LR
-    API[FastAPI 提交任务] --> RUNTIME[Runtime / 状态与请求预算]
-    RUNTIME --> PLAN[plan 结构化计划]
-    PLAN --> RETRIEVE[retrieve 检索与来源合并]
-    RETRIEVE --> ASSESS[assess 证据判断]
-    ASSESS -->|不足且未达轮数上限| RETRIEVE
-    ASSESS --> WRITE[write 结构化报告]
-    WRITE --> VALIDATE[validate 来源与摘录]
-    VALIDATE --> REPORT[报告 / 状态 / 轨迹]
-    RETRIEVE --> VECTOR[(本地 BGE / PgVector)]
-    RUNTIME --> STORE[(SQLite 任务与调用账)]
-    PLAN -. 图状态 .-> CHECKPOINT[(SQLite Checkpointer)]
+flowchart TD
+    A[提交研究问题] --> B[plan：生成结构化计划]
+    B --> C[retrieve：检索资料]
+    C --> D[assess：判断证据是否充分]
+    D -->|证据不足且仍有预算| C
+    D -->|可以继续| E[write：生成报告]
+    E --> F[validate：检查报告结构与来源]
+    F --> G[返回报告、状态与轨迹]
+    C --> H[(词面检索或 PgVector)]
+    B --> I[(模型调用预算)]
+    D --> I
+    E --> I
+    A --> J[(SQLite 任务记录)]
+    B --> K[(SQLite 图检查点)]
 ```
 
-真实结构化模型执行计划、证据判断和报告生成；Mock 的候选数量规则只控制演示检索循环，不构成语义充分性判断。来源记录保留文档、分片、检索时间、locator 与查询。
+研究流程由五个节点组成：`plan`、`retrieve`、`assess`、`write` 和 `validate`。
 
-## 关键实现
+模型负责生成结构化计划、判断证据是否足以支持继续研究，以及组织报告内容。检索不足时，流程可以返回检索节点进行有限补查；达到轮数、模型调用次数或任务时限上限后，流程必须结束或返回受控失败。
 
-| 模块 | 设计与边界 |
+Mock 模式中的候选数量规则只用于演示流程控制，不代表模型真的理解了证据是否充分。
+
+## 核心实现
+
+### 1. LangGraph 状态管理与有限循环
+
+`research_pilot/workflow.py` 使用 `StateGraph` 组织研究节点、状态传递和条件边。
+
+各节点围绕结构化状态协作：
+
+- `plan` 生成研究问题和有限的检索计划。
+- `retrieve` 获取候选资料，并整理来源标识与检索信息。
+- `assess` 判断现有证据是否足以继续生成报告。
+- `write` 根据研究状态组织结构化报告。
+- `validate` 检查报告格式和引用来源。
+
+检索循环具有明确的轮数上限。报告校验失败时，系统不会直接发布未经校验的报告。
+
+### 2. 资料检索与向量模型管理
+
+`research_pilot/retrieval.py` 负责检索流程，`research_pilot/vector.py` 负责向量模型和 PgVector 相关操作。
+
+项目保留词面检索，并支持可选的语义检索后端：
+
+- 英文向量模型使用 BGE English ONNX 资源，输出 384 维向量。
+- 中文向量模型使用 `BAAI/bge-small-zh-v1.5`，输出 512 维向量。
+- 向量数据存储在 PostgreSQL + PgVector 中，并按模型身份与集合配置区分索引。
+
+中文模型需要安装对应的依赖并单独准备模型文件。切换 Embedding 模型后，应使用匹配的向量维度和集合重新导入资料，不能将旧模型的向量直接作为新模型的检索结果。
+
+检索结果保留文档、分片、检索时间、来源定位信息和查询等元数据，为后续的证据引用和问题排查提供依据。
+
+### 3. 来源与摘录校验
+
+`research_pilot/evidence.py` 负责报告中的来源与摘录检查，`research_pilot/schema.py` 定义研究计划、证据判断和报告的数据结构。
+
+系统检查报告使用的来源标识是否来自本轮允许的来源集合，并校验相关摘录与记录是否匹配。结构化报告还需要满足预先定义的 Schema。
+
+这些检查可以发现无效来源 ID、缺少引用和部分结构问题，但不能保证模型对资料的解释一定正确，也不能证明每条结论都由引用内容在语义上充分支持。
+
+项目保留 `facts_verified=false` 等未验证状态，不把格式正确或引用存在直接解释为事实已核实。
+
+### 4. 任务持久化、调用预算与手动恢复
+
+`research_pilot/runtime.py` 负责任务执行与运行时控制，`research_pilot/store.py` 管理任务状态、调用记录和相关持久化数据。
+
+任务通过 `task_id` 与 LangGraph 的 `thread_id` 关联。SQLite 保存任务信息与调用预算，LangGraph Checkpointer 保存图状态，供后续查询或恢复使用。
+
+运行时对模型调用次数、任务总时限、节点超时和输出长度设置上限。失败尝试同样占用调用预算，恢复任务不会自动重置已经消耗的预算。
+
+系统提供手动 `/resume` 接口，用于在条件满足时继续未完成的任务。
+
+需要注意，任务记录和图检查点位于不同的 SQLite 文件中，两者不具备跨库原子事务。项目采用状态对账和显式恢复处理不一致情况，不宣称已经实现分布式任务队列或完全自动的崩溃恢复。
+
+### 5. 本地与云端模型适配
+
+项目提供不同的模型运行方式：
+
+| 模式 | 作用 |
 |---|---|
-| [workflow.py](research_pilot/workflow.py) | 真实 StateGraph 与有界回路；结构化初始计划最多生成两条查询，当前首轮使用第一条；验证失败不发布报告 |
-| [runtime.py](research_pilot/runtime.py) / [store.py](research_pilot/store.py) | task_id 关联 thread_id；任务表、调用账和检查点对账；进程内防重入，手动恢复 |
-| [vector.py](research_pilot/vector.py) | 中文 `BAAI/bge-small-zh-v1.5` 512 维、英文 BGE ONNX 384 维分别存储；校验固定 revision 与资源哈希 |
-| [evidence.py](research_pilot/evidence.py) / [local_llm.py](research_pilot/local_llm.py) | 来源白名单、摘录和报告结构校验；`facts_verified=false`，不自动认证事实真实性 |
+| Mock | 离线演示任务流转和接口行为，不具备真实模型推理能力 |
+| Ollama / Qwen | 使用本地模型完成结构化计划、证据判断和报告生成 |
+| DeepSeek | 显式调用云端模型接口，需要安全配置 API Key，并会产生模型费用 |
 
-| Provider | 结构化输出与错误处理 |
+`research_pilot/local_llm.py` 和 `research_pilot/deepseek.py` 负责相应的模型调用与错误处理，`research_pilot/model.py` 负责模型适配入口。
+
+模型输出会经过结构化解析与 Pydantic 校验。对于非法 JSON、格式不符、截断、认证失败、限流或超时等情况，系统将其转化为受控错误，而不是把异常原文直接当作有效报告。
+
+本地模型与云端模型使用同一套研究工作流，但不同模型的证据判断和拒答行为并不相同。通过结构化输出只能约束结果格式，不能保证模型生成内容的真实性。
+
+## HTTP API
+
+| 接口 | 功能 |
 |---|---|
-| Ollama / Qwen | 本地 OpenAI-compatible 接口；`json_schema`、本地 tokenizer 预算与模型身份预检；显式输出上限，检查截断及 Schema |
-| DeepSeek | 显式 `deepseek` 后端、官方 HTTPS 白名单；`json_object` + 本地严格 Pydantic；按应用 UTF-8 字节界限控制输入，不能当作供应商 tokenizer；SDK 无自动重试，分类认证/限流/超时/截断/非法 JSON 错误 |
+| `GET /health` | 检查应用进程状态 |
+| `POST /api/documents/text` | 导入文本资料 |
+| `POST /api/tasks` | 提交研究任务 |
+| `GET /api/tasks/{id}` | 查询任务状态 |
+| `GET /api/tasks/{id}/report` | 获取已完成的研究报告 |
+| `GET /api/tasks/{id}/trace` | 查看节点轨迹 |
+| `POST /api/tasks/{id}/resume` | 手动恢复任务 |
 
-DeepSeek 共享原图与来源规则，模型名属于服务商别名而非固定权重身份。当前限制为最多 5 次模型调用、300 秒、768 输出 token；预算跨恢复保留，失败尝试也占调用名额。
+新任务提交后返回任务 ID，客户端可以轮询任务状态。报告尚未完成时，报告接口不会将未完成任务当作成功结果返回。
 
-## 配置与快速启动
+## 本地运行
 
-在仓库根目录使用 Python 3.12，以下 PowerShell 示例不调用外部模型或搜索：
+### 环境要求
+
+- Python 3.12
+- 可选：Docker 与 Docker Compose
+- 可选：PostgreSQL + PgVector
+- 可选：本地 Ollama 模型或云端模型 API Key
+
+### 1. 创建 Python 环境
+
+在仓库根目录执行：
 
 ```powershell
 python -m venv .venv
+
 .\.venv\Scripts\python.exe -m pip install -r requirements.lock
+
 .\.venv\Scripts\python.exe -m pip install --no-deps -e .
-$env:RESEARCH_MODEL_BACKEND='mock'
-$env:RESEARCH_SEARCH_BACKEND='none'
-$env:RESEARCH_RETRIEVAL_BACKEND='lexical'
+```
+
+### 2. 启动离线演示
+
+```powershell
+$env:RESEARCH_MODEL_BACKEND = "mock"
+$env:RESEARCH_SEARCH_BACKEND = "none"
+$env:RESEARCH_RETRIEVAL_BACKEND = "lexical"
+
 .\.venv\Scripts\python.exe -m uvicorn research_pilot.api:app --host 127.0.0.1 --port 8010
 ```
 
-打开 `http://127.0.0.1:8010/docs`，或在另一个终端运行 `.\.venv\Scripts\python.exe scripts/smoke_http.py --backend lexical`。默认数据写入被 Git 忽略的 `data/`；程序不会自动读取 `.env`，需向进程环境提供配置。
+打开 `http://127.0.0.1:8010/docs` 查看接口。
 
-| 模式 | 必要准备 |
-|---|---|
-| 中文语义检索 | `requirements-chinese.lock`、固定中文模型缓存、PgVector；设置 `RESEARCH_RETRIEVAL_BACKEND=pgvector`、`RESEARCH_POSTGRES_DSN`、`RESEARCH_EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5` 与独立 `RESEARCH_VECTOR_COLLECTION` |
-| Ollama 研究 | 本地 Qwen 权重与 tokenizer；设置 `RESEARCH_MODEL_BACKEND=ollama`、`RESEARCH_OPENAI_BASE_URL=http://127.0.0.1:11434/v1`、`RESEARCH_OPENAI_MODEL=qwen3:4b-instruct-2507-q4_K_M` |
-| DeepSeek 研究 | 设置 `RESEARCH_MODEL_BACKEND=deepseek`、官方地址、`RESEARCH_OPENAI_MODEL=deepseek-flash`，仅经进程环境注入 `RESEARCH_OPENAI_API_KEY`；实际运行会产生模型费用 |
+也可以在 Docker 环境中运行：
 
-完整中文模型下载、独立数据库、模型参数和容器步骤见 [演示指南](docs/DEMO_GUIDE.md)、[配置模板](.env.example) 与 [开发说明](DEVELOPMENT.md)。默认 embedding 仍为英文；切换词面/向量索引或集合后需重新导入文档，不能把旧索引直接当成新模型结果。
+```bash
+docker compose up --build
+```
 
-## API 示例
+默认 Compose 演示使用 Mock 模型和词面检索，服务绑定本机回环地址，不需要云端模型密钥。
+
+### 3. 导入资料并提交任务
+
+以下 PowerShell 示例使用公开的合成资料，不涉及真实业务文档：
 
 ```powershell
-$base = 'http://127.0.0.1:8010'
-$doc = @{title='公开合成笔记'; content='演示组件通过检查点保存单个线程的图状态。使用相同线程标识可以读取此前保存的状态。'; source_ref='synthetic:readme-demo'} | ConvertTo-Json
-Invoke-RestMethod -Method Post -Uri "$base/api/documents/text" -ContentType 'application/json; charset=utf-8' -Body ([Text.Encoding]::UTF8.GetBytes($doc))
-$request = @{question='演示组件怎样保存单个线程的图状态？'} | ConvertTo-Json
-$task = Invoke-RestMethod -Method Post -Uri "$base/api/tasks" -ContentType 'application/json; charset=utf-8' -Body ([Text.Encoding]::UTF8.GetBytes($request))
+$base = "http://127.0.0.1:8010"
+
+$doc = @{
+    title = "演示资料"
+    content = "演示组件使用检查点保存研究线程状态。"
+    source_ref = "synthetic:readme-demo"
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+    -Method Post `
+    -Uri "$base/api/documents/text" `
+    -ContentType "application/json; charset=utf-8" `
+    -Body ([Text.Encoding]::UTF8.GetBytes($doc))
+
+$request = @{
+    question = "演示组件怎样保存研究线程状态？"
+} | ConvertTo-Json
+
+$task = Invoke-RestMethod `
+    -Method Post `
+    -Uri "$base/api/tasks" `
+    -ContentType "application/json; charset=utf-8" `
+    -Body ([Text.Encoding]::UTF8.GetBytes($request))
+
 Invoke-RestMethod "$base/api/tasks/$($task.task_id)"
 ```
 
-提交返回 202，轮询至 `completed` 后可取 `/api/tasks/{id}/report`；`/trace` 查看节点轨迹，`POST /resume` 手动恢复。未完成任务取报告返回 409；`/health` 是进程状态，不是数据库就绪探针。
+任务完成后，可以通过 `/report` 获取报告，通过 `/trace` 查看执行轨迹。
 
-## 测试与验证证据
+### 4. 启用中文向量检索
 
-以下为已执行并留档的验证结果，详细范围、失败记录与复核过程见 [测试报告](TEST_REPORT.md)。
+中文向量检索需要准备 `requirements-chinese.lock`、中文 Embedding 模型和 PgVector 环境，并按照 [演示指南](docs/DEMO_GUIDE.md) 配置数据库连接与独立集合。
 
-| 范围 | 已有结果与口径 |
-|---|---|
-| 自动化工程回归 | 合并前离线回归 100 项通过，覆盖业务流程、Provider 合约与固定时钟下的受控实验门禁；历史各轮结果分别留档，不累加为同一次运行 |
-| 本地基础设施 | 真实 LangGraph、独立 TCP HTTP、BGE/PgVector、导入回滚、SQLite 中断/异常/超时/崩溃与手动恢复测试 |
-| 中文检索基准 | 20 条合成查询的 Recall@5=1.0；无答案查询仍可能返回候选，**不代表最终回答准确率** |
-| 本地 Ollama / Qwen | 已执行真实规划、证据判断和报告生成；部分有证据的问题仍可能过度拒答，复杂证据任务尚未稳定通过 |
-| 云端 DeepSeek | 公开合成的单文档、多文档及恶意资料干扰场景已分别完成真实 HTTP 验证。后两例共 7 次请求、6028 Token，均正常回答，六条关键结论由固定来源支持；未观察到该恶意样例的指令被遵循或伪造来源 |
+修改模型或检索配置后，需要重新导入相应资料。默认的词面检索模式不等于已经启用了中文向量检索。
 
-云端验证中的 Runtime / SQLite / HTTP 重开查询一致，未产生额外模型调用；重开不是独立进程崩溃恢复验证。DeepSeek 的补检索专项、无答案和超时场景尚未分别真实验证；多文档首轮仍曾提出超出问题范围的要求，第二轮纠正。上述小样本不代表通用研究准确率或提示注入防御率；`evidence_status=unverified`、`facts_verified=false` 保留，人工来源核查不等于自动事实验证。
+### 5. 配置真实模型
 
-结构化规划冒烟与完整研究流程分别统计。详见 [本地模型验证记录](docs/PHASE71_FINAL_REVIEW.md)、[Qwen 对照与撤回](docs/QUALITY_QWEN_20261022.md)、[单文档云端验证](docs/PHASE73_DEEPSEEK_HTTP_A.md)、[多文档与恶意资料真实验收](docs/DEEPSEEK_BE_RESULTS_20261022.md) 和 [检索基准](benchmarks/zh_retrieval_v1/README.md)。
+使用 Ollama 时，需要先准备本地模型并设置对应的模型地址；使用 DeepSeek 时，需要显式启用相应 Provider，并通过进程环境注入 API Key。
 
-完整 `python -m pytest -q` 需要额外依赖、本地模型缓存与专用 PostgreSQL；缺环境会失败，不能当成纯 Mock 测试。真实模型用例单独在 `tests_real/`，需另行准备模型与运行环境。
+不要将真实 API Key 写入代码、提交到 `.env.example` 或放入公开测试数据中。需要真实模型调用的测试应与默认离线演示分开执行。
+
+## 测试与验证
+
+项目的测试覆盖研究工作流、结构化输出、来源校验、向量检索、HTTP 接口、持久化、超时与恢复等部分。
+
+本地 Fake/Mock 测试用于验证工程流程和错误处理；PgVector、模型 HTTP 和真实 LLM 测试则需要对应的外部环境。详细的测试入口和环境要求见 [开发说明](DEVELOPMENT.md) 与 [测试报告](TEST_REPORT.md)。
+
+真实模型验证仍存在已知质量问题：部分证据充分的任务会被模型过度拒答，复杂多文档场景也未达到稳定通过的程度。这些失败作为当前项目的已知限制保留，不能将少量成功样本解释为通用研究准确率或提示注入防御能力。
 
 ## 已知限制
 
-单实例 FastAPI BackgroundTasks 不是持久队列；不支持多 worker 协调、自动恢复或 exactly-once。任务表与 Checkpointer 是两个 SQLite 文件，没有跨库原子事务；硬退出后可能遗留 running，需显式恢复。Python 线程无法强杀同步 I/O，deadline 拒绝迟到结果仍依赖 Provider 自身超时。
+- 当前任务执行依赖单实例 FastAPI 后台任务机制，不是持久消息队列。
+- 不具备多实例任务协调、自动崩溃调度或分布式 exactly-once。
+- 任务状态和图检查点分开存储，硬退出后可能需要手动恢复。
+- 来源 ID、摘录和 Schema 校验不能代替语义蕴含验证与事实核查。
+- 真实模型在证据判断、拒答和复杂研究任务上的表现仍有不足。
+- API 面向本地演示，没有生产级认证与授权，不应直接暴露到公网。
 
-来源 ID、摘录和结构校验不等于语义蕴含或事实验证。不同模型在证据充分性判断与拒答行为上仍有差异，已有小样本验证不足以覆盖全部复杂研究场景。
+## 许可证与第三方来源
 
-API 无生产认证，面向本地演示；Tavily 适配未实测，不提供任意网页抓取、Shell/SQL 写工具或通用提示注入防御。
+本项目采用 MIT License。工作流设计参考 [LangChain Open Deep Research](https://github.com/langchain-ai/open_deep_research)，并保留相应的第三方来源说明。
 
-## 来源、许可与文档
+项目使用的模型权重、运行时、向量检索组件和 Python 依赖均有各自的许可要求。模型权重需按项目文档单独下载，不属于本仓库源码的一部分。
 
-项目遵循 [MIT License](LICENSE)，工作流设计参考 [LangChain Open Deep Research](https://github.com/langchain-ai/open_deep_research)，没有复制整库或借用其基准成绩。模型、运行时与设计来源见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)；权重单独下载，不纳入源码发布。AI 辅助实现和个人实际工作应据提交说明。
-
-[架构](ARCHITECTURE.md) · [开发与测试](DEVELOPMENT.md) · [测试报告](TEST_REPORT.md) · [演示](docs/DEMO_GUIDE.md) · [README 修订依据](docs/readme-review.md)
+- [架构说明](ARCHITECTURE.md)
+- [开发说明](DEVELOPMENT.md)
+- [演示指南](docs/DEMO_GUIDE.md)
+- [测试报告](TEST_REPORT.md)
+- [第三方来源与许可](THIRD_PARTY_NOTICES.md)
