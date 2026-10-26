@@ -1,4 +1,6 @@
-# ResearchPilot
+# ResearchPilot: Evidence-Grounded Research Agent
+
+**ResearchPilot：证据溯源深度研究智能体**
 
 基于 Python、FastAPI 和 LangGraph 的深度研究与证据溯源 Agent。将研究问题组织为有边界的多步骤任务，通过资料检索、证据充分性判断、报告生成和来源校验，输出带有来源信息的研究报告。
 
