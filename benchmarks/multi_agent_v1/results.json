@@ -1,0 +1,784 @@
+{
+  "created_at": "2026-11-25T04:29:51.897946+00:00",
+  "dataset_sha256": "4d6ea4c0e030fe0c3ee310a485784fa4fdbc0cf88f0aaf538179394b78b67ffc",
+  "limits": {
+    "max_rounds": 2,
+    "max_model_calls": 8,
+    "retrieval_top_k": 1,
+    "max_sources": 8
+  },
+  "rows": [
+    {
+      "case": "rag",
+      "arm": "A_single",
+      "repeat": 1,
+      "status": "completed",
+      "quality": "insufficient_evidence",
+      "key_evidence": [
+        2,
+        4
+      ],
+      "dimensions": [
+        4,
+        12
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 4,
+      "total_tokens": null,
+      "elapsed_ms": 73.44,
+      "retrieval_queries": {
+        "比较 PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型。": 1,
+        "PgVector 运维": 1
+      },
+      "trace": [
+        "plan",
+        "retrieve:1:1",
+        "assess:model_insufficient",
+        "retrieve:2:2",
+        "assess:model_insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "B_fixed",
+      "repeat": 1,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        3,
+        4
+      ],
+      "dimensions": [
+        11,
+        12
+      ],
+      "valid_citations": [
+        3,
+        3
+      ],
+      "model_calls": 6,
+      "total_tokens": null,
+      "elapsed_ms": 88.94,
+      "retrieval_queries": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1
+      },
+      "trace": [
+        "supervisor:3",
+        "research:3",
+        "merge:3",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "C_dynamic",
+      "repeat": 1,
+      "status": "completed",
+      "quality": "full",
+      "key_evidence": [
+        4,
+        4
+      ],
+      "dimensions": [
+        12,
+        12
+      ],
+      "valid_citations": [
+        4,
+        4
+      ],
+      "model_calls": 8,
+      "total_tokens": null,
+      "elapsed_ms": 129.06,
+      "retrieval_queries": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1,
+        "PgVector 运维": 1
+      },
+      "trace": [
+        "supervisor:3",
+        "research:3",
+        "merge:3",
+        "review:insufficient",
+        "supplement:1",
+        "merge:4",
+        "review:sufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "A_single",
+      "repeat": 1,
+      "status": "completed",
+      "quality": "insufficient_evidence",
+      "key_evidence": [
+        2,
+        3
+      ],
+      "dimensions": [
+        5,
+        6
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 4,
+      "total_tokens": null,
+      "elapsed_ms": 64.38,
+      "retrieval_queries": {
+        "比较 OpenSearch 和 Loki 在企业内部日志平台中的选型。": 1,
+        "Loki  检索": 1
+      },
+      "trace": [
+        "plan",
+        "retrieve:1:1",
+        "assess:model_insufficient",
+        "retrieve:2:2",
+        "assess:model_insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "B_fixed",
+      "repeat": 1,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        2,
+        3
+      ],
+      "dimensions": [
+        5,
+        6
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 5,
+      "total_tokens": null,
+      "elapsed_ms": 114.09,
+      "retrieval_queries": {
+        "Loki": 1,
+        "OpenSearch": 1
+      },
+      "trace": [
+        "supervisor:2",
+        "research:2",
+        "merge:2",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "C_dynamic",
+      "repeat": 1,
+      "status": "completed",
+      "quality": "full",
+      "key_evidence": [
+        3,
+        3
+      ],
+      "dimensions": [
+        6,
+        6
+      ],
+      "valid_citations": [
+        3,
+        3
+      ],
+      "model_calls": 7,
+      "total_tokens": null,
+      "elapsed_ms": 136.33,
+      "retrieval_queries": {
+        "Loki": 1,
+        "OpenSearch": 1,
+        "Loki 合规": 1
+      },
+      "trace": [
+        "supervisor:2",
+        "research:2",
+        "merge:2",
+        "review:insufficient",
+        "supplement:1",
+        "merge:3",
+        "review:sufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "A_single",
+      "repeat": 2,
+      "status": "completed",
+      "quality": "insufficient_evidence",
+      "key_evidence": [
+        2,
+        4
+      ],
+      "dimensions": [
+        4,
+        12
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 4,
+      "total_tokens": null,
+      "elapsed_ms": 85.08,
+      "retrieval_queries": {
+        "比较 PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型。": 1,
+        "PgVector 运维": 1
+      },
+      "trace": [
+        "plan",
+        "retrieve:1:1",
+        "assess:model_insufficient",
+        "retrieve:2:2",
+        "assess:model_insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "B_fixed",
+      "repeat": 2,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        3,
+        4
+      ],
+      "dimensions": [
+        11,
+        12
+      ],
+      "valid_citations": [
+        3,
+        3
+      ],
+      "model_calls": 6,
+      "total_tokens": null,
+      "elapsed_ms": 110.76,
+      "retrieval_queries": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1
+      },
+      "trace": [
+        "supervisor:3",
+        "research:3",
+        "merge:3",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "C_dynamic",
+      "repeat": 2,
+      "status": "completed",
+      "quality": "full",
+      "key_evidence": [
+        4,
+        4
+      ],
+      "dimensions": [
+        12,
+        12
+      ],
+      "valid_citations": [
+        4,
+        4
+      ],
+      "model_calls": 8,
+      "total_tokens": null,
+      "elapsed_ms": 158.17,
+      "retrieval_queries": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1,
+        "PgVector 运维": 1
+      },
+      "trace": [
+        "supervisor:3",
+        "research:3",
+        "merge:3",
+        "review:insufficient",
+        "supplement:1",
+        "merge:4",
+        "review:sufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "A_single",
+      "repeat": 2,
+      "status": "completed",
+      "quality": "insufficient_evidence",
+      "key_evidence": [
+        2,
+        3
+      ],
+      "dimensions": [
+        5,
+        6
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 4,
+      "total_tokens": null,
+      "elapsed_ms": 94.85,
+      "retrieval_queries": {
+        "比较 OpenSearch 和 Loki 在企业内部日志平台中的选型。": 1,
+        "Loki  检索": 1
+      },
+      "trace": [
+        "plan",
+        "retrieve:1:1",
+        "assess:model_insufficient",
+        "retrieve:2:2",
+        "assess:model_insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "B_fixed",
+      "repeat": 2,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        2,
+        3
+      ],
+      "dimensions": [
+        5,
+        6
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 5,
+      "total_tokens": null,
+      "elapsed_ms": 107.98,
+      "retrieval_queries": {
+        "Loki": 1,
+        "OpenSearch": 1
+      },
+      "trace": [
+        "supervisor:2",
+        "research:2",
+        "merge:2",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "C_dynamic",
+      "repeat": 2,
+      "status": "completed",
+      "quality": "full",
+      "key_evidence": [
+        3,
+        3
+      ],
+      "dimensions": [
+        6,
+        6
+      ],
+      "valid_citations": [
+        3,
+        3
+      ],
+      "model_calls": 7,
+      "total_tokens": null,
+      "elapsed_ms": 133.29,
+      "retrieval_queries": {
+        "OpenSearch": 1,
+        "Loki": 1,
+        "Loki 合规": 1
+      },
+      "trace": [
+        "supervisor:2",
+        "research:2",
+        "merge:2",
+        "review:insufficient",
+        "supplement:1",
+        "merge:3",
+        "review:sufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "A_single",
+      "repeat": 3,
+      "status": "completed",
+      "quality": "insufficient_evidence",
+      "key_evidence": [
+        2,
+        4
+      ],
+      "dimensions": [
+        4,
+        12
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 4,
+      "total_tokens": null,
+      "elapsed_ms": 71.6,
+      "retrieval_queries": {
+        "比较 PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型。": 1,
+        "PgVector 运维": 1
+      },
+      "trace": [
+        "plan",
+        "retrieve:1:1",
+        "assess:model_insufficient",
+        "retrieve:2:2",
+        "assess:model_insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "B_fixed",
+      "repeat": 3,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        3,
+        4
+      ],
+      "dimensions": [
+        11,
+        12
+      ],
+      "valid_citations": [
+        3,
+        3
+      ],
+      "model_calls": 6,
+      "total_tokens": null,
+      "elapsed_ms": 99.15,
+      "retrieval_queries": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1
+      },
+      "trace": [
+        "supervisor:3",
+        "research:3",
+        "merge:3",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "C_dynamic",
+      "repeat": 3,
+      "status": "completed",
+      "quality": "full",
+      "key_evidence": [
+        4,
+        4
+      ],
+      "dimensions": [
+        12,
+        12
+      ],
+      "valid_citations": [
+        4,
+        4
+      ],
+      "model_calls": 8,
+      "total_tokens": null,
+      "elapsed_ms": 129.8,
+      "retrieval_queries": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1,
+        "PgVector 运维": 1
+      },
+      "trace": [
+        "supervisor:3",
+        "research:3",
+        "merge:3",
+        "review:insufficient",
+        "supplement:1",
+        "merge:4",
+        "review:sufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "A_single",
+      "repeat": 3,
+      "status": "completed",
+      "quality": "insufficient_evidence",
+      "key_evidence": [
+        2,
+        3
+      ],
+      "dimensions": [
+        5,
+        6
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 4,
+      "total_tokens": null,
+      "elapsed_ms": 73.15,
+      "retrieval_queries": {
+        "比较 OpenSearch 和 Loki 在企业内部日志平台中的选型。": 1,
+        "Loki  检索": 1
+      },
+      "trace": [
+        "plan",
+        "retrieve:1:1",
+        "assess:model_insufficient",
+        "retrieve:2:2",
+        "assess:model_insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "B_fixed",
+      "repeat": 3,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        2,
+        3
+      ],
+      "dimensions": [
+        5,
+        6
+      ],
+      "valid_citations": [
+        2,
+        2
+      ],
+      "model_calls": 5,
+      "total_tokens": null,
+      "elapsed_ms": 92.21,
+      "retrieval_queries": {
+        "Loki": 1,
+        "OpenSearch": 1
+      },
+      "trace": [
+        "supervisor:2",
+        "research:2",
+        "merge:2",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ]
+    },
+    {
+      "case": "logs",
+      "arm": "C_dynamic",
+      "repeat": 3,
+      "status": "completed",
+      "quality": "full",
+      "key_evidence": [
+        3,
+        3
+      ],
+      "dimensions": [
+        6,
+        6
+      ],
+      "valid_citations": [
+        3,
+        3
+      ],
+      "model_calls": 7,
+      "total_tokens": null,
+      "elapsed_ms": 119.28,
+      "retrieval_queries": {
+        "OpenSearch": 1,
+        "Loki": 1,
+        "Loki 合规": 1
+      },
+      "trace": [
+        "supervisor:2",
+        "research:2",
+        "merge:2",
+        "review:insufficient",
+        "supplement:1",
+        "merge:3",
+        "review:sufficient",
+        "write",
+        "validate:OK"
+      ]
+    }
+  ],
+  "summary": {
+    "A_single": {
+      "key_evidence": [
+        12,
+        21
+      ],
+      "dimensions": [
+        27,
+        54
+      ],
+      "valid_citations": [
+        12,
+        12
+      ],
+      "elapsed_ms_median": 73.3,
+      "model_calls_mean": 4,
+      "completed": 6,
+      "total_tokens": null
+    },
+    "B_fixed": {
+      "key_evidence": [
+        15,
+        21
+      ],
+      "dimensions": [
+        48,
+        54
+      ],
+      "valid_citations": [
+        15,
+        15
+      ],
+      "elapsed_ms_median": 103.56,
+      "model_calls_mean": 5.5,
+      "completed": 6,
+      "total_tokens": null
+    },
+    "C_dynamic": {
+      "key_evidence": [
+        21,
+        21
+      ],
+      "dimensions": [
+        54,
+        54
+      ],
+      "valid_citations": [
+        21,
+        21
+      ],
+      "elapsed_ms_median": 131.55,
+      "model_calls_mean": 7.5,
+      "completed": 6,
+      "total_tokens": null
+    }
+  },
+  "recovery": {
+    "A_single": {
+      "status_before": "failed",
+      "phase_before": "error",
+      "model_calls_before": 2,
+      "model_calls_after": 5,
+      "repeated_existing_queries": {},
+      "query_counts_before": {
+        "比较 PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型。": 1
+      },
+      "query_counts_after": {
+        "比较 PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型。": 1,
+        "PgVector 运维": 1
+      },
+      "subtask_attempts": {},
+      "status_after": "completed",
+      "quality_after": "insufficient_evidence"
+    },
+    "B_fixed": {
+      "status_before": "interrupted",
+      "phase_before": "waiting_for_retry",
+      "model_calls_before": 4,
+      "model_calls_after": 7,
+      "repeated_existing_queries": {},
+      "query_counts_before": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1
+      },
+      "query_counts_after": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1
+      },
+      "subtask_attempts": {
+        "PgVector": 2,
+        "Milvus": 1,
+        "Elasticsearch": 1
+      },
+      "status_after": "completed",
+      "quality_after": "partial"
+    },
+    "C_dynamic": {
+      "status_before": "interrupted",
+      "phase_before": "waiting_for_retry",
+      "model_calls_before": 4,
+      "model_calls_after": 8,
+      "repeated_existing_queries": {},
+      "query_counts_before": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1
+      },
+      "query_counts_after": {
+        "PgVector": 1,
+        "Elasticsearch": 1,
+        "Milvus": 1,
+        "PgVector 运维": 1
+      },
+      "subtask_attempts": {
+        "PgVector": 3,
+        "Milvus": 1,
+        "Elasticsearch": 1
+      },
+      "status_after": "completed",
+      "quality_after": "partial"
+    }
+  }
+}

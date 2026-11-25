@@ -1,0 +1,1915 @@
+{
+  "created_at": "2026-11-25T05:47:51.212409+00:00",
+  "dataset_sha256": "4d6ea4c0e030fe0c3ee310a485784fa4fdbc0cf88f0aaf538179394b78b67ffc",
+  "limits": {
+    "max_rounds": 2,
+    "max_model_calls": 8,
+    "retrieval_top_k": 1,
+    "max_sources": 8
+  },
+  "quality_cases_sha256": "930ea10881e00ef698d3baf8b95234504bfcf455e95a69d276c902ced5b078c4",
+  "real_rows": [
+    {
+      "case": "rag",
+      "arm": "A_single",
+      "model": {
+        "model": "qwen3:4b-instruct-2507-q4_K_M",
+        "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+        "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+        "quantization": "Q4_K_M",
+        "license": "Apache-2.0",
+        "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "provider": "ollama",
+        "base_url": "http://127.0.0.1:11434/v1"
+      },
+      "elapsed_ms": 10203.37,
+      "status": "completed",
+      "quality": "insufficient_evidence",
+      "key_evidence": [
+        2,
+        4
+      ],
+      "dimensions": [
+        7,
+        12
+      ],
+      "valid_citations": [
+        0,
+        0
+      ],
+      "model_calls": 4,
+      "total_tokens": 2965,
+      "provider_calls": 4,
+      "token_events": 4,
+      "initial_status": "completed",
+      "phase": "complete",
+      "error_code": null,
+      "trace": [
+        "plan",
+        "retrieve:1:1",
+        "assess:model_insufficient",
+        "retrieve:2:2",
+        "assess:model_insufficient",
+        "write",
+        "validate:OK"
+      ],
+      "model_events": [
+        {
+          "call": 1,
+          "stage": "plan",
+          "status": "completed",
+          "at": "2026-11-25T05:47:52.758503+00:00",
+          "elapsed_seconds": 2.484,
+          "input_tokens": 301,
+          "output_tokens": 152,
+          "total_tokens": 453,
+          "input_tokens_estimated": 301,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 2,
+          "stage": "assess",
+          "status": "completed",
+          "at": "2026-11-25T05:47:55.262441+00:00",
+          "elapsed_seconds": 2.859,
+          "input_tokens": 516,
+          "output_tokens": 176,
+          "total_tokens": 692,
+          "input_tokens_estimated": 516,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 3,
+          "stage": "assess",
+          "status": "completed",
+          "at": "2026-11-25T05:47:58.128047+00:00",
+          "elapsed_seconds": 2.39,
+          "input_tokens": 594,
+          "output_tokens": 152,
+          "total_tokens": 746,
+          "input_tokens_estimated": 594,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 4,
+          "stage": "write",
+          "status": "completed",
+          "at": "2026-11-25T05:48:00.537373+00:00",
+          "elapsed_seconds": 2.39,
+          "input_tokens": 916,
+          "output_tokens": 158,
+          "total_tokens": 1074,
+          "input_tokens_estimated": 916,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        }
+      ],
+      "research": {
+        "plan": {
+          "objective": "比较 PgVector、Milvus 和 Elasticsearch 在企业内网RAG知识库中的选型，聚焦检索、部署、扩展与运维维度，优先复用现有平台，缺失测量项明确标注。",
+          "questions": [
+            "三者在内网环境下的向量检索性能差异如何？",
+            "哪款数据库支持最高效地复用现有平台的基础设施与数据结构？",
+            "在扩展性与运维复杂度方面，三者的表现差异是什么？"
+          ],
+          "queries": [
+            "PgVector vs Milvus vs Elasticsearch RAG 内网部署对比",
+            "企业级向量数据库检索性能与运维成本对比"
+          ]
+        },
+        "assessments": [
+          {
+            "sufficient": false,
+            "reason": "资料中仅提及PgVector在企业内部RAG知识库中的试点部署，未提供与Milvus和Elasticsearch的直接对比，也缺乏性能、运维成本、准确率等关键指标的量化数据，无法支撑全面选型判断。",
+            "source_ids": [
+              "S1"
+            ],
+            "missing_information": [
+              "企业级向量数据库在内部RAG知识库中的具体性能指标对比",
+              "PgVector、Milvus和Elasticsearch在内网部署的运维成本数据",
+              "各数据库在企业内部RAG场景下的实际使用案例或用户反馈",
+              "检索准确率与响应延迟在不同场景下的量化对比"
+            ],
+            "next_queries": [
+              "PgVector、Milvus和Elasticsearch在企业内部RAG场景下的实际使用案例",
+              "Elasticsearch在向量检索中的性能与局限性分析"
+            ]
+          },
+          {
+            "sufficient": false,
+            "reason": "资料中仅提及PgVector和Elasticsearch在企业内部RAG试点中的部署与运维情况，未涉及Milvus的任何信息，也缺乏三者在检索性能、运维成本及扩展性方面的直接对比数据，无法完成完整选型分析。",
+            "source_ids": [
+              "S1",
+              "S2"
+            ],
+            "missing_information": [
+              "企业内部RAG知识库中PgVector、Milvus和Elasticsearch在检索性能、运维成本、扩展性及安全性方面的具体对比数据"
+            ],
+            "next_queries": [
+              "PgVector与Milvus在企业内网部署中的检索效率与资源消耗对比",
+              "Elasticsearch在RAG场景下向量检索的延迟与资源隔离验证报告"
+            ]
+          }
+        ],
+        "citation_valid": true,
+        "facts_verified": false,
+        "model": {
+          "model": "qwen3:4b-instruct-2507-q4_K_M",
+          "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+          "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+          "quantization": "Q4_K_M",
+          "license": "Apache-2.0",
+          "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+          "provider": "ollama",
+          "base_url": "http://127.0.0.1:11434/v1"
+        },
+        "inference": {
+          "temperature": 0,
+          "reasoning_effort": "none",
+          "context_tokens": 4096,
+          "output_tokens": 768
+        },
+        "retrieval_rounds": [
+          {
+            "iteration": 1,
+            "queries": [
+              "PgVector vs Milvus vs Elasticsearch RAG 内网部署对比"
+            ],
+            "incoming_count": 1,
+            "new_source_ids": [
+              "S1"
+            ]
+          },
+          {
+            "iteration": 2,
+            "queries": [
+              "PgVector、Milvus和Elasticsearch在企业内部RAG场景下的实际使用案例",
+              "Elasticsearch在向量检索中的性能与局限性分析"
+            ],
+            "incoming_count": 2,
+            "new_source_ids": [
+              "S2"
+            ]
+          }
+        ],
+        "report": {
+          "title": "关于PgVector、Milvus与Elasticsearch在企业内部RAG知识库选型的评估报告",
+          "answer_status": "insufficient_evidence",
+          "claims": [],
+          "limitations": [
+            "缺乏PgVector、Milvus和Elasticsearch在检索性能、运维成本及扩展性方面的直接对比数据",
+            "未提供Milvus在企业内部RAG知识库中的任何部署或性能信息",
+            "无法验证三者在内网环境下的资源消耗、延迟及安全性表现",
+            "现有资料未涵盖扩展性与运维成本的量化测量",
+            "缺少关于向量检索在企业内网中资源隔离与安全性的实证报告"
+          ]
+        },
+        "validation_reason": "OK"
+      },
+      "markdown": "# 关于PgVector、Milvus与Elasticsearch在企业内部RAG知识库选型的评估报告\n\n证据结论：insufficient_evidence\n\n\n## 局限\n- 缺乏PgVector、Milvus和Elasticsearch在检索性能、运维成本及扩展性方面的直接对比数据\n- 未提供Milvus在企业内部RAG知识库中的任何部署或性能信息\n- 无法验证三者在内网环境下的资源消耗、延迟及安全性表现\n- 现有资料未涵盖扩展性与运维成本的量化测量\n- 缺少关于向量检索在企业内网中资源隔离与安全性的实证报告",
+      "sources": [
+        {
+          "source_id": "S1",
+          "source_ref": "rag-pg",
+          "title": "PgVector 内部试点纪要",
+          "excerpt": "PgVector PgVector PgVector 企业内部 RAG 知识库。检索用试点问题集。部署沿用现有 PostgreSQL。扩展先进行容量压测。"
+        },
+        {
+          "source_id": "S2",
+          "source_ref": "rag-es",
+          "title": "Elasticsearch 内部试点纪要",
+          "excerpt": "Elasticsearch Elasticsearch Elasticsearch 企业内部 RAG 知识库。检索测试词项与向量的组合。部署考虑已有集群。扩展需要验证资源隔离。运维沿用现有值班流程。"
+        }
+      ],
+      "subtasks": []
+    },
+    {
+      "case": "rag",
+      "arm": "B_fixed",
+      "model": {
+        "model": "qwen3:4b-instruct-2507-q4_K_M",
+        "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+        "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+        "quantization": "Q4_K_M",
+        "license": "Apache-2.0",
+        "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "provider": "ollama",
+        "base_url": "http://127.0.0.1:11434/v1"
+      },
+      "elapsed_ms": 19444.62,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        3,
+        4
+      ],
+      "dimensions": [
+        11,
+        12
+      ],
+      "valid_citations": [
+        6,
+        6
+      ],
+      "model_calls": 6,
+      "total_tokens": 5603,
+      "provider_calls": 5,
+      "token_events": 5,
+      "initial_status": "completed",
+      "phase": "complete",
+      "error_code": null,
+      "trace": [
+        "supervisor:3",
+        "research:3",
+        "merge:3",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ],
+      "model_events": [
+        {
+          "call": 1,
+          "stage": "supervisor",
+          "status": "completed",
+          "at": "2026-11-25T05:48:03.054063+00:00",
+          "elapsed_seconds": 0.0,
+          "provider": "fixed_fixture"
+        },
+        {
+          "call": 2,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:48:03.074430+00:00",
+          "subtask_id": "R-b9097176683e2fe97a2f",
+          "elapsed_seconds": 4.828,
+          "input_tokens": 547,
+          "output_tokens": 203,
+          "total_tokens": 750,
+          "input_tokens_estimated": 547,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 3,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:48:03.075620+00:00",
+          "subtask_id": "R-2facde10f0a5062b4df7",
+          "elapsed_seconds": 2.391,
+          "input_tokens": 532,
+          "output_tokens": 197,
+          "total_tokens": 729,
+          "input_tokens_estimated": 532,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 4,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:48:05.481347+00:00",
+          "subtask_id": "R-7409448ed20808cab928",
+          "elapsed_seconds": 5.203,
+          "input_tokens": 542,
+          "output_tokens": 222,
+          "total_tokens": 764,
+          "input_tokens_estimated": 542,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 5,
+          "stage": "review",
+          "status": "completed",
+          "at": "2026-11-25T05:48:10.693055+00:00",
+          "elapsed_seconds": 5.594,
+          "input_tokens": 1524,
+          "output_tokens": 431,
+          "total_tokens": 1955,
+          "input_tokens_estimated": 1524,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 6,
+          "stage": "multi_write",
+          "status": "completed",
+          "at": "2026-11-25T05:48:16.297997+00:00",
+          "elapsed_seconds": 6.172,
+          "input_tokens": 928,
+          "output_tokens": 477,
+          "total_tokens": 1405,
+          "input_tokens_estimated": 928,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        }
+      ],
+      "research": {
+        "model": {
+          "model": "qwen3:4b-instruct-2507-q4_K_M",
+          "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+          "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+          "quantization": "Q4_K_M",
+          "license": "Apache-2.0",
+          "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+          "provider": "ollama",
+          "base_url": "http://127.0.0.1:11434/v1"
+        },
+        "review": {
+          "sufficient": false,
+          "gaps": [
+            "PgVector：尚缺覆盖维度 运维。",
+            "PgVector：子任务状态 insufficient。",
+            "PgVector 运维阶段的监控与故障恢复机制未明确",
+            "Milvus 部署流程未明确",
+            "Elasticsearch 检索词项与向量组合的准确率和响应时间测量方法未说明",
+            "扩展场景下各平台的性能测量标准未统一",
+            "全局评估尚有未解决的研究要求。"
+          ],
+          "conflicts": [],
+          "followups": [],
+          "rejected_followup_count": 0
+        },
+        "citation_valid": true,
+        "facts_verified": false,
+        "report": {
+          "title": "PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型比较",
+          "answer_status": "insufficient_evidence",
+          "claims": [
+            {
+              "text": "PgVector 部署沿用现有 PostgreSQL，符合优先复用现有平台的要求。",
+              "source_id": "S1",
+              "quote": "部署沿用现有 PostgreSQL。",
+              "section": "fit"
+            },
+            {
+              "text": "Milvus 部署需要申请独立服务，不满足优先复用现有平台的要求。",
+              "source_id": "S2",
+              "quote": "部署需要申请独立服务。",
+              "section": "fit"
+            },
+            {
+              "text": "Elasticsearch 部署考虑已有集群，符合优先复用现有平台的要求。",
+              "source_id": "S3",
+              "quote": "部署考虑已有集群。",
+              "section": "fit"
+            },
+            {
+              "text": "PgVector 扩展先进行容量压测，未明确运维阶段的监控与故障恢复机制。",
+              "source_id": "S1",
+              "quote": "扩展先进行容量压测。",
+              "section": "comparison"
+            },
+            {
+              "text": "Milvus 运维交给平台组轮值，未明确具体监控与故障恢复流程。",
+              "source_id": "S2",
+              "quote": "运维交给平台组轮值。",
+              "section": "risks"
+            },
+            {
+              "text": "Elasticsearch 运维沿用现有值班流程，未说明检索词项与向量组合的准确率和响应时间测量方法。",
+              "source_id": "S3",
+              "quote": "运维沿用现有值班流程。",
+              "section": "risks"
+            }
+          ],
+          "limitations": [
+            "PgVector 运维阶段的监控与故障恢复机制未明确，无法验证其运维维度的可行性。",
+            "Milvus 部署流程未明确，无法判断其在内网环境下的部署可行性。",
+            "Elasticsearch 检索词项与向量组合的准确率和响应时间测量方法未说明，缺乏性能验证依据。",
+            "扩展场景下各平台的性能测量标准未统一，无法进行横向对比。",
+            "缺少对各平台在内网环境下实际运行的综合性能与稳定性测试数据。"
+          ]
+        },
+        "quality": "partial",
+        "validation_reason": "OK"
+      },
+      "markdown": "# PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型比较\n\n## 调研背景与业务需求\n\n证据结论：insufficient_evidence。\n\n> 比较 PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型。\n\n> 维度：检索、部署、扩展、运维；要求：使用内网，优先复用现有平台，缺少测量时列出待验项目。\n\n\n## 多维度方案对比\n\n- PgVector 扩展先进行容量压测，未明确运维阶段的监控与故障恢复机制。 [S1]\n\n## 适用条件\n\n- PgVector 部署沿用现有 PostgreSQL，符合优先复用现有平台的要求。 [S1]\n- Milvus 部署需要申请独立服务，不满足优先复用现有平台的要求。 [S2]\n- Elasticsearch 部署考虑已有集群，符合优先复用现有平台的要求。 [S3]\n\n## 成本、风险及限制\n\n- Milvus 运维交给平台组轮值，未明确具体监控与故障恢复流程。 [S2]\n- Elasticsearch 运维沿用现有值班流程，未说明检索词项与向量组合的准确率和响应时间测量方法。 [S3]\n\n## 证据不足与待确认事项\n\n- PgVector 运维阶段的监控与故障恢复机制未明确，无法验证其运维维度的可行性。\n- Milvus 部署流程未明确，无法判断其在内网环境下的部署可行性。\n- Elasticsearch 检索词项与向量组合的准确率和响应时间测量方法未说明，缺乏性能验证依据。\n- 扩展场景下各平台的性能测量标准未统一，无法进行横向对比。\n- 缺少对各平台在内网环境下实际运行的综合性能与稳定性测试数据。\n- PgVector：尚缺覆盖维度 运维。\n- PgVector：子任务状态 insufficient。\n- PgVector 运维阶段的监控与故障恢复机制未明确\n- Milvus 部署流程未明确\n- Elasticsearch 检索词项与向量组合的准确率和响应时间测量方法未说明\n- 扩展场景下各平台的性能测量标准未统一\n- 全局评估尚有未解决的研究要求。\n\n## 参考来源及原文引用\n\n- [S1] PgVector 内部试点纪要：部署沿用现有 PostgreSQL。\n- [S2] Milvus 内部试点纪要：部署需要申请独立服务。\n- [S3] Elasticsearch 内部试点纪要：部署考虑已有集群。\n- [S1] PgVector 内部试点纪要：扩展先进行容量压测。\n- [S2] Milvus 内部试点纪要：运维交给平台组轮值。\n- [S3] Elasticsearch 内部试点纪要：运维沿用现有值班流程。",
+      "sources": [
+        {
+          "source_id": "S1",
+          "source_ref": "rag-pg",
+          "title": "PgVector 内部试点纪要",
+          "excerpt": "PgVector PgVector PgVector 企业内部 RAG 知识库。检索用试点问题集。部署沿用现有 PostgreSQL。扩展先进行容量压测。"
+        },
+        {
+          "source_id": "S2",
+          "source_ref": "rag-milvus",
+          "title": "Milvus 内部试点纪要",
+          "excerpt": "Milvus Milvus Milvus 企业内部 RAG 知识库。检索纳入同一问题集。部署需要申请独立服务。扩展为后续压测项。运维交给平台组轮值。"
+        },
+        {
+          "source_id": "S3",
+          "source_ref": "rag-es",
+          "title": "Elasticsearch 内部试点纪要",
+          "excerpt": "Elasticsearch Elasticsearch Elasticsearch 企业内部 RAG 知识库。检索测试词项与向量的组合。部署考虑已有集群。扩展需要验证资源隔离。运维沿用现有值班流程。"
+        }
+      ],
+      "subtasks": [
+        {
+          "objective": "PgVector",
+          "status": "insufficient",
+          "initial_queries": [
+            "PgVector"
+          ],
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "covered_dimensions": [
+            "检索",
+            "部署",
+            "扩展"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "PgVector"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            }
+          ],
+          "supplement": null,
+          "started_at": "2026-11-25T05:48:03.067641+00:00",
+          "completed_at": "2026-11-25T05:48:05.471444+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "Milvus",
+          "status": "completed",
+          "initial_queries": [
+            "Milvus"
+          ],
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "covered_dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "Milvus"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            }
+          ],
+          "supplement": null,
+          "started_at": "2026-11-25T05:48:03.067641+00:00",
+          "completed_at": "2026-11-25T05:48:07.903157+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "Elasticsearch",
+          "status": "completed",
+          "initial_queries": [
+            "Elasticsearch"
+          ],
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "covered_dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "Elasticsearch"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            }
+          ],
+          "supplement": null,
+          "started_at": "2026-11-25T05:48:05.473529+00:00",
+          "completed_at": "2026-11-25T05:48:10.682744+00:00",
+          "model_calls": 1,
+          "error_code": null
+        }
+      ]
+    },
+    {
+      "case": "rag",
+      "arm": "C_dynamic",
+      "model": {
+        "model": "qwen3:4b-instruct-2507-q4_K_M",
+        "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+        "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+        "quantization": "Q4_K_M",
+        "license": "Apache-2.0",
+        "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "provider": "ollama",
+        "base_url": "http://127.0.0.1:11434/v1"
+      },
+      "elapsed_ms": 30044.52,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        3,
+        4
+      ],
+      "dimensions": [
+        11,
+        12
+      ],
+      "valid_citations": [
+        6,
+        6
+      ],
+      "model_calls": 7,
+      "total_tokens": 8557,
+      "provider_calls": 7,
+      "token_events": 7,
+      "initial_status": "completed",
+      "phase": "complete",
+      "error_code": null,
+      "trace": [
+        "supervisor:3",
+        "research:3",
+        "merge:3",
+        "review:insufficient",
+        "supplement:1",
+        "merge:3",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ],
+      "model_events": [
+        {
+          "call": 1,
+          "stage": "supervisor",
+          "status": "completed",
+          "at": "2026-11-25T05:48:22.574606+00:00",
+          "elapsed_seconds": 7.453,
+          "input_tokens": 537,
+          "output_tokens": 623,
+          "total_tokens": 1160,
+          "input_tokens_estimated": 537,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 2,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:48:30.050154+00:00",
+          "subtask_id": "R-96735abbde4d6ea9b0a3",
+          "elapsed_seconds": 2.282,
+          "input_tokens": 543,
+          "output_tokens": 184,
+          "total_tokens": 727,
+          "input_tokens_estimated": 543,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 3,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:48:30.052154+00:00",
+          "subtask_id": "R-ea80b78d84f6968e314d",
+          "elapsed_seconds": 4.704,
+          "input_tokens": 528,
+          "output_tokens": 207,
+          "total_tokens": 735,
+          "input_tokens_estimated": 528,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 4,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:48:32.348886+00:00",
+          "subtask_id": "R-352daab4c189b8db09a9",
+          "elapsed_seconds": 4.953,
+          "input_tokens": 538,
+          "output_tokens": 219,
+          "total_tokens": 757,
+          "input_tokens_estimated": 538,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 5,
+          "stage": "review",
+          "status": "completed",
+          "at": "2026-11-25T05:48:37.322029+00:00",
+          "elapsed_seconds": 5.391,
+          "input_tokens": 1500,
+          "output_tokens": 422,
+          "total_tokens": 1922,
+          "input_tokens_estimated": 1500,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 6,
+          "stage": "review",
+          "status": "completed",
+          "at": "2026-11-25T05:48:42.739634+00:00",
+          "elapsed_seconds": 4.875,
+          "input_tokens": 1500,
+          "output_tokens": 415,
+          "total_tokens": 1915,
+          "input_tokens_estimated": 1500,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 7,
+          "stage": "multi_write",
+          "status": "completed",
+          "at": "2026-11-25T05:48:47.626648+00:00",
+          "elapsed_seconds": 4.969,
+          "input_tokens": 925,
+          "output_tokens": 416,
+          "total_tokens": 1341,
+          "input_tokens_estimated": 925,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        }
+      ],
+      "research": {
+        "model": {
+          "model": "qwen3:4b-instruct-2507-q4_K_M",
+          "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+          "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+          "quantization": "Q4_K_M",
+          "license": "Apache-2.0",
+          "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+          "provider": "ollama",
+          "base_url": "http://127.0.0.1:11434/v1"
+        },
+        "review": {
+          "sufficient": false,
+          "gaps": [
+            "Milvus：尚缺覆盖维度 扩展。",
+            "Milvus：子任务状态 insufficient。",
+            "Milvus在内网环境下的部署是否需要额外权限审批？",
+            "PgVector容量压测如何量化扩展能力的边界？",
+            "Elasticsearch的资源隔离与性能测量标准是否已制定？",
+            "运维中是否需额外部署监控工具以保障稳定性？",
+            "全局评估尚有未解决的研究要求。"
+          ],
+          "conflicts": [],
+          "followups": [
+            {
+              "subtask_id": "R-ea80b78d84f6968e314d",
+              "reason": "PgVector结论中提及兼容性需验证，但未明确流程，需补查以确认可复用性。",
+              "queries": [
+                "PgVector在内网环境下与现有PostgreSQL的兼容性验证流程"
+              ]
+            },
+            {
+              "subtask_id": "R-96735abbde4d6ea9b0a3",
+              "reason": "Milvus在扩展维度缺失，需明确压测方案以验证其扩展能力边界。",
+              "queries": [
+                "Milvus 扩展的压测方案与资源需求"
+              ]
+            },
+            {
+              "subtask_id": "R-352daab4c189b8db09a9",
+              "reason": "Elasticsearch结论提及性能测量需进一步验证，需明确标准以支持决策。",
+              "queries": [
+                "Elasticsearch在内网环境下的性能测量标准"
+              ]
+            },
+            {
+              "subtask_id": "R-352daab4c189b8db09a9",
+              "reason": "Elasticsearch扩展需验证资源隔离，动态扩展配置是否可行需明确。",
+              "queries": [
+                "现有平台是否支持Elasticsearch的动态扩展配置？"
+              ]
+            }
+          ],
+          "rejected_followup_count": 0
+        },
+        "citation_valid": true,
+        "facts_verified": false,
+        "report": {
+          "title": "PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型比较",
+          "answer_status": "insufficient_evidence",
+          "claims": [
+            {
+              "text": "PgVector 部署沿用现有 PostgreSQL，符合优先复用现有平台的要求。",
+              "source_id": "S1",
+              "quote": "部署沿用现有 PostgreSQL。",
+              "section": "fit"
+            },
+            {
+              "text": "Milvus 部署需要申请独立服务，可能涉及额外权限审批。",
+              "source_id": "S2",
+              "quote": "部署需要申请独立服务。",
+              "section": "fit"
+            },
+            {
+              "text": "Elasticsearch 部署考虑已有集群，符合优先复用现有平台的要求。",
+              "source_id": "S3",
+              "quote": "部署考虑已有集群。",
+              "section": "fit"
+            },
+            {
+              "text": "PgVector 扩展需先进行容量压测以量化扩展能力边界。",
+              "source_id": "S1",
+              "quote": "扩展先进行容量压测。",
+              "section": "risks"
+            },
+            {
+              "text": "Milvus 扩展列为后续压测项，尚缺覆盖维度扩展。",
+              "source_id": "S2",
+              "quote": "扩展为后续压测项。",
+              "section": "risks"
+            },
+            {
+              "text": "Elasticsearch 扩展需要验证资源隔离，尚未制定性能测量标准。",
+              "source_id": "S3",
+              "quote": "扩展需要验证资源隔离。",
+              "section": "risks"
+            }
+          ],
+          "limitations": [
+            "Milvus在内网环境下的部署是否需要额外权限审批？",
+            "PgVector容量压测如何量化扩展能力的边界？",
+            "Elasticsearch的资源隔离与性能测量标准是否已制定？",
+            "运维中是否需额外部署监控工具以保障稳定性？",
+            "Milvus子任务状态 insufficient，无法验证其扩展能力。"
+          ]
+        },
+        "quality": "partial",
+        "validation_reason": "OK"
+      },
+      "markdown": "# PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型比较\n\n## 调研背景与业务需求\n\n证据结论：insufficient_evidence。\n\n> 比较 PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型。\n\n> 维度：检索、部署、扩展、运维；要求：使用内网，优先复用现有平台，缺少测量时列出待验项目。\n\n\n## 适用条件\n\n- PgVector 部署沿用现有 PostgreSQL，符合优先复用现有平台的要求。 [S1]\n- Milvus 部署需要申请独立服务，可能涉及额外权限审批。 [S2]\n- Elasticsearch 部署考虑已有集群，符合优先复用现有平台的要求。 [S3]\n\n## 成本、风险及限制\n\n- PgVector 扩展需先进行容量压测以量化扩展能力边界。 [S1]\n- Milvus 扩展列为后续压测项，尚缺覆盖维度扩展。 [S2]\n- Elasticsearch 扩展需要验证资源隔离，尚未制定性能测量标准。 [S3]\n\n## 证据不足与待确认事项\n\n- Milvus在内网环境下的部署是否需要额外权限审批？\n- PgVector容量压测如何量化扩展能力的边界？\n- Elasticsearch的资源隔离与性能测量标准是否已制定？\n- 运维中是否需额外部署监控工具以保障稳定性？\n- Milvus子任务状态 insufficient，无法验证其扩展能力。\n- Milvus：尚缺覆盖维度 扩展。\n- Milvus：子任务状态 insufficient。\n- 全局评估尚有未解决的研究要求。\n\n## 参考来源及原文引用\n\n- [S1] PgVector 内部试点纪要：部署沿用现有 PostgreSQL。\n- [S2] Milvus 内部试点纪要：部署需要申请独立服务。\n- [S3] Elasticsearch 内部试点纪要：部署考虑已有集群。\n- [S1] PgVector 内部试点纪要：扩展先进行容量压测。\n- [S2] Milvus 内部试点纪要：扩展为后续压测项。\n- [S3] Elasticsearch 内部试点纪要：扩展需要验证资源隔离。",
+      "sources": [
+        {
+          "source_id": "S1",
+          "source_ref": "rag-pg",
+          "title": "PgVector 内部试点纪要",
+          "excerpt": "PgVector PgVector PgVector 企业内部 RAG 知识库。检索用试点问题集。部署沿用现有 PostgreSQL。扩展先进行容量压测。"
+        },
+        {
+          "source_id": "S2",
+          "source_ref": "rag-milvus",
+          "title": "Milvus 内部试点纪要",
+          "excerpt": "Milvus Milvus Milvus 企业内部 RAG 知识库。检索纳入同一问题集。部署需要申请独立服务。扩展为后续压测项。运维交给平台组轮值。"
+        },
+        {
+          "source_id": "S3",
+          "source_ref": "rag-es",
+          "title": "Elasticsearch 内部试点纪要",
+          "excerpt": "Elasticsearch Elasticsearch Elasticsearch 企业内部 RAG 知识库。检索测试词项与向量的组合。部署考虑已有集群。扩展需要验证资源隔离。运维沿用现有值班流程。"
+        }
+      ],
+      "subtasks": [
+        {
+          "objective": "PgVector",
+          "status": "completed",
+          "initial_queries": [
+            "PgVector"
+          ],
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "covered_dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "PgVector"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            }
+          ],
+          "supplement": null,
+          "started_at": "2026-11-25T05:48:30.042633+00:00",
+          "completed_at": "2026-11-25T05:48:34.766411+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "Milvus",
+          "status": "insufficient",
+          "initial_queries": [
+            "Milvus"
+          ],
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "covered_dimensions": [
+            "检索",
+            "部署",
+            "运维"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "Milvus"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            },
+            {
+              "generation": 1,
+              "queries": [
+                "Milvus 扩展"
+              ],
+              "new_source_ids": []
+            }
+          ],
+          "supplement": {
+            "reason": "补查未覆盖的请求维度",
+            "queries": [
+              "Milvus 扩展"
+            ]
+          },
+          "started_at": "2026-11-25T05:48:30.042633+00:00",
+          "completed_at": "2026-11-25T05:48:42.728411+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "Elasticsearch",
+          "status": "completed",
+          "initial_queries": [
+            "Elasticsearch"
+          ],
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "covered_dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "Elasticsearch"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            }
+          ],
+          "supplement": null,
+          "started_at": "2026-11-25T05:48:32.343064+00:00",
+          "completed_at": "2026-11-25T05:48:37.315243+00:00",
+          "model_calls": 1,
+          "error_code": null
+        }
+      ]
+    },
+    {
+      "case": "internal",
+      "arm": "C_dynamic",
+      "model": {
+        "model": "qwen3:4b-instruct-2507-q4_K_M",
+        "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+        "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+        "quantization": "Q4_K_M",
+        "license": "Apache-2.0",
+        "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "provider": "ollama",
+        "base_url": "http://127.0.0.1:11434/v1"
+      },
+      "elapsed_ms": 26492.98,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        2,
+        2
+      ],
+      "dimensions": [
+        5,
+        5
+      ],
+      "valid_citations": [
+        4,
+        4
+      ],
+      "model_calls": 8,
+      "total_tokens": 8955,
+      "provider_calls": 8,
+      "token_events": 8,
+      "initial_status": "completed",
+      "phase": "complete",
+      "error_code": null,
+      "trace": [
+        "supervisor:4",
+        "research:4",
+        "merge:3",
+        "review:insufficient",
+        "supplement:3",
+        "merge:3",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ],
+      "model_events": [
+        {
+          "call": 1,
+          "stage": "supervisor",
+          "status": "completed",
+          "at": "2026-11-25T05:48:52.701031+00:00",
+          "elapsed_seconds": 6.172,
+          "input_tokens": 510,
+          "output_tokens": 533,
+          "total_tokens": 1043,
+          "input_tokens_estimated": 510,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 2,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:48:58.891075+00:00",
+          "subtask_id": "R-29869da22bb65f1785c8",
+          "elapsed_seconds": 4.359,
+          "input_tokens": 536,
+          "output_tokens": 194,
+          "total_tokens": 730,
+          "input_tokens_estimated": 536,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 3,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:48:58.892854+00:00",
+          "subtask_id": "R-f0f024211d89e02c4aba",
+          "elapsed_seconds": 2.187,
+          "input_tokens": 541,
+          "output_tokens": 187,
+          "total_tokens": 728,
+          "input_tokens_estimated": 541,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 4,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:49:01.077165+00:00",
+          "subtask_id": "R-f578bf0e0ee3ca2eb348",
+          "elapsed_seconds": 4.063,
+          "input_tokens": 539,
+          "output_tokens": 166,
+          "total_tokens": 705,
+          "input_tokens_estimated": 539,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 5,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:49:03.245787+00:00",
+          "subtask_id": "R-99be8c02cf7c3f6115c4",
+          "elapsed_seconds": 4.016,
+          "input_tokens": 600,
+          "output_tokens": 188,
+          "total_tokens": 788,
+          "input_tokens_estimated": 600,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 6,
+          "stage": "review",
+          "status": "completed",
+          "at": "2026-11-25T05:49:07.277783+00:00",
+          "elapsed_seconds": 4.094,
+          "input_tokens": 1588,
+          "output_tokens": 307,
+          "total_tokens": 1895,
+          "input_tokens_estimated": 1588,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 7,
+          "stage": "review",
+          "status": "completed",
+          "at": "2026-11-25T05:49:11.408020+00:00",
+          "elapsed_seconds": 3.938,
+          "input_tokens": 1593,
+          "output_tokens": 312,
+          "total_tokens": 1905,
+          "input_tokens_estimated": 1593,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 8,
+          "stage": "multi_write",
+          "status": "completed",
+          "at": "2026-11-25T05:49:15.347644+00:00",
+          "elapsed_seconds": 3.813,
+          "input_tokens": 842,
+          "output_tokens": 319,
+          "total_tokens": 1161,
+          "input_tokens_estimated": 842,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        }
+      ],
+      "research": {
+        "model": {
+          "model": "qwen3:4b-instruct-2507-q4_K_M",
+          "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+          "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+          "quantization": "Q4_K_M",
+          "license": "Apache-2.0",
+          "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+          "provider": "ollama",
+          "base_url": "http://127.0.0.1:11434/v1"
+        },
+        "review": {
+          "sufficient": false,
+          "gaps": [
+            "明确故障恢复后交接的实际流程与责任团队：子任务状态 WORKER_BUDGET_RESERVED。",
+            "资料入库后如何确保版本一致性与变更可追溯？",
+            "手册中是否明确记录了恢复流程的时长或时间窗口？",
+            "运维组与知识管理组在故障恢复中的协作机制是什么？",
+            "知识管理组的入库审核是否包含自动化检查环节？",
+            "全局评估尚有未解决的研究要求。"
+          ],
+          "conflicts": [],
+          "followups": [
+            {
+              "subtask_id": "R-f578bf0e0ee3ca2eb348",
+              "reason": "故障恢复后交接流程中缺乏明确的文档或模板说明，需确认具体记录形式。",
+              "queries": [
+                "是否有明确的交接记录或文档模板？"
+              ]
+            },
+            {
+              "subtask_id": "R-f578bf0e0ee3ca2eb348",
+              "reason": "交接流程中未明确是否涉及审批环节，需核实流程中的控制点。",
+              "queries": [
+                "交接过程中是否存在审批环节？"
+              ]
+            },
+            {
+              "subtask_id": "R-99be8c02cf7c3f6115c4",
+              "reason": "故障恢复后是否需通知其他团队未明确，需确认信息同步机制。",
+              "queries": [
+                "资料修复后是否需要通知其他相关团队？"
+              ]
+            }
+          ],
+          "rejected_followup_count": 0
+        },
+        "citation_valid": true,
+        "facts_verified": false,
+        "report": {
+          "title": "知识库资料入库与故障恢复流程汇总",
+          "answer_status": "insufficient_evidence",
+          "claims": [
+            {
+              "text": "知识管理组审核数据分级，审核通过后将资料写入待发布索引并登记版本号。",
+              "source_id": "S1",
+              "quote": "知识管理组审核数据分级，审核通过后将资料写入待发布索引并登记版本号。",
+              "section": "candidates"
+            },
+            {
+              "text": "运维组从最近一次通过校验的备份恢复索引，并复核查询可用性。",
+              "source_id": "S2",
+              "quote": "运维组从最近一次通过校验的备份恢复索引，并复核查询可用性。",
+              "section": "fit"
+            },
+            {
+              "text": "运维组将修复涉及的资料交给知识管理组重新执行入库审核。",
+              "source_id": "S2",
+              "quote": "运维组将修复涉及的资料交给知识管理组重新执行入库审核。",
+              "section": "risks"
+            },
+            {
+              "text": "会议记录包含参会者、议题、补充说明及下次会期。",
+              "source_id": "S3",
+              "quote": "会议记录包含参会者、议题、补充说明及下次会期。",
+              "section": "recommendation"
+            }
+          ],
+          "limitations": [
+            "明确故障恢复后交接的实际流程与责任团队：子任务状态 WORKER_BUDGET_RESERVED。",
+            "资料入库后如何确保版本一致性与变更可追溯？",
+            "手册中是否明确记录了恢复流程的时长或时间窗口？",
+            "运维组与知识管理组在故障恢复中的协作机制是什么？",
+            "知识管理组的入库审核是否包含自动化检查环节？"
+          ]
+        },
+        "quality": "partial",
+        "validation_reason": "OK"
+      },
+      "markdown": "# 知识库资料入库与故障恢复流程汇总\n\n## 调研背景与业务需求\n\n证据结论：insufficient_evidence。\n\n> 综合内部资料，说明知识库资料入库和故障恢复各自的实际流程、负责团队及恢复后的交接。\n\n> 维度：资料入库、故障恢复；仅汇总手册已载明的流程和责任。\n\n\n## 候选技术方案\n\n- 知识管理组审核数据分级，审核通过后将资料写入待发布索引并登记版本号。 [S1]\n\n## 适用条件\n\n- 运维组从最近一次通过校验的备份恢复索引，并复核查询可用性。 [S2]\n\n## 成本、风险及限制\n\n- 运维组将修复涉及的资料交给知识管理组重新执行入库审核。 [S2]\n\n## 综合选型建议\n\n- 会议记录包含参会者、议题、补充说明及下次会期。 [S3]\n\n## 证据不足与待确认事项\n\n- 明确故障恢复后交接的实际流程与责任团队：子任务状态 WORKER_BUDGET_RESERVED。\n- 资料入库后如何确保版本一致性与变更可追溯？\n- 手册中是否明确记录了恢复流程的时长或时间窗口？\n- 运维组与知识管理组在故障恢复中的协作机制是什么？\n- 知识管理组的入库审核是否包含自动化检查环节？\n- 全局评估尚有未解决的研究要求。\n\n## 参考来源及原文引用\n\n- [S1] 知识库资料入库手册：知识管理组审核数据分级，审核通过后将资料写入待发布索引并登记版本号。\n- [S2] 知识库故障恢复手册：运维组从最近一次通过校验的备份恢复索引，并复核查询可用性。\n- [S2] 知识库故障恢复手册：运维组将修复涉及的资料交给知识管理组重新执行入库审核。\n- [S3] 组织会议记录模板：会议记录包含参会者、议题、补充说明及下次会期。",
+      "sources": [
+        {
+          "source_id": "S1",
+          "source_ref": "internal-ingest",
+          "title": "知识库资料入库手册",
+          "excerpt": "知识库资料入库流程。业务团队提交文档和数据分级。知识管理组审核数据分级，审核通过后将资料写入待发布索引并登记版本号。"
+        },
+        {
+          "source_id": "S2",
+          "source_ref": "internal-recovery",
+          "title": "知识库故障恢复手册",
+          "excerpt": "知识库故障恢复流程。运维组从最近一次通过校验的备份恢复索引，并复核查询可用性。运维组将修复涉及的资料交给知识管理组重新执行入库审核。"
+        },
+        {
+          "source_id": "S3",
+          "source_ref": "internal-template",
+          "title": "组织会议记录模板",
+          "excerpt": "会议记录包含参会者、议题、补充说明及下次会期。记录模板适用于团队例行会议。"
+        }
+      ],
+      "subtasks": [
+        {
+          "objective": "明确知识库资料入库的实际流程与负责团队",
+          "status": "completed",
+          "initial_queries": [
+            "知识库资料入库的正式流程是什么？",
+            "哪个团队负责资料入库的执行与审核？"
+          ],
+          "dimensions": [
+            "资料入库流程",
+            "资料入库责任团队"
+          ],
+          "covered_dimensions": [
+            "资料入库流程",
+            "资料入库责任团队"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "知识库资料入库的正式流程是什么？",
+                "哪个团队负责资料入库的执行与审核？"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            },
+            {
+              "generation": 1,
+              "queries": [
+                "知识管理组的入库审核是否包含自动化检查环节？"
+              ],
+              "new_source_ids": []
+            }
+          ],
+          "supplement": {
+            "reason": "资料入库审核流程未说明是否包含自动化检查，需核实技术环节。",
+            "queries": [
+              "知识管理组的入库审核是否包含自动化检查环节？"
+            ]
+          },
+          "started_at": "2026-11-25T05:48:58.886632+00:00",
+          "completed_at": "2026-11-25T05:49:11.389705+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "明确知识库故障恢复的实际流程与负责团队",
+          "status": "completed",
+          "initial_queries": [
+            "知识库发生故障时的恢复流程是什么？",
+            "哪个团队负责故障恢复的启动与执行？"
+          ],
+          "dimensions": [
+            "故障恢复流程",
+            "故障恢复责任团队"
+          ],
+          "covered_dimensions": [
+            "故障恢复流程",
+            "故障恢复责任团队"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "知识库发生故障时的恢复流程是什么？",
+                "哪个团队负责故障恢复的启动与执行？"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            },
+            {
+              "generation": 1,
+              "queries": [
+                "运维组与知识管理组在故障恢复中的协作机制是什么？"
+              ],
+              "new_source_ids": []
+            }
+          ],
+          "supplement": {
+            "reason": "故障恢复流程中提及双方协作，但未明确具体协作机制，需进一步查证。",
+            "queries": [
+              "运维组与知识管理组在故障恢复中的协作机制是什么？"
+            ]
+          },
+          "started_at": "2026-11-25T05:48:58.886632+00:00",
+          "completed_at": "2026-11-25T05:49:11.391705+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "明确故障恢复后交接的实际流程与责任团队",
+          "status": "insufficient",
+          "initial_queries": [
+            "故障恢复完成后，如何进行责任与状态交接？",
+            "哪个团队负责恢复后的交接工作？"
+          ],
+          "dimensions": [
+            "恢复后的交接流程",
+            "交接责任团队"
+          ],
+          "covered_dimensions": [
+            "恢复后的交接流程",
+            "交接责任团队"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "故障恢复完成后，如何进行责任与状态交接？",
+                "哪个团队负责恢复后的交接工作？"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            },
+            {
+              "generation": 1,
+              "queries": [
+                "是否有明确的交接记录或文档模板？"
+              ],
+              "new_source_ids": [
+                "S2"
+              ]
+            }
+          ],
+          "supplement": {
+            "reason": "故障恢复后交接流程中未明确提及交接记录或文档模板，需确认具体形式。",
+            "queries": [
+              "是否有明确的交接记录或文档模板？"
+            ]
+          },
+          "started_at": "2026-11-25T05:49:01.070705+00:00",
+          "completed_at": "2026-11-25T05:49:11.395998+00:00",
+          "model_calls": 1,
+          "error_code": "WORKER_BUDGET_RESERVED"
+        },
+        {
+          "objective": "整合资料入库、故障恢复及恢复后交接的全流程与责任团队",
+          "status": "completed",
+          "initial_queries": [
+            "资料入库、故障恢复及交接的全流程如何衔接？",
+            "各环节的责任团队是否明确？"
+          ],
+          "dimensions": [
+            "资料入库",
+            "故障恢复",
+            "交接流程"
+          ],
+          "covered_dimensions": [
+            "资料入库",
+            "故障恢复",
+            "交接流程"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "资料入库、故障恢复及交接的全流程如何衔接？",
+                "各环节的责任团队是否明确？"
+              ],
+              "new_source_ids": [
+                "S1",
+                "S2"
+              ]
+            }
+          ],
+          "supplement": null,
+          "started_at": "2026-11-25T05:49:03.241552+00:00",
+          "completed_at": "2026-11-25T05:49:07.271041+00:00",
+          "model_calls": 1,
+          "error_code": null
+        }
+      ]
+    },
+    {
+      "case": "insufficient",
+      "arm": "C_dynamic",
+      "model": {
+        "model": "qwen3:4b-instruct-2507-q4_K_M",
+        "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+        "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+        "quantization": "Q4_K_M",
+        "license": "Apache-2.0",
+        "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "provider": "ollama",
+        "base_url": "http://127.0.0.1:11434/v1"
+      },
+      "elapsed_ms": 26854.56,
+      "status": "completed",
+      "quality": "partial",
+      "key_evidence": [
+        0,
+        0
+      ],
+      "dimensions": [
+        0,
+        0
+      ],
+      "valid_citations": [
+        4,
+        4
+      ],
+      "model_calls": 8,
+      "total_tokens": 8695,
+      "provider_calls": 8,
+      "token_events": 8,
+      "initial_status": "completed",
+      "phase": "complete",
+      "error_code": null,
+      "trace": [
+        "supervisor:4",
+        "research:4",
+        "merge:2",
+        "review:insufficient",
+        "supplement:3",
+        "merge:2",
+        "review:insufficient",
+        "write",
+        "validate:OK"
+      ],
+      "model_events": [
+        {
+          "call": 1,
+          "stage": "supervisor",
+          "status": "completed",
+          "at": "2026-11-25T05:49:19.286407+00:00",
+          "elapsed_seconds": 6.765,
+          "input_tokens": 518,
+          "output_tokens": 585,
+          "total_tokens": 1103,
+          "input_tokens_estimated": 518,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 2,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:49:26.073495+00:00",
+          "subtask_id": "R-85be0398f441f66f8938",
+          "elapsed_seconds": 3.797,
+          "input_tokens": 609,
+          "output_tokens": 167,
+          "total_tokens": 776,
+          "input_tokens_estimated": 609,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 3,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:49:26.076180+00:00",
+          "subtask_id": "R-a1fd4e13aa6d62cc10dc",
+          "elapsed_seconds": 1.859,
+          "input_tokens": 559,
+          "output_tokens": 149,
+          "total_tokens": 708,
+          "input_tokens_estimated": 559,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 4,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:49:27.933033+00:00",
+          "subtask_id": "R-e4137f351fc75d91ca71",
+          "elapsed_seconds": 4.141,
+          "input_tokens": 547,
+          "output_tokens": 187,
+          "total_tokens": 734,
+          "input_tokens_estimated": 547,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 5,
+          "stage": "worker_assess",
+          "status": "completed",
+          "at": "2026-11-25T05:49:29.877870+00:00",
+          "subtask_id": "R-224ca4d420b77f269118",
+          "elapsed_seconds": 4.172,
+          "input_tokens": 552,
+          "output_tokens": 175,
+          "total_tokens": 727,
+          "input_tokens_estimated": 552,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 6,
+          "stage": "review",
+          "status": "completed",
+          "at": "2026-11-25T05:49:34.057596+00:00",
+          "elapsed_seconds": 4.079,
+          "input_tokens": 1473,
+          "output_tokens": 317,
+          "total_tokens": 1790,
+          "input_tokens_estimated": 1473,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 7,
+          "stage": "review",
+          "status": "completed",
+          "at": "2026-11-25T05:49:38.169997+00:00",
+          "elapsed_seconds": 3.969,
+          "input_tokens": 1473,
+          "output_tokens": 318,
+          "total_tokens": 1791,
+          "input_tokens_estimated": 1473,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        },
+        {
+          "call": 8,
+          "stage": "multi_write",
+          "status": "completed",
+          "at": "2026-11-25T05:49:42.147213+00:00",
+          "elapsed_seconds": 3.953,
+          "input_tokens": 761,
+          "output_tokens": 305,
+          "total_tokens": 1066,
+          "input_tokens_estimated": 761,
+          "template_margin_tokens": 128,
+          "provider": "ollama",
+          "requested_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "response_model": "qwen3:4b-instruct-2507-q4_K_M",
+          "finish_reason": "stop"
+        }
+      ],
+      "research": {
+        "model": {
+          "model": "qwen3:4b-instruct-2507-q4_K_M",
+          "manifest_sha256": "0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+          "gguf_sha256": "85e4a5b7b8ef0e48af0e8658f5aaab9c2324c76c1641493f4d1e25fce54b18b9",
+          "quantization": "Q4_K_M",
+          "license": "Apache-2.0",
+          "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+          "provider": "ollama",
+          "base_url": "http://127.0.0.1:11434/v1"
+        },
+        "review": {
+          "sufficient": false,
+          "gaps": [
+            "本企业知识库生产环境尚未进行性能压测，缺乏实测的每秒查询吞吐量数据。",
+            "无压测记录或替代性性能评估数据支持吞吐量估算。",
+            "未定义‘生产吞吐量’指标的具体计算方式或基准。",
+            "未明确压测记录的完整性标准与配置要求。",
+            "全局评估尚有未解决的研究要求。"
+          ],
+          "conflicts": [],
+          "followups": [
+            {
+              "subtask_id": "R-a1fd4e13aa6d62cc10dc",
+              "reason": "需明确压测时间安排以判断实测数据可获得性。",
+              "queries": [
+                "何时将开展生产环境的性能压测？"
+              ]
+            },
+            {
+              "subtask_id": "R-224ca4d420b77f269118",
+              "reason": "需确认测试场景设计是否覆盖典型业务负载。",
+              "queries": [
+                "压测将如何定义测试场景与负载基准？"
+              ]
+            },
+            {
+              "subtask_id": "R-85be0398f441f66f8938",
+              "reason": "需明确数据记录与验证机制以确保可追溯性。",
+              "queries": [
+                "压测数据将如何记录与验证？"
+              ]
+            }
+          ],
+          "rejected_followup_count": 0
+        },
+        "citation_valid": true,
+        "facts_verified": false,
+        "report": {
+          "title": "本企业知识库生产环境实测吞吐量与压测记录缺失",
+          "answer_status": "insufficient_evidence",
+          "claims": [
+            {
+              "text": "本企业知识库生产环境尚未进行性能压测。",
+              "source_id": "S1",
+              "quote": "本企业知识库生产环境尚未进行性能压测。",
+              "section": "risks"
+            },
+            {
+              "text": "每秒查询吞吐量没有测量值，压测记录将在生产压测执行后登记。",
+              "source_id": "S1",
+              "quote": "每秒查询吞吐量没有测量值，压测记录将在生产压测执行后登记。",
+              "section": "fit"
+            },
+            {
+              "text": "知识库联调只检查测试样本的导入和单条查询是否成功。",
+              "source_id": "S2",
+              "quote": "知识库联调只检查测试样本的导入和单条查询是否成功。",
+              "section": "comparison"
+            },
+            {
+              "text": "联调未测生产环境的并发和每秒查询吞吐量。",
+              "source_id": "S2",
+              "quote": "联调未测生产环境的并发和每秒查询吞吐量。",
+              "section": "risks"
+            }
+          ],
+          "limitations": [
+            "缺乏实测的每秒查询吞吐量数据。",
+            "无压测记录或替代性性能评估数据支持吞吐量估算。",
+            "未定义‘生产吞吐量’指标的具体计算方式或基准。",
+            "未明确压测记录的完整性标准与配置要求。",
+            "全局评估尚有未解决的研究要求。"
+          ]
+        },
+        "quality": "partial",
+        "validation_reason": "OK"
+      },
+      "markdown": "# 本企业知识库生产环境实测吞吐量与压测记录缺失\n\n## 调研背景与业务需求\n\n证据结论：insufficient_evidence。\n\n> 根据现有资料，给出本企业知识库生产环境实测的每秒查询吞吐量，并提供对应的压测记录。\n\n> 维度：生产吞吐量、实测记录；只采用本企业生产实测数据。\n\n\n## 多维度方案对比\n\n- 知识库联调只检查测试样本的导入和单条查询是否成功。 [S2]\n\n## 适用条件\n\n- 每秒查询吞吐量没有测量值，压测记录将在生产压测执行后登记。 [S1]\n\n## 成本、风险及限制\n\n- 本企业知识库生产环境尚未进行性能压测。 [S1]\n- 联调未测生产环境的并发和每秒查询吞吐量。 [S2]\n\n## 证据不足与待确认事项\n\n- 缺乏实测的每秒查询吞吐量数据。\n- 无压测记录或替代性性能评估数据支持吞吐量估算。\n- 未定义‘生产吞吐量’指标的具体计算方式或基准。\n- 未明确压测记录的完整性标准与配置要求。\n- 全局评估尚有未解决的研究要求。\n- 本企业知识库生产环境尚未进行性能压测，缺乏实测的每秒查询吞吐量数据。\n\n## 参考来源及原文引用\n\n- [S1] 知识库生产性能验证排期：本企业知识库生产环境尚未进行性能压测。\n- [S1] 知识库生产性能验证排期：每秒查询吞吐量没有测量值，压测记录将在生产压测执行后登记。\n- [S2] 知识库联调验收简报：知识库联调只检查测试样本的导入和单条查询是否成功。\n- [S2] 知识库联调验收简报：联调未测生产环境的并发和每秒查询吞吐量。",
+      "sources": [
+        {
+          "source_id": "S1",
+          "source_ref": "no-load-test",
+          "title": "知识库生产性能验证排期",
+          "excerpt": "本企业知识库生产环境尚未进行性能压测。每秒查询吞吐量没有测量值，压测记录将在生产压测执行后登记。"
+        },
+        {
+          "source_id": "S2",
+          "source_ref": "no-prod-results",
+          "title": "知识库联调验收简报",
+          "excerpt": "知识库联调只检查测试样本的导入和单条查询是否成功。联调未测生产环境的并发和每秒查询吞吐量。"
+        }
+      ],
+      "subtasks": [
+        {
+          "objective": "确定本企业知识库生产环境实测的每秒查询吞吐量",
+          "status": "completed",
+          "initial_queries": [
+            "查询本企业知识库生产环境的压测记录中，每秒查询吞吐量的实测值",
+            "确认压测记录的执行时间、环境配置及测试条件"
+          ],
+          "dimensions": [
+            "生产吞吐量"
+          ],
+          "covered_dimensions": [
+            "生产吞吐量"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "查询本企业知识库生产环境的压测记录中，每秒查询吞吐量的实测值",
+                "确认压测记录的执行时间、环境配置及测试条件"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            },
+            {
+              "generation": 1,
+              "queries": [
+                "何时将开展生产环境的性能压测？"
+              ],
+              "new_source_ids": []
+            }
+          ],
+          "supplement": {
+            "reason": "需明确压测时间安排以判断数据可得性。",
+            "queries": [
+              "何时将开展生产环境的性能压测？"
+            ]
+          },
+          "started_at": "2026-11-25T05:49:26.064577+00:00",
+          "completed_at": "2026-11-25T05:49:38.150995+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "获取本企业知识库生产环境压测的完整实测记录",
+          "status": "completed",
+          "initial_queries": [
+            "检索本企业知识库生产环境压测的原始记录文件",
+            "提取记录中的测试时间、配置参数及结果详情"
+          ],
+          "dimensions": [
+            "实测记录"
+          ],
+          "covered_dimensions": [
+            "实测记录"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "检索本企业知识库生产环境压测的原始记录文件",
+                "提取记录中的测试时间、配置参数及结果详情"
+              ],
+              "new_source_ids": [
+                "S1",
+                "S2"
+              ]
+            },
+            {
+              "generation": 1,
+              "queries": [
+                "压测数据将如何记录与验证？"
+              ],
+              "new_source_ids": []
+            }
+          ],
+          "supplement": {
+            "reason": "需明确数据记录与验证机制以确保可追溯性。",
+            "queries": [
+              "压测数据将如何记录与验证？"
+            ]
+          },
+          "started_at": "2026-11-25T05:49:26.064577+00:00",
+          "completed_at": "2026-11-25T05:49:38.154590+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "交叉验证生产吞吐量与实测记录的一致性",
+          "status": "completed",
+          "initial_queries": [
+            "比对实测记录中记录的吞吐量值与压测报告中的吞吐量指标",
+            "确认数据在时间维度和配置维度上的匹配性"
+          ],
+          "dimensions": [
+            "生产吞吐量",
+            "实测记录"
+          ],
+          "covered_dimensions": [
+            "生产吞吐量",
+            "实测记录"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "比对实测记录中记录的吞吐量值与压测报告中的吞吐量指标",
+                "确认数据在时间维度和配置维度上的匹配性"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            }
+          ],
+          "supplement": null,
+          "started_at": "2026-11-25T05:49:27.929875+00:00",
+          "completed_at": "2026-11-25T05:49:32.079957+00:00",
+          "model_calls": 1,
+          "error_code": null
+        },
+        {
+          "objective": "整合并呈现本企业知识库生产环境实测的每秒查询吞吐量及对应的压测记录",
+          "status": "completed",
+          "initial_queries": [
+            "汇总所有实测记录中的吞吐量值与对应测试场景",
+            "格式化输出为清晰、可读的报告结构"
+          ],
+          "dimensions": [
+            "生产吞吐量",
+            "实测记录"
+          ],
+          "covered_dimensions": [
+            "生产吞吐量",
+            "实测记录"
+          ],
+          "rounds": [
+            {
+              "generation": 0,
+              "queries": [
+                "汇总所有实测记录中的吞吐量值与对应测试场景",
+                "格式化输出为清晰、可读的报告结构"
+              ],
+              "new_source_ids": [
+                "S1"
+              ]
+            },
+            {
+              "generation": 1,
+              "queries": [
+                "压测将如何定义测试场景与负载基准？"
+              ],
+              "new_source_ids": []
+            }
+          ],
+          "supplement": {
+            "reason": "需确认测试场景设计是否覆盖典型业务负载。",
+            "queries": [
+              "压测将如何定义测试场景与负载基准？"
+            ]
+          },
+          "started_at": "2026-11-25T05:49:29.874125+00:00",
+          "completed_at": "2026-11-25T05:49:38.158317+00:00",
+          "model_calls": 1,
+          "error_code": null
+        }
+      ]
+    }
+  ]
+}

@@ -11,3 +11,12 @@ data/
 dist/
 build/
 *.log
+
+# Local runtime databases and private credentials
+*.sqlite*
+*.db
+*.db-*
+*.pem
+*.key
+id_ed25519
+id_rsa

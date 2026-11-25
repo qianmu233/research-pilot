@@ -38,6 +38,11 @@ class LocalStore:
                   chunk_id TEXT PRIMARY KEY, doc_id TEXT NOT NULL,
                   title TEXT NOT NULL, source_ref TEXT NOT NULL, content TEXT NOT NULL
                 );
+                CREATE TABLE IF NOT EXISTS research_subtasks (
+                  task_id TEXT NOT NULL REFERENCES tasks(id), subtask_id TEXT NOT NULL,
+                  ordinal INTEGER NOT NULL, spec_json TEXT NOT NULL, state_json TEXT NOT NULL,
+                  PRIMARY KEY (task_id, subtask_id)
+                );
             """)
             columns = {row[1] for row in self.conn.execute("PRAGMA table_info(tasks)")}
             if "tool_errors_json" not in columns:
@@ -46,6 +51,8 @@ class LocalStore:
                 self.conn.execute("ALTER TABLE tasks ADD COLUMN evidence_status TEXT NOT NULL DEFAULT 'unassessed'")
             if "research_json" not in columns:
                 self.conn.execute("ALTER TABLE tasks ADD COLUMN research_json TEXT NOT NULL DEFAULT '{}'")
+            if "mode" not in columns:
+                self.conn.execute("ALTER TABLE tasks ADD COLUMN mode TEXT NOT NULL DEFAULT 'single'")
             self.conn.execute("""CREATE TABLE IF NOT EXISTS model_budgets (
                 task_id TEXT PRIMARY KEY, started REAL NOT NULL, calls INTEGER NOT NULL,
                 events_json TEXT NOT NULL)""")
@@ -59,8 +66,10 @@ class LocalStore:
         timestamp = now_iso()
         with self.lock, self.conn:
             self.conn.execute(
-                "INSERT INTO tasks(id,question,scope,status,phase,created_at,updated_at) VALUES (?,?,?,?,?,?,?)",
-                (task_id, data.question, data.scope, "pending", "created", timestamp, timestamp),
+                "INSERT INTO tasks(id,question,scope,status,phase,created_at,updated_at,mode) "
+                "VALUES (?,?,?,?,?,?,?,?)",
+                (task_id, data.question, data.scope, "pending", "created", timestamp, timestamp,
+                 data.mode),
             )
         return task_id
 
@@ -80,39 +89,92 @@ class LocalStore:
         item["model_events"] = json.loads(budget["events_json"]) if budget else []
         return item
 
+    def start_budget(self, task_id: str) -> None:
+        with self.lock, self.conn:
+            self.conn.execute("INSERT OR IGNORE INTO model_budgets VALUES (?,?,0,'[]')",
+                              (task_id, time.time()))
+
     def reserve_model_call(self, task_id: str, stage: str, max_calls: int,
-                           timeout_seconds: float) -> tuple[int, float]:
+                           timeout_seconds: float, *, subtask_id: str | None = None,
+                           keep_calls: int = 0) -> tuple[int, float]:
         """Reserve BEFORE network I/O, persist even on crash/failure/resume. No retries."""
         with self.lock, self.conn:
+            self.conn.execute("BEGIN IMMEDIATE")
             self.conn.execute("INSERT OR IGNORE INTO model_budgets VALUES (?,?,0,'[]')",
                               (task_id, time.time()))
             row = self.conn.execute("SELECT * FROM model_budgets WHERE task_id=?", (task_id,)).fetchone()
             remaining = timeout_seconds - (time.time() - row["started"])
             if remaining <= 0:
                 raise TimeoutError("TASK_DEADLINE_EXCEEDED")
-            if row["calls"] >= max_calls:
+            if row["calls"] >= max_calls - keep_calls:
                 raise ModelCallBudgetExceeded("MODEL_CALL_BUDGET_EXCEEDED")
             number = row["calls"] + 1
             events = json.loads(row["events_json"])
-            events.append({"call": number, "stage": stage, "status": "reserved", "at": now_iso()})
+            event = {"call": number, "stage": stage, "status": "reserved", "at": now_iso()}
+            if subtask_id is not None:
+                event["subtask_id"] = subtask_id
+            events.append(event)
             self.conn.execute("UPDATE model_budgets SET calls=?,events_json=? WHERE task_id=?",
                               (number, json.dumps(events), task_id))
         return number, remaining
 
     def check_task_deadline(self, task_id: str, timeout_seconds: float) -> None:
+        self.remaining_seconds(task_id, timeout_seconds)
+
+    def remaining_seconds(self, task_id: str, timeout_seconds: float) -> float:
         with self.lock:
             row = self.conn.execute("SELECT started FROM model_budgets WHERE task_id=?", (task_id,)).fetchone()
-        if row and time.time() - row[0] >= timeout_seconds:
+        remaining = timeout_seconds - (time.time() - row[0]) if row else timeout_seconds
+        if remaining <= 0:
             raise TimeoutError("TASK_DEADLINE_EXCEEDED")
+        return remaining
 
     def finish_model_call(self, task_id: str, number: int, status: str, elapsed: float,
                           usage: dict) -> None:
         with self.lock, self.conn:
+            self.conn.execute("BEGIN IMMEDIATE")
             row = self.conn.execute("SELECT events_json FROM model_budgets WHERE task_id=?", (task_id,)).fetchone()
             events = json.loads(row[0])
             events[number - 1].update(status=status, elapsed_seconds=round(elapsed, 4), **usage)
             self.conn.execute("UPDATE model_budgets SET events_json=? WHERE task_id=?",
                               (json.dumps(events), task_id))
+
+    def register_subtasks(self, task_id: str, specs: list[dict]) -> None:
+        with self.lock, self.conn:
+            self.conn.executemany(
+                "INSERT OR IGNORE INTO research_subtasks VALUES (?,?,?,?,?)",
+                [(task_id, spec["id"], index, json.dumps(spec, ensure_ascii=False),
+                  '{"status":"pending","generation":-1,"attempts":0,"rounds":[],"sources":[]}')
+                 for index, spec in enumerate(specs)],
+            )
+
+    def subtasks(self, task_id: str) -> list[dict]:
+        with self.lock:
+            rows = self.conn.execute(
+                "SELECT * FROM research_subtasks WHERE task_id=? ORDER BY ordinal",
+                (task_id,),
+            ).fetchall()
+        result = []
+        for row in rows:
+            spec = json.loads(row["spec_json"])
+            result.append({"task_id": task_id, **spec, "initial_queries": spec["queries"],
+                           **json.loads(row["state_json"])})
+        return result
+
+    def subtask_state(self, task_id: str, subtask_id: str) -> dict:
+        with self.lock:
+            row = self.conn.execute(
+                "SELECT state_json FROM research_subtasks WHERE task_id=? AND subtask_id=?",
+                (task_id, subtask_id),
+            ).fetchone()
+        return json.loads(row[0])
+
+    def save_subtask(self, task_id: str, subtask_id: str, state: dict) -> None:
+        with self.lock, self.conn:
+            self.conn.execute(
+                "UPDATE research_subtasks SET state_json=? WHERE task_id=? AND subtask_id=?",
+                (json.dumps(state, ensure_ascii=False), task_id, subtask_id),
+            )
 
     def patch_task(self, task_id: str, *, status: str | None = None,
                    phase: str | None = None, report: str | None = None,

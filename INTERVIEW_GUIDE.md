@@ -1,5 +1,7 @@
 ﻿# ResearchPilot 面试复盘（以实际证据为准）
 
+当前版本请从[多智能体流程与面试指南](docs/MULTI_AGENT_FLOW_ZH.md)和[简历事实依据](docs/RESUME_FACTS_ZH.md)开始。以下各节保留此前各阶段的原始结果。
+
 ## Phase 7.2/7.3：本地与远端兼容如何证明？
 
 2026-10-21新增验收：DeepSeek一次真实JSON规划冒烟已验证（1请求、357 Token），一条公开合成A已通过完整HTTP工作流与来源支持性核查（3请求、1830 Token）。主链为FastAPI→既有LangGraph五节点→DeepSeek规划/证据评估/报告→中文BGE512D/PgVector→引用校验→SQLite→API查询。实际轨迹plan/retrieve:1:1/assess:model_sufficient/write/validate:OK，未补检索，非Mock结果。两条技术结论各引用同一检索所得S1的对应原句，逐条supported；这里真实检索指实际数据库操作，来源内容仍是明确标记的合成演示笔记，不是企业资料或外部事实权威。

@@ -7,7 +7,7 @@
 在项目根目录运行：
 
 ```powershell
-Set-Location E:\codeplace\llm-agent\research-pilot
+# 在克隆后的 research-pilot 仓库根目录执行
 $artifact = Get-Content data/phase7/phase71-final-suite/C.json -Raw -Encoding UTF8 | ConvertFrom-Json
 $artifact.case.question
 $artifact.task.trace

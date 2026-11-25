@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="1.211" timestamp="2026-10-20T18:26:07.994459+08:00" hostname="LAPTOP-0TJ3VR8A"><testcase classname="tests.test_phase6_zh" name="test_source_metadata_survives_search_dedup_and_evidence_schema" time="0.730"><failure message="KeyError: 'source_ref'">store = &lt;research_pilot.vector.PgVectorSearch object at 0x00000169575C6000&gt;
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="1.211" timestamp="2026-10-20T18:26:07.994459+08:00"><testcase classname="tests.test_phase6_zh" name="test_source_metadata_survives_search_dedup_and_evidence_schema" time="0.730"><failure message="KeyError: 'source_ref'">store = &lt;research_pilot.vector.PgVectorSearch object at 0x00000169575C6000&gt;
 
     def test_source_metadata_survives_search_dedup_and_evidence_schema(store):
         doc_id, _ = store.ingest_text(IngestText(title="合成测试：检查点", source_ref="synthetic:zh:source",

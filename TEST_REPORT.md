@@ -1,5 +1,7 @@
 # ResearchPilot 测试与验证报告
 
+> 公开副本说明（2026-10-29）：文档中的本机绝对路径已替换为通用说明，历史 `baseline-regressions.xml` 仅移除测试主机名。测试结果、失败正文、基准金标和模型用量保持不变。本次只整理已有材料，没有新增测试或模型请求；当前量化汇总及复现条件见 [README](README.md)。
+
 ## 合并前日期门禁回归（2026-10-22）
 
 修复仅涉及实验工具的测试层：Windows 时区转换改为固定时刻，新增 6 个固定时钟用例，验证上海时间授权日的起止允许、前一日及 2026-10-23/24、2027 年拒绝。直接检查真实收费入口的条件分支，在公开数据检查处主动停止，禁止 Key 读取、写文件和模型/HTTP 调用；没有改变收费脚本、授权日期、预算或生产参数。
@@ -376,7 +378,7 @@ All checks passed!
 
 ## 实际环境与版本
 
-- Windows 主机 Python **3.12.3**，`E:\anaconda3\python.exe`；项目 `.venv` 与全局环境隔离。
+- Windows 主机 Python **3.12.3**，`python`；项目 `.venv` 与全局环境隔离。
 - Linux Docker 应用 Python **3.12.15**；Docker Desktop **4.93.0** / Engine **29.8.1**。
 - LangChain **1.4.6**，langchain-core **1.6.12**，LangGraph **1.2.16**。
 - langgraph-checkpoint **4.3.0**，langgraph-checkpoint-sqlite **3.1.2**，langchain-openai **1.7.2**。

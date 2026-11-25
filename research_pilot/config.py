@@ -32,6 +32,8 @@ class Settings:
     max_model_calls: int = 5
     task_timeout_seconds: float = 300.0
     retrieval_top_k: int = 5
+    multi_max_subtasks: int = 4
+    multi_max_concurrency: int = 3
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -59,6 +61,8 @@ class Settings:
             max_model_calls=int(os.getenv("RESEARCH_MAX_MODEL_CALLS", "5")),
             task_timeout_seconds=float(os.getenv("RESEARCH_TASK_TIMEOUT_SECONDS", "300")),
             retrieval_top_k=int(os.getenv("RESEARCH_RETRIEVAL_TOP_K", "5")),
+            multi_max_subtasks=int(os.getenv("RESEARCH_MULTI_MAX_SUBTASKS", "4")),
+            multi_max_concurrency=int(os.getenv("RESEARCH_MULTI_MAX_CONCURRENCY", "3")),
         )
         config.validate()
         return config
@@ -88,6 +92,8 @@ class Settings:
             raise ValueError("max_sources must be in [1, 20]")
         if not 1 <= self.retrieval_top_k <= 5:
             raise ValueError("retrieval_top_k must be in [1, 5]")
+        if not 1 <= self.multi_max_subtasks <= 6 or not 1 <= self.multi_max_concurrency <= 6:
+            raise ValueError("Multi-Agent subtask and concurrency limits must be in [1, 6]")
         if self.model_backend == "openai" and not (self.model_name and self.model_api_key):
             raise ValueError("Real model mode requires a model name and API key")
         if self.model_backend == "ollama":

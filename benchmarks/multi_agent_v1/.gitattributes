@@ -1,0 +1,2 @@
+# Preserve the byte-for-byte archive of the original Mock results.
+results.json -text whitespace=trailing-space,space-before-tab,cr-at-eol
