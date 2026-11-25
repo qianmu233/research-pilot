@@ -86,7 +86,7 @@ DeepSeek没有下载Tokenizer：使用系统消息+用户JSON的UTF-8字节数�
 ### 1. 现在可执行的无费用预览
 
 ```powershell
-Set-Location E:\codeplace\llm-agent\research-pilot
+# 在克隆后的 research-pilot 仓库根目录执行
 .\.venv\Scripts\python.exe scripts/deepseek_preview.py
 ```
 

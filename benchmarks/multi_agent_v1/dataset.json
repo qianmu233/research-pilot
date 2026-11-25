@@ -1,0 +1,116 @@
+{
+  "description": "公开合成的企业内部选型材料。文档描述虚构组织的试点约束，不可用于推断产品通用性能、报价或特性。",
+  "cases": [
+    {
+      "id": "rag",
+      "question": "比较 PgVector、Milvus 和 Elasticsearch 在企业内部 RAG 知识库中的选型。",
+      "scope": "维度：检索、部署、扩展、运维；要求：使用内网，优先复用现有平台，缺少测量时列出待验项目。",
+      "fixed_subjects": [
+        "PgVector",
+        "Milvus",
+        "Elasticsearch"
+      ],
+      "documents": [
+        {
+          "id": "rag-pg",
+          "subject": "PgVector",
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展"
+          ],
+          "title": "PgVector 内部试点纪要",
+          "content": "PgVector PgVector PgVector 企业内部 RAG 知识库。检索用试点问题集。部署沿用现有 PostgreSQL。扩展先进行容量压测。"
+        },
+        {
+          "id": "rag-pg-ops",
+          "subject": "PgVector",
+          "dimensions": [
+            "运维"
+          ],
+          "title": "PgVector 运维交接",
+          "content": "PgVector 运维 运维 运维。备份恢复与扩容审批由数据库组负责。权限制定、交接演练、夜间告警与业务恢复时限仍需确认。"
+        },
+        {
+          "id": "rag-milvus",
+          "subject": "Milvus",
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "title": "Milvus 内部试点纪要",
+          "content": "Milvus Milvus Milvus 企业内部 RAG 知识库。检索纳入同一问题集。部署需要申请独立服务。扩展为后续压测项。运维交给平台组轮值。"
+        },
+        {
+          "id": "rag-es",
+          "subject": "Elasticsearch",
+          "dimensions": [
+            "检索",
+            "部署",
+            "扩展",
+            "运维"
+          ],
+          "title": "Elasticsearch 内部试点纪要",
+          "content": "Elasticsearch Elasticsearch Elasticsearch 企业内部 RAG 知识库。检索测试词项与向量的组合。部署考虑已有集群。扩展需要验证资源隔离。运维沿用现有值班流程。"
+        },
+        {
+          "id": "rag-decoy",
+          "subject": null,
+          "dimensions": [],
+          "title": "内容部门知识库录入规范",
+          "content": "企业内部知识库材料分为草稿、终稿和归档。业务分析需要逐份确认使用权限。"
+        }
+      ]
+    },
+    {
+      "id": "logs",
+      "question": "比较 OpenSearch 和 Loki 在企业内部日志平台中的选型。",
+      "scope": "维度：检索、部署、合规；要求：内网运行，明确留存责任，实测前不承诺吞吐或价格。",
+      "fixed_subjects": [
+        "OpenSearch",
+        "Loki"
+      ],
+      "documents": [
+        {
+          "id": "logs-open",
+          "subject": "OpenSearch",
+          "dimensions": [
+            "检索",
+            "部署",
+            "合规"
+          ],
+          "title": "OpenSearch 日志试点",
+          "content": "OpenSearch OpenSearch OpenSearch 企业内部日志平台。检索在样本日志上做字段筛选。部署由平台组承担。合规需记录归档责任人。"
+        },
+        {
+          "id": "logs-loki",
+          "subject": "Loki",
+          "dimensions": [
+            "检索",
+            "部署"
+          ],
+          "title": "Loki 日志试点",
+          "content": "Loki Loki Loki 企业内部日志平台。检索使用既有告警样本做回放验证。部署申请独立测试空间。"
+        },
+        {
+          "id": "logs-loki-risk",
+          "subject": "Loki",
+          "dimensions": [
+            "合规"
+          ],
+          "title": "Loki 合规留存备忘录",
+          "content": "Loki 合规 合规 合规。试点留存由数据治理组审批；需要完成删除审计、恢复演练、标签脱敏及跨团队责任交接。"
+        },
+        {
+          "id": "logs-decoy",
+          "subject": null,
+          "dimensions": [],
+          "title": "日志平台工单模板",
+          "content": "企业内部日志平台统一提交工单号、责任人、风险说明与变更后的观察窗口。"
+        }
+      ]
+    }
+  ]
+}

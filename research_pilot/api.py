@@ -93,7 +93,8 @@ def create_app(runtime: ResearchRuntime | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="TASK_NOT_FOUND")
         if task["status"] == "completed":
             raise HTTPException(status_code=409, detail="TASK_ALREADY_COMPLETED")
-        background_tasks.add_task(app.state.runtime.run_task, task_id)
+        if task.get("mode") != "multi" or not app.state.runtime.is_active(task_id):
+            background_tasks.add_task(app.state.runtime.run_task, task_id)
         return {"task_id": task_id, "status": "resume_requested"}
 
     return app

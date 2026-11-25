@@ -91,7 +91,7 @@ docker info和compose ps/up显示dockerDesktopLinuxEngine管道不存在；只�
 以下仅无费用预览与离线验证，可先执行：
 
 ```powershell
-Set-Location E:\codeplace\llm-agent\research-pilot
+# 在克隆后的 research-pilot 仓库根目录执行
 $env:PYTHONUTF8='1'
 .\.venv\Scripts\python.exe -m scripts.deepseek_http_a
 docker info --format '{{.ServerVersion}}'
@@ -111,7 +111,7 @@ if ($LASTEXITCODE -ne 0) { throw '离线验收未通过；停止，不调用Deep
 只有离线4项全部通过并明确批准“仅本条公开合成A，最多5次请求、USD0.02”后，才手动执行：
 
 ```powershell
-Set-Location E:\codeplace\llm-agent\research-pilot
+# 在克隆后的 research-pilot 仓库根目录执行
 $env:PYTHONUTF8='1'
 .\.venv\Scripts\python.exe -m scripts.deepseek_http_a --execute-paid --smoke-result data/phase72-paid-8421922ca7b2/smoke.json
 if ($LASTEXITCODE -ne 0) { throw '实验停止；保留结果，不重试、不提高预算、不运行B/E。' }

@@ -1,0 +1,5 @@
+# Frozen benchmark checksums must survive checkout on Windows and other platforms.
+benchmarks/** -text
+# Keep historical CRLF records while checking other trailing whitespace.
+TEST_REPORT.md whitespace=trailing-space,space-before-tab,cr-at-eol
+benchmarks/zh_retrieval_v1/results/baseline-regressions.xml whitespace=trailing-space,space-before-tab,cr-at-eol

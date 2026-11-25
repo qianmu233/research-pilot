@@ -1,27 +1,67 @@
-# ResearchPilot: Evidence-Grounded Research Agent
+# ResearchPilot: Evidence-Grounded Research Platform
 
-**ResearchPilot：多文档自主调研与报告生成 Agent**
+**ResearchPilot：多智能体协作式企业调研与报告生成平台**
 
-基于 Python、FastAPI 和 LangGraph
-构建的多文档研究智能体。系统将研究问题拆解为有边界的多步骤任务，通过结构化研究规划、资料检索、证据评估、报告生成和引用校验，输出附有来源信息、便于追溯的研究报告。
+面向企业技术选型与多文档调研的 Python 项目。通过 FastAPI 提交问题，使用 LangGraph 编排检索、补查与报告生成，并附上可追溯的来源和摘录。
 
-## 项目介绍
+## 企业研究与执行模式
 
-研究型任务通常需要围绕一个问题进行多轮资料检索与整理。ResearchPilot 使用
-LangGraph 编排研究流程，通过 FastAPI
-提供任务提交、状态查询、报告获取、执行轨迹查看和手动恢复接口。
+ResearchPilot 面向企业技术选型、内部多文档调研、竞品与供应商方案比较。研究员可以提交一个问题和业务约束，系统从已导入的资料中收集摘录，生成可以追溯来源的决策辅助报告，并列出缺少证据的事项。
 
-系统将研究过程拆分为五个节点：`plan`、`retrieve`、`assess`、`write` 和
-`validate`。当现有资料不足时，工作流可以根据评估结果补充检索；达到检索轮数、模型调用预算或任务时限后，流程按配置结束。
+| 模式 | 执行方式 | 适合的问题 |
+|---|---|---|
+| `single`（默认） | 原五节点图在同一上下文内规划、循环检索、判断证据、写作和校验 | 单文档总结、目标集中的资料核对 |
+| `multi` | Supervisor 动态规划，LangGraph `Send` 并行派发独立 Worker 子图，Review 检查全局缺口并定向补查 | 多候选、多维度、需要独立资料路径的技术选型 |
 
-项目重点包括：
+```mermaid
+flowchart TD
+    API[提交问题和范围] --> S[Supervisor 动态拆分]
+    S --> F[Send 按子任务派发]
+    F --> W1[Worker A 独立检索与评估]
+    F --> W2[Worker B 独立检索与评估]
+    F --> WN[其他 Worker 按计划启动]
+    W1 --> J[Reducer 合并结果并去重证据]
+    W2 --> J
+    WN --> J
+    J -->|可恢复的子任务异常| PAUSE[保存进度并等待 resume]
+    PAUSE -->|仅失败子任务| F
+    J --> R[Review 核对覆盖与冲突]
+    R -->|缺口且未达到补查上限| F
+    R -->|充分或停止补查| P[生成综合报告]
+    P --> V[校验来源 ID 和原文摘录]
+    V --> O[保存任务结果]
+    W1 -.-> DB[(SQLite 子任务游标)]
+    W2 -.-> DB
+    WN -.-> DB
+    S -.-> CP[(SQLite 主图检查点)]
+    R -.-> CP
+```
 
-- 使用结构化模型输出生成研究计划、评估检索证据并组织报告。
-- 通过有界条件循环执行补充检索，控制检索轮数和来源数量。
-- 支持 SQLite 词面检索，以及 PostgreSQL + PgVector 语义检索。
-- 为检索来源分配稳定标识，核对报告中的来源 ID 和原文摘录。
-- 持久化任务状态、模型调用记录、调用预算和 LangGraph 检查点。
-- 通过统一模型适配层接入 Mock、Ollama/Qwen 和 DeepSeek。
+- **Supervisor** 用 Pydantic 校验目标、范围、维度、约束与查询，按问题拆分子任务。明确列出的候选产品和维度沿用用户原词，首查按产品名发起。默认最多 4 个子任务、3 路并行，可通过 `RESEARCH_MULTI_MAX_SUBTASKS` 和 `RESEARCH_MULTI_MAX_CONCURRENCY` 在 1–6 范围内调整。
+- **Research Worker** 各自保存查询、检索轮次、证据、评估结果和异常历史。复用 SQLite 词面检索或专用集合中的 PgVector/BGE 检索。多模式只查已导入资料。
+- **Review** 按计划顺序合并结果，优先保留 Worker 引用过的证据，并按 locator 和摘录去重。评估原问题覆盖、缺口和可能的冲突。最多派发一批定向补查，本地检索与补查共用轮次上限；没有新证据时复用原局部评估。
+- **报告** 提供有证据的候选、对比和风险信息，同时列明缺口。本地 Qwen 先选原文段落，再写这段能支持的发现。程序核对来源和原文，`facts_verified` 始终为 `false`。
+
+### 进度、预算与恢复
+
+`GET /api/tasks/{id}` 的 `progress` 提供主阶段、Worker 状态和已完成数、唯一证据数、补查数、预算和报告状态。每个子任务有初始与执行查询、证据、局部结论、覆盖维度、未解决问题、用量、时间和异常。主任务 `completed` 表示报告已发布，`progress.quality` 的 `full`、`partial` 或 `insufficient` 表示当前证据结论。引用校验失败会阻止发布。
+
+多模式的所有模型尝试共用主任务的 SQLite 账本。每次请求前原子预占，Worker 给全局评估和写报告预留额度。单步超时后不采纳迟到结果，绝对时限从首次执行开始并跨恢复保留。调用数统计预占次数，Token 只采用提供方返回的数据。环境模板见 [.env.example](.env.example)。
+
+主任务用 `task_id` 找到主图 checkpoint，子任务用 `task_id + subtask_id` 找到独立游标。`POST /api/tasks/{id}/resume` 会继续未完成工作；若首次局部失败，主图在 `waiting_for_retry` 暂停，同一轮分发允许一次手动重试。已保存的检索或已完成的子任务可直接复用。进程在模型请求和结果落盘之间中断时，请求可能重放并消耗原预算。详见[中文流程讲解](docs/MULTI_AGENT_FLOW_ZH.md)。
+
+## 目录结构
+
+| 位置 | 职责 |
+|---|---|
+| `research_pilot/api.py`、`runtime.py` | HTTP、双模式路由、后台执行和进度 |
+| `research_pilot/workflow.py` | 原单 Agent 图 |
+| `research_pilot/multi_workflow.py`、`multi_schema.py` | 主图、动态分发、全局 Review 和企业报告结构 |
+| `research_pilot/research_agent.py` | 独立 Worker 子图、查询与轮次游标 |
+| `research_pilot/store.py`、`evidence.py` | 持久化、原子预算、证据合并与引用 |
+| `research_pilot/retrieval.py`、`vector.py` | 词面检索、PgVector 与 BGE |
+| `tests/`、`tests_real/` | 离线回归、本地真实模型测试 |
+| `benchmarks/multi_agent_v1/`、`benchmarks/zh_retrieval_v1/` | Multi-Agent 编排对照、独立中文检索评测 |
 
 ## 技术栈
 
@@ -29,7 +69,7 @@ LangGraph 编排研究流程，通过 FastAPI
 |:-----------------------------|:-----------------------------------------|
 | Python 3.12                  | 主要开发语言                             |
 | FastAPI                      | 任务提交、状态查询、报告、轨迹与恢复接口 |
-| LangGraph                    | 五节点研究工作流、State 管理与条件路由   |
+| LangGraph                    | 单 Agent 基线、并行子图和条件路由   |
 | LangChain、Pydantic          | 模型交互与结构化数据校验                 |
 | SQLite                       | 任务记录、模型调用记录、预算及图检查点   |
 | PostgreSQL、PgVector         | 可选的向量检索后端                       |
@@ -39,7 +79,7 @@ LangGraph 编排研究流程，通过 FastAPI
 
 依赖版本及可选安装方式见 `pyproject.toml` 和对应的依赖锁文件。
 
-## 架构与研究流程
+## 单 Agent 基线工作流
 
 ``` mermaid
 flowchart TD
@@ -146,9 +186,9 @@ LangGraph `recursion_limit` 控制执行范围。
 
 ### 3. 来源标识与引用摘录校验
 
-`research_pilot/evidence.py`
-负责来源标识、引用和摘录检查，`research_pilot/schema.py`
-定义研究计划、资料评估和报告的数据结构。
+`research_pilot/evidence.py` 合并来源并校验引用 ID。
+`research_pilot/local_llm.py` 校验结构化报告的原文摘录和证据充分性标记，
+`research_pilot/schema.py` 与 `research_pilot/multi_schema.py` 定义数据结构。
 
 - 检索来源使用稳定的 `S1`、`S2` 等标识。
 - 来源去重依据 locator 和 excerpt。
@@ -204,7 +244,8 @@ JSON、格式不符、截断、认证失败、限流或超时等情况，系统�
 
 新任务提交后返回任务
 ID，客户端可以轮询任务状态。报告完成并通过校验后，可通过 `/report`
-获取；执行过程可通过 `/trace` 查看。
+获取，执行过程可通过 `/trace` 查看。
+提交时用 `mode: "multi"` 启动并行研究，省略 `mode` 使用 `single`。
 
 ## 本地运行
 
@@ -233,6 +274,9 @@ python -m venv .venv
 $env:RESEARCH_MODEL_BACKEND = "mock"
 $env:RESEARCH_SEARCH_BACKEND = "none"
 $env:RESEARCH_RETRIEVAL_BACKEND = "lexical"
+$env:RESEARCH_DATA_DIR = "./data/multi-agent-demo"
+$env:RESEARCH_MAX_MODEL_CALLS = "8"
+$env:RESEARCH_RETRIEVAL_TOP_K = "1"
 
 .\.venv\Scripts\python.exe -m uvicorn research_pilot.api:app --host 127.0.0.1 --port 8010
 ```
@@ -287,6 +331,36 @@ Invoke-RestMethod "$base/api/tasks/$($task.task_id)/report"
 Invoke-RestMethod "$base/api/tasks/$($task.task_id)/trace"
 ```
 
+### 演示企业 RAG 知识库技术选型
+
+先启动上面的 Mock 服务，再在另一个终端提交合成技术选型任务。该配置便于观察 PgVector 的定向补查。
+
+```powershell
+$base = 'http://127.0.0.1:8010'
+$dataset = Get-Content -Encoding utf8 benchmarks/multi_agent_v1/dataset.json -Raw | ConvertFrom-Json
+$case = $dataset.cases | Where-Object id -EQ 'rag'
+function Submit-ResearchJson($path, $body) {
+    $json = $body | ConvertTo-Json -Depth 8
+    Invoke-RestMethod -Method Post -Uri "$base$path" -ContentType 'application/json; charset=utf-8' -Body ([Text.Encoding]::UTF8.GetBytes($json))
+}
+foreach ($doc in $case.documents) {
+    Submit-ResearchJson '/api/documents/text' @{title=$doc.title; content=$doc.content; source_ref=$doc.id}
+}
+$task = Submit-ResearchJson '/api/tasks' @{question=$case.question; scope=$case.scope; mode='multi'}
+$path = "$base/api/tasks/$($task.task_id)"
+do {
+    $status = Invoke-RestMethod $path
+    $status.progress | Select-Object phase,completed_subtask_count,evidence_count,model_calls,quality
+    if ($status.status -notin 'pending','running') { break }
+    Start-Sleep -Milliseconds 300
+} while ($true)
+if ($status.status -eq 'completed') {
+    (Invoke-RestMethod "$path/report").markdown
+}
+```
+
+对照调用把 `mode` 改为 `single` 即可。演示资料均为合成企业试点纪要，适用于展示范围与证据，价格或通用性能需要另行实测。
+
 ### 4. 启用中文向量检索
 
 中文向量检索需要准备 `requirements-chinese.lock`、中文 Embedding 模型和
@@ -311,17 +385,13 @@ PgVector 环境，并按照 [演示指南](docs/DEMO_GUIDE.md)
 
 ### 1. 自动化回归
 
-截至 2026-10-22，测试报告记录的完整离线回归结果为：
+| 测试范围 | 实际结果 |
+|---|---|
+| 完整默认回归 | 124 通过，0 失败，0 跳过 |
+| 多 Agent 专项 | 24 通过 |
+| 本地真实 Qwen 套件 | 7 通过，0 失败，0 跳过。历史失败的 B/E 通过原断言 |
 
-| 测试范围                |              结果               |
-|:------------------------|:-------------------------------:|
-| 完整离线回归            | 100 passed，0 failed，0 skipped |
-| 日期与时区专项          |     7 passed，3 deselected      |
-| Ruff 静态检查           |              通过               |
-| PowerShell 静态语法检查 |              通过               |
-
-离线回归覆盖业务逻辑、脚本化 HTTP 合约、真实本地 BGE/PgVector 和 SQLite
-相关测试；该结果不包含新的真实模型质量样本。
+默认回归覆盖业务逻辑、HTTP 合约、BGE/PgVector、SQLite 并发预算与独立进程恢复。运行条件和命令见[发布验收](docs/MULTI_AGENT_ACCEPTANCE_ZH.md)。本地 Qwen 和 Mock 评测分别执行。
 
 ### 2. 中文语义检索评测
 
@@ -339,10 +409,32 @@ PgVector 环境，并按照 [演示指南](docs/DEMO_GUIDE.md)
 道无答案问题中，中文模型仍有 3
 道返回候选资料，因此检索指标用于衡量候选资料召回，不等同于最终回答准确率或正确拒答率。
 
-### 3. 真实模型与任务闭环验证
+### 3. Multi-Agent Mock 对照实验
 
-使用本地 Qwen3 4B 和云端
-DeepSeek，在固定公开合成场景中验证研究流程、检索补查、报告生成、引用校验和任务持久化。
+相同的两道多文档企业题、相同 Mock 模型和 SQLite 资料库，每组 6 次常规运行。预算均为最多 8 次模型尝试，检索候选为 Top-1。在此固定样本中：
+
+| 指标 | A 原单 Agent | B 固定并行、无补查 | C 动态多 Agent |
+|---|---:|---:|---:|
+| 关键证据覆盖 | 12/21（57.1%） | 15/21（71.4%） | 21/21（100%） |
+| 研究维度覆盖 | 27/54（50.0%） | 48/54（88.9%） | 54/54（100%） |
+| 有效引用（报告实际生成） | 12/12 | 15/15 | 21/21 |
+| 平均模型调用尝试 | 4 | 5.5 | 7.5 |
+
+三组均完成报告。RAG 用例注入一次评估异常后，三组均可恢复且未重跑已持久化的检索。C 恢复后按剩余额度生成部分报告。耗时、逐次结果和 Token 口径见[实验说明](benchmarks/multi_agent_v1/README.md)和[原始 JSON](benchmarks/multi_agent_v1/results.json)。这组 Mock 结果衡量编排效果，中文 BGE 检索历史评测和真实模型验收单独记录。
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m pytest -q tests/test_multi_agent.py
+.\.venv\Scripts\python.exe -X utf8 scripts/evaluate_multi_agent.py --output data/multi-agent-eval.json
+```
+
+完整回归还需要现有中文和英文模型缓存，以及已启动的专用 PgVector 测试服务。测试验收、真实模型运行与限制见[多智能体开发验收](docs/MULTI_AGENT_ACCEPTANCE_ZH.md)。
+
+发布前默认回归 **124 项通过**，另有本地真实 Qwen **7 项通过**，包括历史失败的 B/E。最终 RAG 复查在 8 次调用内取到 4/4 关键材料并输出 7 条有效引用。严格人工复核只有 1 条结论完整获证，报告标记为部分完成。[真实 A/B/C、三类验收与人工复核](benchmarks/multi_agent_v1/REAL_QWEN_REVIEW_20261125.md)
+
+### 4. 历史模型验收
+
+以下为升级前的原始验收。新版本的本地 Qwen 套件结果见上文，历史失败记录仍可追溯。
 
 | 模型与场景           | 验证结果                                                  |
 |:---------------------|:----------------------------------------------------------|
@@ -362,6 +454,10 @@ Checkpointer 和 API
 `facts_verified=false` 和 `fact_review=pending_manual_review`
 状态保持不变。
 
+## 使用边界
+
+HTTP 服务面向本机演示。当前实现采用单服务和显式手动恢复。企业认证、租户隔离与分布式调度未纳入实现。外部模型调用在崩溃后可能重放并继续扣用原预算。引用匹配只验证来源和摘录，真实报告仍需人工判断结论是否获证。
+
 ## 许可证与第三方来源
 
 本项目采用 MIT License。工作流设计参考 [LangChain Open Deep
@@ -370,7 +466,9 @@ Research](https://github.com/langchain-ai/open_deep_research)，并保留相应�
 项目使用的模型权重、运行时、向量检索组件和 Python
 依赖均有各自的许可要求。模型权重需按项目文档单独下载，不属于本仓库源码的一部分。
 
-- [架构说明](ARCHITECTURE.md)
+- [多 Agent 流程与面试指南](docs/MULTI_AGENT_FLOW_ZH.md)
+- [简历事实依据](docs/RESUME_FACTS_ZH.md)
+- [原单 Agent 架构归档](ARCHITECTURE.md)
 - [开发说明](DEVELOPMENT.md)
 - [演示指南](docs/DEMO_GUIDE.md)
 - [测试报告](TEST_REPORT.md)
