@@ -1,6 +1,6 @@
 # ResearchPilot 工程冻结归档
 
-归档日期：2026-10-21（Asia/Shanghai）。**工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 工程冻结表示当前工程范围停止开发，不表示模型质量全过，也不是生产级可靠的深度研究系统。历史“不能封板”指质量验收条件尚未满足，不妨碍此次带已知失败的工程MVP归档。
+本文记录 2026-10-21 的工程归档。该版本完成了单 Agent 工程验收，真实模型的 B/E 场景仍有已知失败。当前版本的实现与验证见[多智能体执行流程](MULTI_AGENT_FLOW_ZH.md)和[发布验收](MULTI_AGENT_ACCEPTANCE_ZH.md)。
 
 ## Git 与归档完整性
 
@@ -32,26 +32,15 @@ Phase7.1既有记录中的8个文件（local_llm.py、两份数据集、真实�
 
 复现依赖现有本地权重、Ollama0.40.6和专用PgVector；缺少就报告环境缺失，不下载新模型、不切Mock冒充。现场运行会产生模型调用和新测试数据，冻结归档本身不执行它们。
 
-## 简历项目事实清单
+## 实现范围与第三方依赖
 
-| 内容 | 归属和事实 | 证据/限定 |
-|---|---|---|
-| 上游参考 | 参考langchain-ai/open_deep_research的规划、检索、补查、报告思想，保留MIT来源说明 | 非复制整个仓库；不主张上游benchmark、多研究员或MCP成果为本项目贡献 |
-| 框架/预训练资产 | LangGraph/LangChain、FastAPI、PgVector、BGE、Qwen、Ollama均为第三方依赖/模型 | 没有自研Agent框架、向量数据库、Embedding或训练LLM |
-| 本项目实现 | 独立的有界五节点图和State、适配器接线、文本导入、元数据与引用校验、SQLite任务/检查点对账、调用预算/超时/手动恢复、HTTP接口及部署 | 源码位于research_pilot；“独立实现”针对应用工程，不针对底层依赖 |
-| 本项目验证工作 | 真实图、向量模型/数据库/HTTP/Docker验收；固定中文数据集及评测；真实LLM定向场景和失败诊断 | 回归48项中有Mock/Fake/合约；真实LLM另列，B/E不隐藏 |
-| 允许写的工程结果 | 中文512维模型与旧384维索引隔离；命令/参数兼容修复；实际恢复/超时/错误引用保护 | 不将数量/引用白名单表述成确定性语义充分性或事实保证 |
-| 必须说明的限制 | 本地单实例研究MVP；质量验收未全过，B/E为已知失败 | 不写“生产级”“100%准确”“完全抗注入”“自动事实核验” |
+工作流设计参考 `langchain-ai/open_deep_research`。归档版本中的五节点执行图、任务接口、文本导入、元数据与引用校验、预算、超时和恢复属于应用层实现。LangGraph、LangChain、FastAPI、PgVector、BGE、Qwen 和 Ollama 为第三方框架、运行时或模型。外部项目与许可详见[第三方来源与许可](../THIRD_PARTY_NOTICES.md)。
 
-适合实习简历的描述（使用者应能解释对应源码和失败）：
+归档版本的工程验证包括真实 HTTP、向量模型、数据库和 Docker 验收。48 项回归包含 Mock、Fake 与合约测试，真实模型场景单独统计。检索规模、事实支持度和已知失败的证据见上文。
 
-> **ResearchPilot｜本地研究工作流MVP（Python、FastAPI、LangGraph、PgVector）**：参考Open Deep Research思想，独立实现有界规划—检索—补查—报告流程，接入本地Qwen3 4B与中文BGE检索；实现SQLite检查点恢复、持久化调用预算、超时状态对账与来源/摘录校验。完成48项回归/合约测试及真实HTTP、数据库、Docker验收；真实模型A/C/D/F通过，B/E过度拒答作为已知质量失败保留，项目按工程MVP冻结。
+## 单 Agent 源码导读
 
-篇幅有限时，保留“本地MVP”和质量边界，检索指标可不写；不要把6 supported/1 uncertain换算成系统准确率。外部来源与MIT/模型许可证见[THIRD_PARTY_NOTICES](../THIRD_PARTY_NOTICES.md)，不得移除。
-
-## 源码学习顺序
-
-1. README、本文、TEST_REPORT与DEMO_GUIDE：先分清工程实现、真实验证和保留失败。
+1. [项目主页](../README.md)、本文、[测试报告](../TEST_REPORT.md)和[演示指南](DEMO_GUIDE.md)说明工程范围、复现条件及已知失败。
 2. `schema.py`→`config.py`：任务/来源/计划/判断/报告Schema，以及默认Mock和显式后端/限额。
 3. `api.py`→`runtime.py`：HTTP边界、后台运行、服务资源、任务收口与恢复入口。
 4. `workflow.py`：同一张五节点图、真实/Mock分支、有限循环、模型调用预留和节点deadline。
@@ -59,9 +48,9 @@ Phase7.1既有记录中的8个文件（local_llm.py、两份数据集、真实�
 6. `evidence.py`→`local_llm.py`→`chat_tokens.py`→`model.py`：稳定ID、引用/摘录校验、结构化请求、Tokenizer预算、Mock/兼容适配器。模型assessment不等于事实验证。
 7. `store.py`再回看`runtime.py`：SQLite持久预算、事件、状态/checkpoint对账与失败恢复。两个SQLite文件没有跨库原子事务。
 8. `tests/test_langgraph_integration.py`、`test_pgvector_integration.py`、`test_recovery_integration.py`、`test_phase7_contracts.py`；再读`tests_real/test_local_llm.py`及固定benchmark：区分真实依赖、模拟传输、固定故障与真实模型质量。
-9. 最后读PHASE71_FINAL_REVIEW、原始B/E JSON和候选失败，练习解释为何“ID合法”仍可能不足/不正确。
+9. [Phase 7.1 原始终审](PHASE71_FINAL_REVIEW.md)记录了 B/E 过度拒答及候选修复验证，可用于定位证据覆盖和引用判断的问题。
 
-文件路径均相对于research_pilot目录或项目tests目录，阅读不需要启动服务或调用模型。
+上述模块位于 `research_pilot/`，测试路径相对于仓库根目录。
 
 ## 本机文件与敏感信息检查
 
@@ -76,7 +65,7 @@ Phase7.1既有记录中的8个文件（local_llm.py、两份数据集、真实�
 | .venv约0.98GB、build、egg-info、Python/pytest/Ruff缓存 | 保留 | 生成物不随源码交付，不复用旧包当新归档 |
 | Docker运行数据库/任务卷 | 本轮未访问或修改内容，前阶段已验收 | 卷不在源码清单内，不导出、不删除；冻结不等于停止服务 |
 
-`.gitignore`和`.dockerignore`已有env/data/虚拟环境/日志/生成物排除规则，Dockerfile也仅显式复制源码/锁/说明。**当前无Git仓库，这些规则并不证明任何文件从未被提交；也不约束手工压缩整个文件夹。** 对外源码应使用明确允许清单：research_pilot、scripts、tests、tests_real、benchmarks、examples、docs（不含运行目录），根README/ARCHITECTURE/DEVELOPMENT/TEST_REPORT/INTERVIEW_GUIDE、LICENSE/THIRD_PARTY_NOTICES、pyproject、三份requirements锁、Dockerfile/Compose和ignore模板。不得一键压缩整个含data的工作目录。
+`.gitignore`和`.dockerignore`已有env/data/虚拟环境/日志/生成物排除规则，Dockerfile也仅显式复制源码/锁/说明。归档时尚未建立 Git 仓库。发布包应采用明确的文件清单，包含源码、脚本、测试、基准、示例、技术文档、许可证、依赖锁、容器文件及配置模板，排除运行数据与本机环境。
 
 发现运行私钥和体积较大的生成物已在此报告，但没有进行删除、迁移、密钥轮换或修改用户数据；后续如需清理必须另获明确指示。此次只完成本地文档归档，没有上传、发布或新建远端。
 

@@ -51,4 +51,4 @@ $env:RESEARCH_REAL_RUN_LABEL='quality-new-unique-label'
 python -m pytest tests_real/test_local_llm.py -k 'not real_ollama_chinese' -q --tb=short --junitxml=data/acceptance/new-unique.xml
 ```
 
-结论：**修复失败，不采纳候选；B/E仍未解决。** 停止继续盲调小模型Prompt，保留可面试说明的失败归因、严格边界和撤回证据。本轮有效保留的DeepSeek预检改动另见[收费前预检](DEEPSEEK_BE_PREFLIGHT.md)，其Mock通过不代表真实B/E质量通过。
+结论：**修复失败，不采纳候选；B/E仍未解决。** 停止继续盲调小模型Prompt，保留可复核的失败归因、严格边界和撤回证据。本轮有效保留的DeepSeek预检改动另见[收费前预检](DEEPSEEK_BE_PREFLIGHT.md)，其Mock通过不代表真实B/E质量通过。

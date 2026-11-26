@@ -106,4 +106,4 @@ if ($LASTEXITCODE -ne 0) { throw 'Push failed; stop and review.' }
 
 若 main 或远端演进导致不能 fast-forward，应重新审查并走正常 PR。当前仅准备本地归档提交，不承诺远端合并安全已经验证。
 
-结论：ResearchPilot 的工程 MVP 和本次真实模型样例可以冻结，转入简历与面试；保留 Qwen 限制和 DeepSeek 未测范围。日期测试问题已解决，本地具备 fast-forward 合并条件；正式同步仍需用户确认与远端 fetch 核对，公开前仍需确认历史邮箱等隐私待办。不需要继续调业务 Prompt 或新增收费实验。
+结论：ResearchPilot 的工程 MVP 和本次真实模型样例可以归档；保留 Qwen 限制和 DeepSeek 未测范围。日期测试问题已解决，本地具备 fast-forward 合并条件；正式同步仍需用户确认与远端 fetch 核对，公开前仍需确认历史邮箱等隐私待办。不需要继续调业务 Prompt 或新增收费实验。

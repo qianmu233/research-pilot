@@ -96,7 +96,7 @@ Qwen 证据沿用 `data/phase7/quality-{baseline-real,restored-real}/{B,E}.json`
 
 [Qwen 失败与撤回记录](QUALITY_QWEN_20261022.md)保持不变：A/C/D/F 通过，B/E 过度拒答；移除 assess 中 plan 的候选没有改善 B/E 且使 C 退化，业务改动已撤回，不应纳入稳定版。DeepSeek A 的[既有真实验收](PHASE73_DEEPSEEK_HTTP_A.md)另行统计；C/D/F 尚未单独真实验证，B 中发生补检索不等于专项 C 已验收。
 
-建议冻结当前工程 MVP，转入简历与面试准备。没有证据要求为这两个通过样例继续修改业务算法。保留初轮范围扩张、Qwen 拒答及自动引用校验不等于事实蕴含等限制；两例通过不代表通用准确率或安全保证。总览见 [README](../README.md)、[TEST_REPORT](../TEST_REPORT.md)，纳入版本的文件审查见 [稳定版本归档审查](STABLE_VERSION_REVIEW_20261022.md)。
+本轮结果按固定样例归档。没有证据要求为这两个通过样例继续修改业务算法。保留初轮范围扩张、Qwen 拒答及自动引用校验不等于事实蕴含等限制；两例通过不代表通用准确率或安全保证。总览见 [README](../README.md)、[TEST_REPORT](../TEST_REPORT.md)，纳入版本的文件审查见 [稳定版本归档审查](STABLE_VERSION_REVIEW_20261022.md)。
 
 ## 本地原件 SHA256
 
