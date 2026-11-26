@@ -2,6 +2,8 @@
 
 **ResearchPilot：多智能体协作式自主调研与报告生成平台**
 
+[AI 应用实践案例](docs/AI_APPLICATION_CASE_ZH.md) · 项目场景、开发过程与实测结果
+
 基于 Python、FastAPI、LangChain 和 LangGraph 构建的多智能体研究平台，面向企业技术选型、多文档资料调研和决策辅助场景。系统根据研究需求动态拆分子任务，协调多个 Research Agent 并行检索与评估证据，对存在缺口的研究方向定向补查，最终生成附有来源和原文摘录的研究报告。
 
 > 支持 `single`（默认）与 `multi` 两种执行模式。多 Agent 模式基于已导入资料研究，报告用于辅助决策。
