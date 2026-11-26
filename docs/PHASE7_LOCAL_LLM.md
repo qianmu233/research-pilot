@@ -1,6 +1,6 @@
 # Phase 7：真实本地LLM闭环与质量限制
 
-**工程冻结归档（2026-10-21）：工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 以下Phase7/7.1实验保持历史原样，不再继续模型优化。冻结范围、源码学习顺序和简历事实见[工程归档](ENGINEERING_ARCHIVE.md)。
+**工程冻结归档（2026-10-21）：工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 以下Phase7/7.1实验保持历史原样，不再继续模型优化。归档范围、源码导读和实现范围见[工程归档](ENGINEERING_ARCHIVE.md)。
 
 **Phase 7.1 最终审核更新（2026-10-20）**：E有完整正常证据，但模型计划/充分性判断扩大问题范围；一次通用提示修改未解决且使B/C退化，已撤回。最终产品/测试/金标/锁文件无改动。原配置E三次均失败、D两次均正确拒答；最终真实六项对照为4通过/2失败（B/E），E/D追加为1通过/1失败。48项回归仍全部通过，Ruff及宿主机/容器pip check通过，新容器真实HTTP任务及重启查询一致。**不封板。** 完整逐次记录、八项根因分析、原始7条事实（6 supported / 1 uncertain）与范围审查见[Phase 7.1 最终审核](PHASE71_FINAL_REVIEW.md)。以下保留Phase7原验收记录；历史6/1不覆盖本次B失败，历史笼统“七条相符”由新逐条审核取代。没有完成用户的人工签字审核，也没有事实正确率保证。
 
@@ -91,4 +91,4 @@ $env:RESEARCH_REAL_RUN_LABEL='unique-new-label'
 - 工具：scripts/download_ollama_windows.py、start_local_ollama.py、download_chat_tokenizer.py、inspect_local_model.py。
 - 测试：tests/test_phase7_contracts.py（9项）、tests_real/test_local_llm.py（7项）；原39项未删除、跳过或放宽。
 - 数据：benchmarks/local_llm_v1/dataset.json、dataset.sha256、README.md；原中文20题/19文档SHA不变。
-- 文档：README、ARCHITECTURE、DEVELOPMENT、TEST_REPORT、THIRD_PARTY_NOTICES、INTERVIEW_GUIDE及docs中的Phase7结果/历史准备/接力说明。实际日志、JSON、XML、SQLite和模型在被忽略的data下，未上传。
+- 文档：README、ARCHITECTURE、DEVELOPMENT、TEST_REPORT、THIRD_PARTY_NOTICES、当时的项目复盘文档及 docs中的Phase7结果/历史准备/接力说明。实际日志、JSON、XML、SQLite和模型在被忽略的data下，未上传。

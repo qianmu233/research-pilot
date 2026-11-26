@@ -121,7 +121,7 @@ XML均在data/acceptance/；原始逐题JSON/SQLite在data/phase7/phase71-*。�
 
 **工程证据**：模型/量化/推理参数/4096上下文/3轮5调用300秒均未变。容器新任务4e7d306de5f54c34b99c681dff1a3a5a完成真实FastAPI→LangGraph→Qwen→中文PgVector→报告→校验→持久化（1轮3调用，6.141秒）；旧任务062a38df051a4e8bbea5330c54e089c7保留。只重启researchpilot-phase7应用后逐对象相同，证据data/phase71/docker-{before,after}-restart.json。真实F验证即时超时不发布；迟到节点等待/恢复由48项内的故障注入测试补充，二者不混称。未重复容器E套件，不将容器A链路通过当成E质量通过。
 
-最终修改：README.md、TEST_REPORT.md、docs/PHASE7_LOCAL_LLM.md、INTERVIEW_GUIDE.md、docs/PHASE71_FINAL_REVIEW.md。候选源码在data/phase71/prompt-candidate.py；没有遗留产品改动，没有新增重复Mock测试。原材料和两套benchmark SHA256不变，所有历史失败仍保留；不涉及P1/P2/P3、收费服务或GitHub上传。
+最终修改：README.md、TEST_REPORT.md、docs/PHASE7_LOCAL_LLM.md、当时的项目复盘文档、docs/PHASE71_FINAL_REVIEW.md。候选源码在data/phase71/prompt-candidate.py；没有遗留产品改动，没有新增重复Mock测试。原材料和两套benchmark SHA256不变，所有历史失败仍保留；不涉及P1/P2/P3、收费服务或GitHub上传。
 
 **停止结论：工程闭环存在，但E、B稳定性与A3表述范围尚未通过质量终审，第一版不封板。本轮不再调Prompt、换模型或扩展架构，等待最终审核。**
 
@@ -304,7 +304,7 @@ Ryzen9 8945HX 16核32线程、约32GB RAM（最终可用10.6GiB）、RTX5060 Lap
 - 运行时代码：`research_pilot/vector.py`、`research_pilot/embedding.lock.json`、`schema.py`、`store.py`、`retrieval.py`、`pyproject.toml`。固定模型身份，返回完整片段、来源元数据与分数，为同分排序增加稳定次序；不改库表、依赖版本或图拓扑。
 - 评测：`research_pilot/benchmark.py`、`scripts/evaluate_zh_retrieval.py`、`benchmarks/zh_retrieval_v1/` 的固定数据、哈希、说明和原始结果。
 - 测试：仅新增 `tests/test_phase6_zh.py`（9 项），覆盖来源关联、完整片段、固定标签/指标口径、真实中文向量与长文本分片、全基准证据完整性、模型防篡改、无语料与相似干扰、攻击文本边界、真实 PgVector 断连失败。原 24 项保持并全部通过。
-- 文档：README、ARCHITECTURE、DEVELOPMENT、TEST_REPORT、INTERVIEW_GUIDE、CODEX_NEXT_STEPS、THIRD_PARTY_NOTICES，以及 `docs/PHASE6_CHINESE_RETRIEVAL.md`。
+- 文档：README、ARCHITECTURE、DEVELOPMENT、TEST_REPORT、当时的项目复盘文档、CODEX_NEXT_STEPS、THIRD_PARTY_NOTICES，以及 `docs/PHASE6_CHINESE_RETRIEVAL.md`。
 
 LangGraph 原图、HTTP、SQLite 恢复及原 PgVector 测试全部继续通过；本轮没有重写 Agent、增加多 Agent 或第二种数据库，也没有重新部署 Phase 5 容器。所有新验收针对当前工作区代码和专用测试库。
 
@@ -372,7 +372,7 @@ All checks passed!
 | 2 FastAPI 纵向闭环 | `tests/test_http_integration.py`、`scripts/smoke_http.py` | 独立进程 TCP HTTP 通过；完成文本→任务→循环→证据→报告→状态/轨迹→重启查询 | 报告仍是清楚标注的 Mock 摘录 |
 | 3 Embedding + PgVector | `vector.py`、`config.py`、`runtime.py`、`api.py`、`pyproject.toml`、`requirements-vector.lock`、`compose.vector.yaml`、下载脚本、PgVector 测试 | 4/4 真实数据库/模型测试通过 | 当前英文模型；中文质量、ANN/规模性能未测 |
 | 4 Checkpointer 一致性 | `runtime.py`、`workflow.py`、`store.py`、`schema.py`、`retrieval.py`、`api.py`、恢复/错误测试与崩溃辅助进程 | 7 项恢复 + 2 项错误测试通过；全套 24/24 | 手动恢复；无多实例、自动调度或硬中断同步线程 |
-| 5 Docker/文档 | `Dockerfile`、`.dockerignore`、两份 Compose、`.env.example`、README/架构/开发/测试/面试/交接/第三方声明 | 词面与向量 Compose config、build、up 健康、真实 HTTP 均通过 | P3 MCP 未实现；无生产性能与报告质量结论 |
+| 5 Docker/文档 | `Dockerfile`、`.dockerignore`、两份 Compose、`.env.example`、项目主页、架构、开发、测试、阶段复盘、交接及第三方声明 | 词面与向量 Compose config、build、up 健康、真实 HTTP 均通过 | P3 MCP 未实现；无生产性能与报告质量结论 |
 
 其余 Python 文件做了 Ruff 导入/未使用变量清理，未移除功能或降低测试要求。未修改 P1/P2/P3，没有 Git 推送或创建远端；本目录没有 `.git`，未编造提交记录。
 

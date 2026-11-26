@@ -8,7 +8,7 @@
 - 根许可证为 MIT；保留版权和许可证声明后允许使用、修改和再分发。
 - `pyproject.toml` 项目版本 0.0.16，声明 Python >=3.10，以及 `langgraph>=0.5.4` 等众多模型与搜索依赖；并未证明其直接符合本项目要求的 LangGraph 1.x 固定基线。
 - `langgraph.json` 指向 `src/open_deep_research/deep_researcher.py:deep_researcher`，设置 Python 3.11；README 建议通过 `langgraph dev` 运行。
-- 上游现有研究工作流、多提供商和 MCP 的代码结构可参考，但对仅需一个受控、面试可讲的 MVP 来说，整体迁移成本较高。
+- 上游现有研究工作流、多提供商和 MCP 的代码结构可参考，但对仅需一个有明确范围和验收条件的 MVP 来说，整体迁移成本较高。
 
 ## 未核验/不能声称的事项
 

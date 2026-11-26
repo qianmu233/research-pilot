@@ -1,6 +1,6 @@
 ﻿# ResearchPilot 下一步与验收入口
 
-**工程冻结交接（2026-10-21）：工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 当前不再执行后面的历史“下一步”、模型优化或全量评测。没有新任务授权就保持冻结，不把“质量未全过”解释成可自行继续开发。归档、已知失败与简历事实见[ENGINEERING_ARCHIVE](ENGINEERING_ARCHIVE.md)，固定演示见[DEMO_GUIDE](DEMO_GUIDE.md)。下文Phase7的6/1已被Phase7.1原配置4/2（B/E）及重复记录更新，历史证据不删除。
+**工程冻结交接（2026-10-21）：工程 MVP 已完成；真实模型质量验收未完全通过；B/E 为保留的已知失败。** 当前不再执行后面的历史“下一步”、模型优化或全量评测。没有新任务授权就保持冻结，不把“质量未全过”解释成可自行继续开发。归档、已知失败及实现范围见[ENGINEERING_ARCHIVE](ENGINEERING_ARCHIVE.md)，固定演示见[DEMO_GUIDE](DEMO_GUIDE.md)。下文Phase7的6/1已被Phase7.1原配置4/2（B/E）及重复记录更新，历史证据不删除。
 
 更新于 2026-10-20。原接力优先事项中的真实 LangGraph、HTTP、PgVector 与 SQLite 恢复已经执行，具体成功数和 Docker 状态以根目录 TEST_REPORT.md 为准；不再把旧初版“8 项通过”作为完整结论。
 

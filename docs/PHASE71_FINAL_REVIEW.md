@@ -99,6 +99,6 @@ Docker 仅检查独立 researchpilot-phase7（应用127.0.0.1:8017、数据库15
 
 ## 最终交付与停止点
 
-最终修改仅限 README.md、TEST_REPORT.md、docs/PHASE7_LOCAL_LLM.md、INTERVIEW_GUIDE.md，以及本审核文档。产品代码/测试/金标/锁文件无最终改动；候选源码和所有成功/失败 JSON/XML/SQLite 保留在data内，没有上传。没有用新增 Mock 数量掩盖失败。
+最终修改仅限 README.md、TEST_REPORT.md、docs/PHASE7_LOCAL_LLM.md、当时的项目复盘文档，以及本审核文档。产品代码/测试/金标/锁文件无最终改动；候选源码和所有成功/失败 JSON/XML/SQLite 保留在data内，没有上传。没有用新增 Mock 数量掩盖失败。
 
 工程链路可运行，来源格式检查和状态保护有效，但 **E三次拒答、B稳定性不足、A3语义范围不清** 均未达成最终质量标准，第一版不封板。没有证据支持当前小幅提示调整能够可靠解决，继续换模型或设计新的充分性合约需要另行审核，属于本轮之外。本轮停止开发并等待最终审核；不扩展MCP、多Agent、前端或新模型，不调用收费服务。
