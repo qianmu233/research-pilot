@@ -423,14 +423,13 @@ DeepSeek B/E 共完成 7 次请求，累计 6,028 Token。两项任务均完成�
 
 ### 部署范围
 
-默认 HTTP 服务绑定本机回环地址，适用于本地开发、测试与演示。服务采用单进程运行，发生中断后通过接口手动恢复。若要接入企业环境，需另行落实认证、文档权限、租户隔离和多实例调度等要求。
+默认 HTTP 服务绑定本机回环地址，适用于本地开发、测试与演示。服务采用单进程运行，发生中断后通过接口手动恢复。
 
 ## 技术文档
 
 - [多智能体执行流程](docs/MULTI_AGENT_FLOW_ZH.md)
 - [单 Agent 架构归档](ARCHITECTURE.md)
 - [开发环境与复现](DEVELOPMENT.md)
-- [单 Agent 工程归档](docs/ENGINEERING_ARCHIVE.md)
 - [演示指南](docs/DEMO_GUIDE.md)
 - [多智能体验收记录](docs/MULTI_AGENT_ACCEPTANCE_ZH.md)与[历史测试报告](TEST_REPORT.md)
 - [中文检索评测](benchmarks/zh_retrieval_v1/README.md)与[多智能体编排评测](benchmarks/multi_agent_v1/README.md)
